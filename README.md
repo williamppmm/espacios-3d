@@ -66,3 +66,16 @@ Comprobado en navegador Chromium: escena sin errores, vistas individuales, edici
 ## Dependencias
 
 Three.js y OrbitControls r128, licencia MIT, © autores de Three.js. Fuentes de la distribución: [Three.js r128](https://github.com/mrdoob/three.js/tree/r128). Los avisos de licencia se conservan en los archivos distribuidos; consulta `assets/vendor/LICENSE.txt`.
+
+## Diseño final 260 con condimentero y puertas
+
+En el catálogo de cocina, elige **Final · condimentero, puertas y basurero**. El visor detallado es `cocina-propuesta.html` y sus documentos son `despiece-propuesta.xlsx` y `despiece-propuesta.html`. La cocina actual se conserva.
+
+Distribución inferior: 15 + 60 + 70 + 70 + 40 cm. B3 conserva un cajón para cubiertos y dos puertas inferiores con entrepaño removible. B4 tiene puerta superior, entrepaño fijo y basurero extraíble inferior HSO688-00. El módulo de 40 cm deja la zona del escurridor sobre el mesón.
+
+El basurero usa plataforma RH15 provisional 343 × 550 sobre bastidor inferior de 60 mm (P072–P074), con rieles laterales HRE126-55 de 55 cm, cierre normal, 38 kg, $12.560/par. Confirmar descuento de ancho, altura del riel, bandeja real, holguras y fijación de frente antes de cortar. No cambia la fachada. Golas: previsión 10 fijaciones (8 extremos + 2 intermedias), referencia/precio compatibles por confirmar. Despiece: 85 piezas RH15 + 9 fondos; optimización de tablero pendiente.
+
+Compras con precio: $6.851.217 COP, con 12 partidas por cotizar. Incluye HSO317-15R a $122.902 y HSO688-00 a $109.700, precios aportados por el usuario el 26/10/2026. Los demás precios conservan la base anterior. Se retiran HSO460-30 y HSO228-90R; el cajón B3 usa un par HRE550-55N y las puertas requieren 24 bisagras físicas.
+
+`assets/models/cocina-propuesta-data.js` contiene las piezas, posiciones y datos resumidos de la alternativa; `assets/models/kitchen-propuesta.js` construye su geometría. Tras editar la alternativa, mantener coherentes el Excel, su vista web y esos datos. Para regenerar la vista web desde el Excel guardado: `python herramientas/build_despiece.py propuesta`.
+S2 sobre campana: puerta única 347 × 597 mm abatible hacia arriba a 90°, dos bisagras en el techo y dos brazos grises HEC060-03. Faja RH fija 570 × 60 mm retranqueada 25 mm respecto al reverso del frente; el piso sube 40 mm para permitir agarre. Brazos a $9.126/u ($18.252); verificar fuerza y montaje con peso real y ficha. La animación no es una plantilla de perforación. Actualización local del 26/10/2026.
