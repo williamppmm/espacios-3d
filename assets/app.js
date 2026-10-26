@@ -81,7 +81,14 @@ function renderUI(){
 }
 let viewName='general';function view(name){viewName=name;const single=state.mode==='item',i=item(),w=(i?.w||260)/100,h=(i?.h||215)/100,d=(i?.d||62)/100;const target=single?new THREE.Vector3(w/2,h*.45,d/2):new THREE.Vector3(9.6,.4,2.7);let p;
  if(single){const dist=Math.max(w,h,d)*1.8;p=name==='top'?[w/2,dist*1.4,d/2+.001]:name==='front'?[w/2,h*.5,dist]:[w/2+dist*.65,h*.65+dist*.45,d/2+dist*.85];controls.minDistance=.5;}else{p=name==='top'?[L/2,29,W/2+.001]:name==='entrance'?[19.6,1.65,4.6]:name==='front'?[10.15,9,18]:[23,16,19];if(name==='entrance')target.set(5,1.2,1.6);controls.minDistance=1;}
- controls.target.copy(target);camera.position.set(...p);controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));
+ controls.target.copy(target);camera.position.set(...p);controls.update();
+ // Ajusta el encuadre al aspecto real del lienzo, también en iPad vertical.
+ if(name!=='entrance'){
+  const bounds=single&&i?new THREE.Box3().setFromObject(models.get(i.id).outer):new THREE.Box3(new THREE.Vector3(-.12,0,-.12),new THREE.Vector3(L+.12,2.65,W+.12));
+  const corners=[];for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z])corners.push(new THREE.Vector3(x,y,z));
+  for(let n=0;n<8;n++){camera.updateMatrixWorld();const extent=Math.max(...corners.map(c=>{const q=c.clone().project(camera);return Math.max(Math.abs(q.x),Math.abs(q.y));}));if(extent<.88)break;camera.position.sub(target).multiplyScalar(extent/.84).add(target);controls.update();}
+ }
+ document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));
 }
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},60000);}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset.view));$('fit').onclick=()=>view(viewName);
@@ -97,10 +104,11 @@ $('wall-height').oninput=()=>{state.room.wallHeight=Number($('wall-height').valu
 $('export').onclick=()=>download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),'espacios-3d-proyecto.json');$('import').onclick=()=>$('project-file').click();$('project-file').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1000000)throw Error('El archivo de proyecto es demasiado grande (máximo 1 MB).');const next=validate(JSON.parse(await f.text()));state=next;rebuildAll();buildPerimeter();transform();renderUI();view('general');save();}catch(e){$('save-state').textContent='No se abrió el archivo: '+e.message;}finally{$('project-file').value='';}};
 $('reset').onclick=()=>{if(!confirm('¿Restaurar la distribución inicial? Descarga antes tu proyecto si quieres conservarlo.'))return;state=initial();rebuildAll();buildPerimeter();transform();renderUI();view('general');save();};
 $('snapshot').onclick=()=>{renderer.render(scene,camera);renderer.domElement.toBlob(blob=>{if(blob)download(blob,'espacios-3d-vista.png');},'image/png');};
-function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(stage);resize();
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(models.size)view(viewName);}new ResizeObserver(resize).observe(stage);resize();
 renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();fail('Se perdió el contexto WebGL. Recarga la página.');});
 buildPerimeter();rebuildAll();transform();renderUI();view('general');$('loading').hidden=true;if(storageNotice)$('save-state').textContent=storageNotice;
 function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);}loop();
 })();
+
 
 
