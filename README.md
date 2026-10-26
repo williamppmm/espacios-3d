@@ -79,3 +79,5 @@ Compras con precio: $6.851.217 COP, con 12 partidas por cotizar. Incluye HSO317-
 
 `assets/models/cocina-propuesta-data.js` contiene las piezas, posiciones y datos resumidos de la alternativa; `assets/models/kitchen-propuesta.js` construye su geometría. Tras editar la alternativa, mantener coherentes el Excel, su vista web y esos datos. Para regenerar la vista web desde el Excel guardado: `python herramientas/build_despiece.py propuesta`.
 S2 sobre campana: puerta única 347 × 597 mm abatible hacia arriba a 90°, dos bisagras en el techo y dos brazos grises HEC060-03. Faja RH fija 570 × 60 mm retranqueada 25 mm respecto al reverso del frente; el piso sube 40 mm para permitir agarre. Brazos a $9.126/u ($18.252); verificar fuerza y montaje con peso real y ficha. La animación no es una plantilla de perforación. Actualización local del 26/10/2026.
+
+Restaurar terraza inicial carga el diseño final (condimentero, puertas y basurero). Las versiones anteriores siguen disponibles como Cocina 1 (260 cm, cajonero de 75) y Cocina 2 (280 cm). Los proyectos guardados conservan su selección hasta restaurarlos.
