@@ -1,8 +1,9 @@
-/* Cocina actual: geometría extraída del visor detallado, en milímetros. */
+/* Cocina en dos versiones (actual 260 y alternativa 280): geometría extraída de sus visores detallados, en milímetros. */
 window.EspaciosModels=window.EspaciosModels||{};
-window.EspaciosModels.kitchen=function(THREE){
+window.EspaciosModels.kitchen=function(THREE,variant){
+variant=variant==='280'?'280':'actual';
 const scene=new THREE.Group(); let kitchenInfo={},drawerAssembly=[];
-const MODS={"B6": {"n": "Costado 1,5", "d": "Panel 882 × 595 a 3 mm del piso. x=215–230; mesón x=200–2800.", "x": [215, 230], "h": [3, 885]}, "B1": {"n": "Basurero 30", "d": "Basurero HSO460-30 con frente extraíble de 732 mm.", "x": [230, 530], "h": [100, 885]}, "B2": {"n": "Horno y estufa 60", "d": "Horno H60EEVAL005 y estufa CCR60-F4P-SBF031. Campana centrada; nicho y ventilación por validar con manuales.", "x": [530, 1130], "h": [100, 885]}, "B3": {"n": "Cajonero único 75", "d": "Tres cajones: exterior 693 × 550, interior 663 × 520. Bases aplicadas inferiores 693 × 550 × 15; paredes de 205/125/75, envolventes 220/140/90 conservadas. Cubiertero 360 × 480 a la izquierda del superior. Confirmar unión por cara inferior, rieles y carga con fabricante.", "x": [1130, 1880], "h": [100, 885]}, "B5": {"n": "Lavaplatos 90", "d": "Módulo 900. Socoda AS350 submontar: exterior 550 × 430, abertura ilustrativa 490 × 370 y profundidad 165. Pestaña bajo placa; corte definitivo por plantilla Socoda. Travesaños 870 × 100 de canto, fuera de pestaña. Validar soporte mecánico, listones, sifón y canasta.", "x": [1880, 2780], "h": [100, 885]}, "S1": {"n": "Alacena 31,5", "d": "Ancho 315 mm, entrepaño 283 y puerta 312 × 717. Alineada con B6 en x=215; S2 permanece centrado con B2.", "x": [215, 530], "h": [1450, 2150]}, "S2": {"n": "Gabinete ducto 60", "d": "Caja de 350 mm de alto. Campana a 1550 mm en esta vista: posición ilustrativa, validar manual antes de instalar.", "x": [530, 1130], "h": [1800, 2150]}, "S3": {"n": "Alacena 84,5", "d": "División central y dos entrepaños de 397,5 mm; puertas 419,5 × 717.", "x": [1130, 1975], "h": [1450, 2150]}, "S4": {"n": "Platero 71,5", "d": "Caja 715, luz 685. HSO566-03G de 680 × 245; holgura total 5 mm. Máximo 7 kg; acero 201 pintado. Cuatro fijaciones Ø10 por pines, a marcar en obra con pieza real; profundidad y cotas por verificar, sin taladros de fábrica.", "x": [1975, 2690], "h": [1450, 2150]}};
+const MODS=variant==='280'?{"B6": {"n": "Costado 1,5", "d": "Panel de 882 × 595, elevado 3 mm. Extremo libre x=115; mesón empieza en x=100.", "x": [115, 130], "h": [3, 885]}, "B1": {"n": "Basurero 30", "d": "Basurero HSO460-30 con frente extraíble de 732 mm.", "x": [130, 430], "h": [100, 885]}, "B2": {"n": "Horno y estufa 60", "d": "Horno H60EEVAL005 y estufa CCR60-F4P-SBF031. Campana centrada; nicho y ventilación por validar con manuales.", "x": [430, 1030], "h": [100, 885]}, "B3": {"n": "Cajonero 47,5", "d": "Tres cajones con cajas de 418 mm exteriores y 550 de fondo; frentes 167, 207 y 302.", "x": [1030, 1505], "h": [100, 885]}, "B4": {"n": "Cajonero 47,5", "d": "Tres cajones; cubiertero de 360 × 480 en caja interior de 388 × 520.", "x": [1505, 1980], "h": [100, 885]}, "B5": {"n": "Lavaplatos 90", "d": "Sin relleno. Extremo x=2880: quedan 120 mm hasta el muro, y el mesón vuela 20 mm a la derecha.", "x": [1980, 2880], "h": [100, 885]}, "S1": {"n": "Alacena 32", "d": "Ancho de 320 mm del Excel, con entrepaño de 288. Comienza 5 mm antes del costado bajo para centrar S2 sobre B2.", "x": [110, 430], "h": [1450, 2150]}, "S2": {"n": "Gabinete ducto 60", "d": "Caja de 350 mm de alto. Campana a 1550 mm en esta vista: posición ilustrativa, validar manual antes de instalar.", "x": [430, 1030], "h": [1800, 2150]}, "S3": {"n": "Alacena 95", "d": "División vertical central y dos entrepaños de 450 mm, según Excel.", "x": [1030, 1980], "h": [1450, 2150]}, "S4": {"n": "Platero 91,5", "d": "Luz interior 885 mm. Sin relleno: extremo x=2895, con 105 mm hasta la esquina. Validar herraje HSO566-05N.", "x": [1980, 2895], "h": [1450, 2150]}}:{"B6": {"n": "Costado 1,5", "d": "Panel 882 × 595 a 3 mm del piso. x=215–230; mesón x=200–2800.", "x": [215, 230], "h": [3, 885]}, "B1": {"n": "Basurero 30", "d": "Basurero HSO460-30 con frente extraíble de 732 mm.", "x": [230, 530], "h": [100, 885]}, "B2": {"n": "Horno y estufa 60", "d": "Horno H60EEVAL005 y estufa CCR60-F4P-SBF031. Campana centrada; nicho y ventilación por validar con manuales.", "x": [530, 1130], "h": [100, 885]}, "B3": {"n": "Cajonero único 75", "d": "Tres cajones: exterior 693 × 550, interior 663 × 520. Bases aplicadas inferiores 693 × 550 × 15; paredes de 205/125/75, envolventes 220/140/90 conservadas. Cubiertero 360 × 480 a la izquierda del superior. Confirmar unión por cara inferior, rieles y carga con fabricante.", "x": [1130, 1880], "h": [100, 885]}, "B5": {"n": "Lavaplatos 90", "d": "Módulo 900. Socoda AS350 submontar: exterior 550 × 430, abertura ilustrativa 490 × 370 y profundidad 165. Pestaña bajo placa; corte definitivo por plantilla Socoda. Travesaños 870 × 100 de canto, fuera de pestaña. Validar soporte mecánico, listones, sifón y canasta.", "x": [1880, 2780], "h": [100, 885]}, "S1": {"n": "Alacena 31,5", "d": "Ancho 315 mm, entrepaño 283 y puerta 312 × 717. Alineada con B6 en x=215; S2 permanece centrado con B2.", "x": [215, 530], "h": [1450, 2150]}, "S2": {"n": "Gabinete ducto 60", "d": "Caja de 350 mm de alto. Campana a 1550 mm en esta vista: posición ilustrativa, validar manual antes de instalar.", "x": [530, 1130], "h": [1800, 2150]}, "S3": {"n": "Alacena 84,5", "d": "División central y dos entrepaños de 397,5 mm; puertas 419,5 × 717.", "x": [1130, 1975], "h": [1450, 2150]}, "S4": {"n": "Platero 71,5", "d": "Caja 715, luz 685. HSO566-03G de 680 × 245; holgura total 5 mm. Máximo 7 kg; acero 201 pintado. Cuatro fijaciones Ø10 por pines, a marcar en obra con pieza real; profundidad y cotas por verificar, sin taladros de fábrica.", "x": [1975, 2690], "h": [1450, 2150]}};
 /* ---------- Texturas procedurales ---------- */
 function canvasTex(w,h,draw,rx=1,ry=1){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);
   const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=4;return t;}
@@ -39,7 +40,7 @@ function drawer(mod,x0,x1,f0,f1,b0,bh,open,parent){
   const g=new THREE.Group();(parent||scene).add(g);
   box(x0+1.5,x1-1.5,586,601,f0,f1,'wood',mod,g,'front');
   const i0=x0+15+13.5,i1=x1-15-13.5,dz0=36,dz1=586;
-  const applied=mod==='B3',wallBottom=b0+(applied?15:0);
+  const applied=variant==='actual'&&mod==='B3',wallBottom=b0+(applied?15:0);
   // B3: base de 693 × 550 bajo paredes; altura exterior conservada.
   box(applied?i0:i0+15,applied?i1:i1-15,applied?dz0:dz0+15,applied?dz1:dz1-15,b0,b0+15,'carc',mod,g);
   box(i0,i0+15,dz0,dz1,wallBottom,b0+bh,'carc',mod,g);
@@ -62,6 +63,75 @@ function carcass(mod,x0,x1,{fondo=true,trav=true,piso=true}={}){
   if(fondo)box(x0+2,x1-2,0,6,102,883,'back',mod);
 }
 
+if(variant==='280'){
+/* ---------- Bajos ---------- */
+kitchenInfo={modules:MODS,counter:[100,2900],wall:3000};
+const FT=832;
+// Sin B0: la holgura libre hasta la esquina sustituye el relleno.
+carcass('B1',30,330);
+const bin=drawer('B1',30,330,100,FT,125,0,400);bin.children.slice(1).forEach(m=>{m.visible=false;});
+box(170,390,120,540,130,480,'dark','B1',bin);
+carcass('B2',330,930,{fondo:false});
+for(const [mod,x0,x1] of [['B3',1030,1505],['B4',1505,1980]]){
+  carcass(mod,x0,x1);
+  drawer(mod,x0,x1,100,402,125,220,450);
+  drawer(mod,x0,x1,430,637,440,140,420);
+  const top=drawer(mod,x0,x1,665,FT,675,90,400);
+  if(mod==='B4')box(x0+50,x1-50,70,550,690,740,'dark','B4',top);
+}
+carcass('B5',1880,2780);
+door('B5',1980,2430,586,100,FT,'left');door('B5',2430,2880,586,100,FT,'right');
+box(2015,2845,80,520,130,280,'inox','B5');
+box(115,130,6,601,3,885,'carc','B6',null,'front');
+box(130,1505,521,536,3,100,'zoc',null);box(1505,2880,521,536,3,100,'zoc',null);
+box(130,430,556,586,810,885,'gola',null);box(1030,2880,556,586,810,885,'gola',null);
+for(const z of [380,615])box(1030,1980,556,586,z,z+75,'gola',null);
+box(431.5,1028.5,586,601,740,885,'wood','B2',null,'front');
+
+/* ---------- Mesón con hueco del lavaplatos ---------- */
+const C=groups.counter;
+box(100,2155,0,620,885,900,'stone',null,C);box(2705,2900,0,620,885,900,'stone',null,C);
+box(2155,2705,0,95,885,900,'stone',null,C);box(2155,2705,525,620,885,900,'stone',null,C);
+
+/* ---------- Equipos ---------- */
+const E=groups.equip;
+box(433,1027,46,586,115,735,'inox','B2',E);
+box(490,970,586,603,265,635,'glass','B2',E);
+box(510,950,603,625,660,680,'inox','B2',E);
+box(430,1030,55,565,900,906,'black','B2',E);
+for(const [bx,bz,r] of [[480,180,45],[780,180,35],[480,440,35],[780,440,50]]){
+  const c=new THREE.Mesh(new THREE.CylinderGeometry(r*S,r*S,0.012,24),mat('dark'));c.position.set((bx+100)*S,0.912,bz*S);E.add(c);}
+box(2155,2705,95,99,720,885,'inox','B5',E);box(2155,2705,521,525,720,885,'inox','B5',E);
+box(2155,2159,95,525,720,885,'inox','B5',E);box(2701,2705,95,525,720,885,'inox','B5',E);
+box(2155,2705,95,525,716,720,'inox','B5',E);
+const fau=new THREE.Mesh(new THREE.CylinderGeometry(0.014,0.016,0.32,16),mat('inox'));fau.position.set(2.43,1.06,0.05);E.add(fau);
+const spout=new THREE.Mesh(new THREE.CylinderGeometry(0.011,0.011,0.2,16),mat('inox'));spout.rotation.x=Math.PI/2;spout.position.set(2.43,1.21,0.14);E.add(spout);
+box(430,1030,0,480,1550,1700,'black','S2',E);
+
+/* ---------- Superiores ---------- */
+const U=groups.uppers;
+function upper(mod,x0,x1,{piso=true,div=null,shelves=[]}={}){
+  box(x0,x0+15,6,326,1450,2150,'carc',mod,U);box(x1-15,x1,6,326,1450,2150,'carc',mod,U);
+  box(x0+15,x1-15,6,326,2135,2150,'carc',mod,U);
+  if(piso)box(x0+15,x1-15,6,326,1450,1465,'carc',mod,U);
+  else{box(x0+15,x1-15,266,326,1450,1465,'carc',mod,U);box(x0+15,x1-15,6,86,1450,1465,'carc',mod,U);}
+  box(x0+2,x1-2,0,6,1452,2148,'back',mod,U);
+  if(div!=null)box(div-7.5,div+7.5,6,326,1465,2135,'carc',mod,U);
+  for(const [a,b] of shelves)box(a,b,26,326,1792,1807,'carc',mod,U);
+}
+upper('S1',110,430,{shelves:[[126,414]]});door('S1',110,430,326,1430,2147,'left',U);
+box(430,445,6,326,1800,2150,'carc','S2',U);box(1015,1030,6,326,1800,2150,'carc','S2',U);
+box(445,1015,6,326,1800,1815,'carc','S2',U);box(445,1015,6,326,2135,2150,'carc','S2',U);box(432,1028,0,6,1802,2148,'back','S2',U);
+door('S2',430,1030,326,1800,2147,'left',U);
+upper('S3',1030,1980,{div:1505,shelves:[[1046,1496],[1513.5,1963.5]]});
+door('S3',1030,1505,326,1430,2147,'left',U);door('S3',1505,1980,326,1430,2147,'right',U);
+upper('S4',1980,2895,{piso:false});
+box(1997.5,2877.5,40,285,1700,1712,'inox','S4',U);
+for(let i=0;i<8;i++){const p=new THREE.Mesh(new THREE.CylinderGeometry(0.115,0.115,0.012,32),mat('plate'));p.rotation.z=Math.PI/2;p.position.set((2070+i*28)*S,1.83,0.17);U.add(p);}
+box(1997.5,2877.5,40,285,1480,1495,'dark','S4',U);
+door('S4',1980,2437,326,1430,2147,'left',U);door('S4',2438,2895,326,1430,2147,'right',U);
+// Sin S0: 105 mm libres entre el platero y la esquina.
+}else{
 /* ---------- Bajos ---------- */
 const FT=832;
 kitchenInfo={modules:MODS,counter:[200,2800],wall:3000,knownBudget:6980596,slabThickness:15,slabThicknessConfirmed:true,decorativeEdgeSelected:false,railBase:{family:"HRE550",sku:"HRE550-55N",brand:"Bonuit",color:"Negro",length:550,function:"cierre lento",declaredLoad:30,exactVariantConfirmed:true,mountingConfirmed:false,lateralDeduction:27,lateralDeductionConfirmed:true,railHeight:45,railWidth:12.7,sideGap:13.5,includedScrews:[4,12],unitPrice:47034,quantity:3}};
@@ -155,9 +225,11 @@ box(1992.5,2672.5,40,285,1700,1712,'inox','S4',U);
 for(let i=0;i<8;i++){const p=new THREE.Mesh(new THREE.CylinderGeometry(0.115,0.115,0.012,32),mat('plate'));p.rotation.z=Math.PI/2;p.position.set((2050+i*28)*S,1.83,0.17);U.add(p);}
 box(1992.5,2672.5,40,285,1480,1495,'dark','S4',U);
 door('S4',1975,2332,326,1430,2147,'left',U);door('S4',2333,2690,326,1430,2147,'right',U);
+}
 
-
-const root=new THREE.Group();scene.position.x=-.2;root.add(scene);
-return {root,info:kitchenInfo,dimensions:{w:260,d:62,h:215},
- setOpen(t){for(const m of movers){if(m.type==='slide')m.g.position.z=t*m.dist*S;else m.g.rotation.y=m.sign*t*1.75;}}};
+// Cada puerta y cajón expone userData.mover para abrirse por separado al tocarlo.
+for(const m of movers)m.g.userData.mover={t:0,target:0,apply:m.type==='slide'?t=>m.g.position.z=t*m.dist*S:t=>m.g.rotation.y=m.sign*t*1.75};
+const root=new THREE.Group(),W=variant==='280'?280:260;scene.position.x=-(3000-W*10)/2000;root.add(scene);
+return {root,info:kitchenInfo,dimensions:{w:W,d:62,h:215},
+ setOpen(t){for(const m of movers){const u=m.g.userData.mover;u.t=u.target=t;u.apply(t);}}};
 };
