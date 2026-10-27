@@ -7,8 +7,11 @@ window.EspaciosModels.closetOption3=function(T){
  for(const id of ['hoja-1','hoja-2','cajon-1','cajon-2','cajon-3']){const g=new T.Group();(id.startsWith('hoja')?fronts:body).add(g);moving[id]=g;}
  function box(bounds,mat,parent){const [a,b,c,d,e,f]=bounds,m=new T.Mesh(new T.BoxGeometry((b-a)/1000,(d-c)/1000,(f-e)/1000),mat.clone());m.position.set((a+b)/2000,(c+d)/2000,(e+f)/2000);m.castShadow=m.receiveShadow=true;parent.add(m);all.push(m);return m;}
  for(const p of data.parts)for(const pose of p.placements){const mesh=box(pose.bounds,wood,pose.move?moving[pose.move]:body);mesh.userData={sec:p.group,role:pose.role,piece:{id:p.id,name:p.name,bounds:pose.bounds,material:'RH15',sec:p.group,move:pose.move}};parts.push(mesh);}
+ // Bastidor de pino: el riel cuelga de este listón (encajonado y atornillado a los laterales), no de la tapa.
+ const pine=new T.MeshStandardMaterial({color:0xcfa36a,roughness:.85}),extras=[];
+ for(const e of (data.extras||[])){const m=box(e.bounds,pine,body);m.userData={sec:e.group,role:'',piece:{id:e.id,name:e.name,bounds:e.bounds,material:e.material,sec:e.group,move:null}};extras.push(m);}
  // Suspensión superior: posiciones de referencia del clóset real. No hay riel de apoyo abajo.
- for(const z of [P.rearLeaf,P.frontLeaf])box([15,1935,2340,2365,z,z+15],metal,hardware);
+ for(const z of [P.rearLeaf,P.frontLeaf])box([15,1935,P.railY0,P.railY1,z,z+15],metal,hardware);
  const guide=box([965,985,115,120,496,554],dark,hardware);guide.userData.hardware='Guía inferior lateral, sin carga';
  for(const z of [498,515,533,550]){const finger=box([965,985,120,146,z,z+2],dark,hardware);finger.userData.hardware='Guía: mantiene alineada la hoja';}
  const handles=[];
@@ -40,5 +43,5 @@ window.EspaciosModels.closetOption3=function(T){
  }
  function setOpen(t){t=Math.max(0,Math.min(1,t));drawerMovers.forEach(u=>{u.apply(0);u.target=0;});doorMovers[1].apply(0);doorMovers[1].target=0;doorMovers[0].apply(Math.min(1,t/.65));doorMovers[0].target=doorMovers[0].t;drawerMovers.forEach(u=>{u.apply(Math.max(0,(t-.65)/.35));u.target=u.t;});clear();}
  function tick(){movers.forEach(u=>{if(Math.abs(u.target-u.t)>.0001)u.apply(Math.abs(u.target-u.t)<.004?u.target:u.t+(u.target-u.t)*.18);});}
- return {root,all,parts,groups:{body,fronts,clothes,hardware},parameters:P,data,dimensions:data.dimensions,motion:{movers,tick},moving,handles,stop,guide,setOpen,access,get message(){return message;}};
+ return {root,all,parts,extras,groups:{body,fronts,clothes,hardware},parameters:P,data,dimensions:data.dimensions,motion:{movers,tick},moving,handles,stop,guide,setOpen,access,get message(){return message;}};
 };
