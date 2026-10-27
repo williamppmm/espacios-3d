@@ -161,9 +161,26 @@ Elegido por el usuario el 27/10/2026. La opción 1 se conserva íntegra como alt
 - Nueve agarres por elegir: seis puertas y tres tapas. Los tres cajones se abren por los 30 mm libres entre frentes. No añadir tiradores ni fresados a esos cajones.
 - Anclaje lateral con calzos según la separación real.16 fijaciones es una previsión, no una capacidad demostrada del muro. Producto y tornillo según ladrillo y carga. Sin anclaje al cielo falso. El lado derecho se utiliza con puerta de habitación cerrada; comprobar tope real.
 - Canto rígido 60,124 m netos (65 a pedir), flexible 123,956 (140 a pedir). Propuesta de 5 láminas RH15, sierra 4 y refilado 10 por lado, sin girar por veta. Confirmar acabado y mecanizado de piezas estrechas.
-- Subtotal parcial$3.005.953. Faltan brazos,9 agarres, barras, apoyos, anclajes, uniones y servicios. Cocina final y clóset 2 caben juntos en 8 láminas RH15 en lugar de 9 si acabado y suministro son idénticos; no se descuenta de la compra individual sin aprobar el plano conjunto.
+- Subtotal parcial$3.005.953. Faltan brazos,9 agarres, barras, apoyos, anclajes, uniones y servicios. Los despieces permanecen separados; no se ha creado una compra ni un corte conjunto.
 
-El diseño es definitivo. La fabricación queda condicionada a plantillas de herrajes, uniones, anclajes y acabado, pendientes identificados en el Excel. El auditor comprueba números y encaje; su estimación de flexión supone uniones ideales y no certifica el mueble armado.
+La opción 2 se conserva como alternativa. La fabricación queda condicionada a plantillas de herrajes, uniones, anclajes y acabado, pendientes identificados en el Excel. El auditor comprueba números y encaje; su estimación de flexión supone uniones ideales y no certifica el mueble armado.
 
 Regenerar web: `python herramientas/build_despiece_closet.py 2`.
 Auditar Excel: `python herramientas/auditar_closet.py 2 5`.
+
+
+## Clóset principal (opción 3): suspensión superior y tope
+
+Visor `closet-opcion3.html`, manifiesto `assets/models/closet-opcion3-data.js`, geometría `assets/models/closet-opcion3.js` y despiece independiente `despiece-closet-opcion3.xlsx/html`. Se conservan opciones1 y2; los proyectos guardados respetan la selección. La opción 3 es el diseño elegido y se carga al crear o restaurar la terraza; las opciones 1 y 2 permanecen como alternativas. Los proyectos guardados conservan su selección. El despiece no se ha unido con cocina ni baño.
+
+Referencia del usuario: puertas RH15 de80×220cm, colgadas arriba, guía inferior sin carga, manijas tubulares y un tope plástico con caucho detrás de la hoja exterior. Su clóset no presenta pandeo después de4 años. La propuesta tiene hojas de97,5×220cm, aproximadamente20,9kg RH cada una: esa diferencia de tamaño y la suspensión deben validarse antes de fabricar. Esta alternativa no incluye PERALM93; no se presenta como cumplimiento de la configuración de refuerzo publicada por Madecentro.
+
+Cuerpo195×56×238cm. Zona frontal de referencia de7cm, de490 a560mm desde el fondo. Hoja interior500–515; exterior535–550;20mm entre tableros. Las manijas tienen35mm de saliente: la profundidad máxima real es585mm. El inspector muestra58,5cm contando las manijas; no significa que el RH crezca a esa profundidad. Con fondo RH15 queda485mm útil hasta la hoja interior.
+
+El usuario confirmó un desfase de50mm al apilar. Se conserva siempre el orden exterior-izquierda/interior-derecha: la hoja exterior no puede sobrepasar a la interior. Hojas de975, solape cerrado30, desplazamiento895 y abertura libre895mm. Reparto interior ajustado a830/1075mm: se añaden50mm de tolerancia al cajonero respecto a la versión de880mm. Frentes de cajón824×210, separados30mm; cajas803×450 (830−27); refuerzo40mm bajo cada base. Frente máximo del cajonero en x842, inicio de hoja apilada en x910:68mm de margen al tablero. Cotas de manijas y topes representadas, no plantillas de perforación.
+
+Un riel superior, rodamientos, una guía inferior y un tope con amortiguación sustituyen la representación anterior con rieles inferiores y perfiles verticales. Dos manijas HMA310-02 verticales de96mm entre centros, a$2.743/unidad. Kit FSCPCM20$12.730; perfil PERALMA50B2m$33.278. Confirmar si el kit ya incluye el tope y la guía concretos; no duplicar compras. El tope y las manijas se han colocado para no interferir durante el recorrido limitado.
+
+43 piezas RH15,23 líneas;18,915945m² netos. Mismo RH15 y acabado de cocina. Previsión independiente de5 láminas; no se ha optimizado una compra conjunta. Definir uniones, soporte del riel y anclaje al muro posterior e izquierdo. No hay apoyo en el muro derecho.
+
+Puerta de habitación de90cm y bisagra a52cm del muro posterior, confirmados. Eje lateral en288cm según terraza: con1cm a la izquierda y195 de mueble queda2cm al giro. La comprobación debe incluir las manijas y el recorrido de0–90°. Confirmar posición lateral exacta del eje y tope en obra.
