@@ -37,10 +37,12 @@ try{renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true}
  scene.add(new THREE.HemisphereLight(0xfffdf5,0x929f91,.85));const sun=new THREE.DirectionalLight(0xfff8e9,.8);sun.position.set(7,19,12);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-14,right:14,top:14,bottom:-14,near:.5,far:60});sun.target.position.set(9,0,2);scene.add(sun,sun.target);
  const fill=new THREE.DirectionalLight(0xffffff,.3);fill.position.set(-5,7,-6);scene.add(fill);
 }catch(e){fail(e);return;}
-function mat(color){return new THREE.MeshStandardMaterial({color,roughness:.85});}
-const palette={fence:new THREE.MeshStandardMaterial({color:0xffffff,metalness:.65,roughness:.35}),slab:mat(0xcac9bd),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:0xa6c8c2,transparent:true,opacity:.35,roughness:.3}),roof:new THREE.MeshStandardMaterial({color:0xb7c3b3,transparent:true,opacity:.45,side:THREE.DoubleSide})};
-// Farol en aparejo trabado, generado localmente: no requiere fuentes ni texturas remotas.
-const bc=document.createElement('canvas');bc.width=256;bc.height=170;const bg=bc.getContext('2d');bg.fillStyle='#c4b7a1';bg.fillRect(0,0,256,170);for(let r=0;r<2;r++)for(let c=-1;c<3;c++){bg.fillStyle=(c+r)%2?'#b67557':'#bc7b5a';bg.fillRect(c*128+r*64+3,r*85+3,122,79);}
+// Los colores se escriben en sRGB; se pasan a lineal para que el render con salida sRGB no los aclare.
+const srgb=hex=>new THREE.Color(hex).convertSRGBToLinear();
+function mat(color){return new THREE.MeshStandardMaterial({color:srgb(color),roughness:.85});}
+const palette={fence:new THREE.MeshStandardMaterial({color:0xffffff,metalness:.65,roughness:.35}),slab:mat(0xbcbab0),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:srgb(0xa6c8c2),transparent:true,opacity:.35,roughness:.3}),roof:new THREE.MeshStandardMaterial({color:srgb(0xb7c3b3),transparent:true,opacity:.45,side:THREE.DoubleSide}),pit:new THREE.MeshStandardMaterial({color:srgb(0x2a2d30),roughness:1,side:THREE.BackSide})};
+// Farol en aparejo trabado (bloque 30 × 20 cm), generado localmente: tono terracota con variación por pieza y perforaciones.
+const bc=document.createElement('canvas');bc.width=512;bc.height=342;const bg=bc.getContext('2d');bg.fillStyle='#c9bfae';bg.fillRect(0,0,512,342);{let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};for(let r=0;r<2;r++)for(let c=-1;c<3;c++){const x=c*256+r*128+4,y=r*171+4,v=(rnd()-.5)*30;bg.fillStyle=`rgb(${178+v|0},${86+v*.6|0},${52+v*.4|0})`;bg.fillRect(x,y,248,163);bg.fillStyle='rgba(60,25,10,.18)';bg.fillRect(x+84,y+51,20,68);bg.fillRect(x+154,y+51,20,68);bg.fillStyle='rgba(255,255,255,.06)';bg.fillRect(x,y,248,6);}}
 function brick(len,h){const tex=new THREE.CanvasTexture(bc);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(len/.6,h/.4);tex.encoding=THREE.sRGBEncoding;return new THREE.MeshStandardMaterial({map:tex,roughness:1});}
 function box(parent,w,h,d,x,y,z,m){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;}
 // Pieza móvil: apply(t) la lleva de cerrada (0) a abierta (1); se puede tocar para abrir o cerrar.
@@ -53,6 +55,7 @@ room=group(scene);const floor=group(room),perimeter=group(room),architecture=gro
 // Patios P1 y P2: se dejan vacíos, como en la maqueta recibida, con antepechos de ladrillo de 12 cm por dentro del borde.
 const pits=[{x1:9.5,x2:12.2,z1:0,z2:2.3},{x1:0,x2:2.6,z1:3.85,z2:5.75}];
 [[0,2.6,0,3.85],[2.6,9.5,0,W],[9.5,12.2,2.3,W],[12.2,L,0,W]].forEach(([a,b,c,d])=>box(floor,b-a,.1,d-c,(a+b)/2,-.05,(c+d)/2,palette.slab));
+for(const p of pits){const m=new THREE.Mesh(new THREE.BoxGeometry(p.x2-p.x1,.1,p.z2-p.z1),palette.pit);m.position.set((p.x1+p.x2)/2,-.05,(p.z1+p.z2)/2);m.receiveShadow=true;floor.add(m);}
 // P1 (central) a 1,20 m, como el muro exterior; P2 (trasero) a 0,60 m.
 wall(floor,'z',0,2.3,9.56,1.2);wall(floor,'x',9.62,12.08,2.24,1.2);wall(floor,'z',0,2.3,12.14,1.2);wall(floor,'x',0,2.6,3.91,.6);wall(floor,'z',3.97,W,2.54,.6);
 // Frente de entrada: reja metálica blanca fija de 1,20 m, conservando los accesos.
