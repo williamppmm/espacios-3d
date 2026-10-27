@@ -23,13 +23,13 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  const flap=moving['S2-Puerta'],upAxis=new THREE.Vector3(0,1,0),axisX=new THREE.Vector3(1,0,0);
  function segmentMesh(radius,kind){const m=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1,12),mats[kind].clone());groups.uppers.add(m);m.userData.mod='S2';all.push(m);return m;}
  function placeSegment(m,a,b){const delta=b.clone().sub(a);m.position.copy(a).add(b).multiplyScalar(.5);m.scale.y=delta.length();m.quaternion.setFromUnitVectors(upAxis,delta.normalize());}
- for(const x of [407,953]){
+ for(const x of [437,983]){
   const fixed=new THREE.Vector3(x/1000,1.96,.2),housing=segmentMesh(.007,'grey'),rod=segmentMesh(.0035,'inox');
   box([x-9,x+9,190,205,1947,1973],'grey','S2',groups.uppers);
   const update=()=>{const attachment=new THREE.Vector3(x/1000,-.08,-.012).applyAxisAngle(axisX,flap.rotation.x).add(flap.position);const dir=attachment.clone().sub(fixed).normalize(),join=fixed.clone().addScaledVector(dir,.145);placeSegment(housing,fixed,join);placeSegment(rod,join,attachment);};
   armUpdates.push(update);update();
  }
- for(const x of [435,925])box([x-15,x+15,295,326,2128,2135],'inox','S2',groups.uppers);
+ for(const x of [465,955])box([x-15,x+15,295,326,2128,2135],'inox','S2',groups.uppers);
  const E=groups.equip,C=groups.counter;
  // Mesón: abertura ilustrativa de lavaplatos 490 × 370; el corte final requiere plantilla.
  for(const a of [[200,1785,0,620,885,900],[2275,2800,0,620,885,900],[1785,2275,0,125,885,900],[1785,2275,495,620,885,900]])box(a,'stone',null,C);
@@ -37,13 +37,13 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  for(const a of [[1755,1785,95,525,880,885],[2275,2305,95,525,880,885],[1785,2275,95,125,880,885],[1785,2275,495,525,880,885],[1785,1787,125,495,720,885],[2273,2275,125,495,720,885],[1785,2275,125,127,720,885],[1785,2275,493,495,720,885],[1785,2275,125,495,718,720]])box(a,'inox','B5',E);
  box([2030,2045,45,60,900,1210],'inox','B5',E);box([2030,2045,45,220,1195,1210],'inox','B5',E);
  // Horno y estufa: envolventes ilustrativas; ventilación y nicho por manual.
- box([383,977,46,586,115,735],'inox','B2',E);box([440,920,586,603,265,635],'black','B2',E);box([460,900,603,625,660,680],'inox','B2',E);
- box([380,980,55,565,900,912],'black','B2',E);for(const [x,z] of [[510,180],[850,180],[510,430],[850,430]]){const ring=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.008,24),mats.inox);ring.position.set(x/1000,.918,z/1000);E.add(ring);}
- box([380,980,0,480,1550,1700],'black','S2',E);
+ box([413,1007,46,586,115,735],'inox','B2',E);box([470,950,586,603,265,635],'black','B2',E);box([490,930,603,625,660,680],'inox','B2',E);
+ box([410,1010,55,565,900,912],'black','B2',E);for(const [x,z] of [[540,180],[880,180],[540,430],[880,430]]){const ring=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.008,24),mats.inox);ring.position.set(x/1000,.918,z/1000);E.add(ring);}
+ box([410,1010,0,480,1550,1700],'black','S2',E);
  // Cubiertero removible.
- box([1023.5,1383.5,56,536,690,740],'dark','B3',moving['B3-cajon']);
- // Condimentero: volumen y cestas 100 × 446 × 470, independientes de su frente.
- const spice=moving['B1-extraible'];for(const y of [180,375,570]){box([255,355,80,526,y,y+5],'inox','B1',spice);for(const x of [255,350])box([x,x+5,80,526,y,y+55],'inox','B1',spice);for(const z of [80,521])box([255,355,z,z+5,y,y+55],'inox','B1',spice);}for(const x of [255,350])box([x,x+5,80,85,180,650],'inox','B1',spice);
+ box([1053.5,1413.5,56,536,690,740],'dark','B3',moving['B3-cajon']);
+ // Condimentero: cestas 100 × 446 × 470 y rieles laterales izquierdos; conjunto de 135 mm (medido por el usuario) dentro de 150 mm libres.
+ const spice=moving['B1-extraible'];for(const y of [180,375,570]){box([280,380,80,526,y,y+5],'inox','B1',spice);box([245,280,100,500,y+20,y+28],'dark','B1',spice);for(const x of [280,375])box([x,x+5,80,526,y,y+55],'inox','B1',spice);for(const z of [80,521])box([280,380,z,z+5,y,y+55],'inox','B1',spice);}for(const x of [280,375])box([x,x+5,80,85,180,650],'inox','B1',spice);
  // B4: RH provisional desde manifiesto; rieles laterales verticales bajo plataforma.
  const bin=moving['B4-extraible'];
  box([2415,2745,55,540,195,200],'grey','B4',bin);
@@ -59,11 +59,11 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  box([2392.5,2767.5,100,500,901,906],'grey','B4',E);for(let j=0;j<10;j++)box([2410+j*35,2413+j*35,120,480,920,925],'inox','B4',E);
  for(let j=0;j<4;j++){const plate=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.007,24),mats.plate);plate.rotation.z=Math.PI/2;plate.position.set(2.48+j*.045,1.005,.3);E.add(plate);}
  // Perfiles gola por separado de las piezas de melamina.
- for(const [a,b] of [[230,380],[980,2780]])box([a,b,556,586,810,885],'gola',null);
- box([980,1680,556,586,615,665],'gola',null);box([2380,2780,556,586,380,430],'gola',null);
+ for(const [a,b] of [[230,410],[1010,2780]])box([a,b,556,586,810,885],'gola',null);
+ box([1010,1680,556,586,615,665],'gola',null);box([2380,2780,556,586,380,430],'gola',null);
  // Fijaciones gola: 8 extremos + 2 intermedias, posición y compatibilidad por validar.
- const golaFixings=[...([240,370,990,1672.5,2372.5,2770].map(x=>[x,850])),...([990,1670].map(x=>[x,640])),...([2390,2770].map(x=>[x,405]))];
- for(const [x,y] of golaFixings){const f=box([x-4,x+4,536,556,y-10,y+10],'inox',x<380?'B1':x<1680?'B3':x<2380?'B5':'B4');f.userData.golaFixing=true;}
+ const golaFixings=[...([240,400,1020,1672.5,2372.5,2770].map(x=>[x,850])),...([1020,1670].map(x=>[x,640])),...([2390,2770].map(x=>[x,405]))];
+ for(const [x,y] of golaFixings){const f=box([x-4,x+4,536,556,y-10,y+10],'inox',x<410?'B1':x<1680?'B3':x<2380?'B5':'B4');f.userData.golaFixing=true;}
  const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?2150-m.h:100,m.id[0]==='S'?2150:885]}]));
  return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:215},
   setOpen(t){movers.forEach(u=>{u.t=u.target=t;u.apply(t);});},

@@ -1,4 +1,4 @@
-/* Cocina en dos versiones (actual 260 y alternativa 280): geometría extraída de sus visores detallados, en milímetros. */
+/* Cocina en tres versiones (final, Cocina 1 y Cocina 2): geometría extraída de sus visores detallados, en milímetros. */
 window.EspaciosModels=window.EspaciosModels||{};
 window.EspaciosModels.kitchen=function(THREE,variant){
 if(variant==='propuesta')return window.EspaciosModels.kitchenProposal(THREE);

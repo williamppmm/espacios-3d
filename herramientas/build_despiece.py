@@ -23,9 +23,9 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 VERSIONES = [
-    dict(slug="propuesta", nombre="Nueva alternativa 260 · condimentero, puertas y basurero"),
-    dict(slug="actual", nombre="Versión actual · mesón 260 · cajonero único 75"),
-    dict(slug="280", nombre="Alternativa · mesón 280"),
+    dict(slug="propuesta", nombre="Diseño final 260 · condimentero, puertas y basurero"),
+    dict(slug="actual", nombre="Cocina 1 · mesón 260 · cajonero único 75"),
+    dict(slug="280", nombre="Cocina 2 · mesón 280"),
 ]
 
 
