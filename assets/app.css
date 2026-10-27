@@ -25,3 +25,4 @@
 .viewer #detail-links .detail-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;margin:0;padding:10px 13px;border:1px solid var(--line);border-radius:8px;text-decoration:none;font-size:12px;background:var(--white)}
 .viewer #detail-links #viewer-link{order:-1;background:var(--ink);border-color:var(--ink);color:white}
 .viewer #detail-links .detail-link:hover{text-decoration:underline}
+#stage.fs-on #canvas-label{top:max(80px,calc(env(safe-area-inset-top) + 66px))}

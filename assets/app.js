@@ -127,6 +127,12 @@ let viewName='general';function view(name){viewName=name;flight=null;
  }
  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));
 }
+// Pantalla completa (assets/fullscreen.js): accesos a la terraza completa o a un módulo concreto.
+function focusOn(mode,id,name){state.mode=mode;if(id)state.selected=id;transform();renderUI();view(name);save();renderFullscreenBar();}
+function renderFullscreenBar(){const bar=$('fs-bar');if(!bar)return;bar.replaceChildren();if(!stage.classList.contains('fs-on'))return;const closets=state.items.filter(i=>i.type==='closet').length;
+ const chips=[['Terraza completa',state.mode==='room'&&viewName!=='bath',()=>focusOn('room',null,'general')],...state.items.map(i=>[i.type==='kitchen'?'Cocina':i.type==='closet'&&closets===1?'Clóset':i.name,state.mode==='item'&&i.id===state.selected,()=>focusOn('item',i.id,'general')]),['Baño',state.mode==='room'&&viewName==='bath',()=>focusOn('room',null,'bath')]];
+ for(const [txt,on,fn] of chips){const b=document.createElement('button');b.type='button';b.textContent=txt;b.setAttribute('aria-pressed',String(on));b.onclick=fn;bar.append(b);}}
+window.addEventListener('espacios-fullscreen',renderFullscreenBar);
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},60000);}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset.view));$('fit').onclick=()=>view(viewName);
 for(const mode of ['room','item'])$('mode-'+mode).onclick=()=>{state.mode=mode;transform();renderUI();view('general');save();};
