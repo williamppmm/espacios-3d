@@ -33,7 +33,7 @@ Los cambios se guardan en el almacenamiento de **ese navegador**, sin cuenta ni 
 
 La terraza reproduce la maqueta compartida: 20,30 × 5,75 m; sobre la medianera, 2 m libres hasta el baño, baño de 1,20 m libres, habitación y cocina de 2 m libres hasta el patio 1; franja construida de 3,00 × 7,50 m, muros nuevos de 12 cm y 2,50 m de alto, patios P1 y P2 sin losa. La altura inicial del perímetro, 1,10 m, es un supuesto ajustable.
 
-El clóset inicial de 288 × 50 × 210 cm ocupa todo el muro y queda dentro de la habitación, con el fondo apoyado en el muro que la separa de la cocina. Su interior y las estanterías son **referencias visuales editables**, sin despiece ni presupuesto de fabricación. El clóset admitirá sus propias versiones cuando tenga diseño.
+El catálogo de clósets carga la opción 2 definitiva, descrita más abajo; conserva la opción 1 como alternativa. Se retiró el clóset esquemático inicial. Las estanterías libres siguen siendo referencias editables, sin despiece de fabricación.
 
 ## Cocina
 
@@ -62,7 +62,7 @@ En el inspector se elige la versión de la cocina; cada una enlaza su visor deta
 
 La cocina esquemática de la maqueta medía 210 cm. Se reemplazó por la cocina real de 260 cm contra el muro transversal de 3 m, con origen a 750 cm del fondo y 280 cm de la medianera, giro 90°. Esta ubicación se puede cambiar; no es una confirmación de instalaciones de gas, agua ni ventilación.
 
-El aviso de ubicación detecta salidas del perímetro y una posible ocupación de los patios mediante la envolvente del mueble. No comprueba interferencias con muros, otros muebles, puertas abiertas ni instalaciones. No sustituye planos de obra o de fabricación.
+El aviso de ubicación detecta salidas del perímetro y una posible ocupación de los patios mediante la envolvente del mueble. Añade una comprobación puntual entre el clóset opción 1 y la puerta de habitación. No es un detector general de interferencias con muros, otros muebles o instalaciones. No sustituye planos de obra o de fabricación.
 
 ## Archivos
 
@@ -124,3 +124,46 @@ Comprobado en navegador Chromium: escena sin errores, vistas individuales, edici
 ## Dependencias
 
 Three.js y OrbitControls r128, licencia MIT, © autores de Three.js. Fuentes de la distribución: [Three.js r128](https://github.com/mrdoob/three.js/tree/r128). Los avisos de licencia se conservan en los archivos distribuidos; consulta `assets/vendor/LICENSE.txt`.
+
+
+## Clóset opción 1
+
+El catálogo retira la referencia esquemática inicial e incorpora **Clóset 1 · 288 cm · provisional**, con visor detallado en `closet-opcion1.html`. La geometría procede del archivo «Closet empotrado1.html» aportado por el usuario; el original permanece sin cambios. La opción 2 ya está integrada; la opción 3 está pendiente de recibir.
+
+- Frente completo: 2880 mm. Hueco nominal medido por el usuario: 2900 mm, equivalente a 10 mm exteriores por lado si se centra. Debe comprobarse la medida mínima arriba, centro y abajo, plomo y nivel.
+- Estructura interior: 2859 mm, con retranqueo interno de 10,5 mm por lado respecto al frente. No confundirlo con la holgura exterior de instalación.
+- Alto del archivo: 2400 mm, por confirmar. Límite de profundidad confirmado por el usuario: 520 mm. La opción 1 se adapta con estructura de 398 mm, profundidad exterior completa 512 mm y reserva de 8 mm (520 mm necesarios). En la terraza se usa la profundidad completa, sin comprimir puertas ni rieles.
+- Cuatro tramos: 715 + 677 + 677 + 715 mm útiles, cinco divisores de 15 mm. Seis cajones centrales, barras de colgado y maletero; cuatro puertas inferiores y dos superiores corredizas.
+- Cada una de las seis hojas y cada uno de los seis cajones responde individualmente al clic. Las hojas respetan a su compañera de carril; un cajón bloqueado no sale y una hoja no se cierra sobre un cajón abierto. El control Abrir todo mantiene la secuencia de puertas primero y cajones después. Ambos visores comparten los movimientos en `assets/models/closet-motion.js`. El visor detallado usa las tarjetas y estilo de cocina; posiciones, tablas, inventario y ajustes quedan en desplegables. El despiece provisional está en `despiece-closet-opcion1.xlsx` y su vista web. Cantos, herrajes y presupuesto definitivo siguen pendientes.
+- El usuario confirma que el lado derecho se utiliza solo con la puerta de habitación cerrada. El visor comprueba el giro dibujado y señala un cruce físico si aparece; falta comprobar ángulo y tope reales, sin confundir acceso tapado con contacto. Las correderas de cajón pasan a 350 mm. El modelo mantiene las puertas corredizas y su cenefa, que añaden 114 mm al cuerpo de 398 mm. Poco fondo para perchas convencionales: comprobar orientación de colgado, prendas y herrajes antes de fabricar. El original aportado de 500 mm de estructura no se modifica.
+
+Restaurar la terraza carga el clóset 2 definitivo y la cocina final. Los proyectos guardados con la referencia inicial se abren con la opción 1 y sus dimensiones actuales; se conserva su posición. Las dimensiones de la opción 1 están fijas en el visor general; los cambios exploratorios del visor detallado no se sincronizan con la terraza.
+
+En el visor detallado del clóset, ambos laterales son de ladrillo a la vista. La pared derecha termina a 520 mm del fondo; el saliente del marco de la puerta no está dimensionado ni se contabiliza como fondo útil adicional. El lateral izquierdo se prolonga solo como contexto visual.
+
+Clóset 1: todo el tablero es RH15, incluidas las seis hojas. Los frentes de cajón se separan 30 mm; no hay repisas entre cajones. Bases inferiores aplicadas de 650 × 350 × 15 y paredes de 155 mm, conservando la altura exterior de caja de 170 mm. El inventario conserva decimales y refleja las juntas de zócalos/cenefas. El sistema de puertas sigue provisional: FSCPCM73 indica 18–36 mm en la web actual y 30 mm en ficha aportada, sin compatibilidad directa confirmada con 15 mm. PERALM73-2 mide 2050 mm; para tramos de 2880, comprobar la variante PERALM73-3 de 3050 mm. HRE320-45 de 450 mm no cabe en cajas de 350; cotizar variante de 350 mm y confirmar su descuento antes de cortar.
+
+Despiece del clóset: `despiece-closet-opcion1.xlsx` y `despiece-closet-opcion1.html`. Incluye 19 líneas, 80 piezas RH15 y 20,053336 m² netos, sin errores de fórmulas. Los cantos no están elegidos y las medidas son terminadas. La pestaña Herrajes distingue referencias aportadas, piezas que no encajan y alternativas: Peralma + FSCPCM20 declara compatibilidad15–30 mm; Madecentro exige PERALM93 en ambos extremos para puertas15. Esta alternativa no está seleccionada ni modelada como herraje definitivo.
+
+
+## Clóset definitivo (opción 2)
+
+Elegido por el usuario el 27/10/2026. La opción 1 se conserva íntegra como alternativa. Los proyectos guardados respetan su elección; **Restaurar terraza inicial** y los nuevos clósets cargan la opción 2. No se modifica la cocina.
+
+- Visor: `closet-opcion2.html`. Excel: `despiece-closet-opcion2.xlsx`; vista web: `despiece-closet-opcion2.html`. Geometría compartida: `assets/models/closet-opcion2.js`.
+- Hueco medido 2900 × 2400 mm. Ancho nominal 2880, estructura 2860. Altura montada 2380 mm, incluida base 100; quedan 20 mm arriba antes de nivelar. El inspector muestra 238 cm reales, no 240 del hueco. Fondo 480 de cuerpo y 495 cerrado, reserva 498 dentro de 520. La regulación real de apoyos y calzos depende del montaje. Armar de pie o por partes: diagonal del conjunto 2380×480 ≈2428 mm.
+- Tres cuerpos útiles 990 /820 /990. Seis hojas inferiores, tres tapas elevables de 518 de alto y tres cajones separados 30 mm, sin manijas y sin repisas entre ellos. Cada uno de los 12 elementos móviles abre de forma independiente.
+- 75 piezas RH15 en 25 líneas,20,380586 m². Incluye 17 refuerzos:3 listones frontales de 80 y 3 traseros de 100 bajo maleteros,8 listones de 60 bajo repisas,3 refuerzos de 30 bajo bases de cajón. Dimensiones y cantidades conciliadas con la geometría.
+- HRE320-40 zincado,400 mm,45 kg nominales:3 pares a$9.999, total$29.997. Vano 820 menos 27 confirmados = caja 793; base 793×400 debajo de paredes 155. Incluye 36 tornillos de 12 mm. El cajón completo de RH pesa unos 8,51 kg; la capacidad del riel no certifica la carga útil de la caja ni sus uniones.
+- Bisagras candidatas:32 HBM897-02 semiparche abajo y 12 HBM306-01 parche arriba (unidades físicas). Cantidad, plantilla, base y compatibilidad con brazos por confirmar; no sumar capacidades nominales de pares para justificar el número.
+- Seis brazos grises previstos, dos por tapa. Pesos aproximados de las hojas:5,07 kg laterales y 4,21 kg central con densidad 650 kg/m³, sin accesorios. Se retiró la selección orientativa 120/100 N. Fuerza y puntos de montaje se definen para altura 518 y peso real; el precio de HEC060-03 no se aplica a otras fuerzas sin cotizar.
+- Las tapas superiores reciben peso propio **y esfuerzos de las bisagras**. En el lote de uniones se prevén 12 apoyos/escuadras metálicas (4 por tapa), sujetos a montaje y fijación compatibles con RH15. Los refuerzos requieren apoyos y uniones mecánicas definidos. El pegamento sobre canto decorativo no se considera una unión estructural; el taller determina superficies y adhesivo compatibles.
+- Nueve agarres por elegir: seis puertas y tres tapas. Los tres cajones se abren por los 30 mm libres entre frentes. No añadir tiradores ni fresados a esos cajones.
+- Anclaje lateral con calzos según la separación real.16 fijaciones es una previsión, no una capacidad demostrada del muro. Producto y tornillo según ladrillo y carga. Sin anclaje al cielo falso. El lado derecho se utiliza con puerta de habitación cerrada; comprobar tope real.
+- Canto rígido 60,124 m netos (65 a pedir), flexible 123,956 (140 a pedir). Propuesta de 5 láminas RH15, sierra 4 y refilado 10 por lado, sin girar por veta. Confirmar acabado y mecanizado de piezas estrechas.
+- Subtotal parcial$3.005.953. Faltan brazos,9 agarres, barras, apoyos, anclajes, uniones y servicios. Cocina final y clóset 2 caben juntos en 8 láminas RH15 en lugar de 9 si acabado y suministro son idénticos; no se descuenta de la compra individual sin aprobar el plano conjunto.
+
+El diseño es definitivo. La fabricación queda condicionada a plantillas de herrajes, uniones, anclajes y acabado, pendientes identificados en el Excel. El auditor comprueba números y encaje; su estimación de flexión supone uniones ideales y no certifica el mueble armado.
+
+Regenerar web: `python herramientas/build_despiece_closet.py 2`.
+Auditar Excel: `python herramientas/auditar_closet.py 2 5`.

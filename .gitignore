@@ -6,3 +6,6 @@ __pycache__/
 /blender/
 *.blend
 *.blend[0-9]*
+
+# Respaldo local del clóset; las opciones vigentes se guardan en Git
+/respaldo-closet-2026-10-27/

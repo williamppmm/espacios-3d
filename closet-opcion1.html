@@ -1,0 +1,599 @@
+<!doctype html><html lang="es" data-theme="light"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Clóset opción 1 · Espacios 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+
+
+<style>
+/* Concepto: ficha de planificación de carpintería. Visor 3D arriba, ajustes y chequeos en tarjetas debajo.
+   Paleta: verdes-grises fríos con un único acento verde azulado; semáforo aparte para chequeos. */
+:root{
+  --bg:#eef1f0; --paper:#fafbfa; --ink:#1b2528; --muted:#58666a; --line:#d2dada; --accent:#0e6a73; --accent-ink:#ffffff;
+  --chip:#d8eaec; --stage:#cdd5d4;
+  --ok:#2a7849; --warn:#9c5c00; --bad:#a9342b; --ok-bg:#e0f0e6; --warn-bg:#fbeed6; --bad-bg:#f7dfdc;
+  --f-display:"Archivo Narrow","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111718; --paper:#192123; --ink:#e4ebea; --muted:#92a2a5; --line:#2a3739; --accent:#5cc0c9; --accent-ink:#06282b;
+  --chip:#1c3a3e; --stage:#242e2f; --ok:#6cc58d; --warn:#e0a24a; --bad:#ec8a80; --ok-bg:#16301f; --warn-bg:#3a2b10; --bad-bg:#3b1a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111718; --paper:#192123; --ink:#e4ebea; --muted:#92a2a5; --line:#2a3739; --accent:#5cc0c9; --accent-ink:#06282b;
+  --chip:#1c3a3e; --stage:#242e2f; --ok:#6cc58d; --warn:#e0a24a; --bad:#ec8a80; --ok-bg:#16301f; --warn-bg:#3a2b10; --bad-bg:#3b1a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+h1{font:600 clamp(30px,5vw,44px)/1 var(--f-display);margin:0;letter-spacing:.005em;text-wrap:balance}
+.sub{color:var(--muted);margin:6px 0 0;max-width:72ch}
+h2{font:600 21px/1.1 var(--f-display);margin:0 0 10px;letter-spacing:.01em}
+h3{font:600 15px/1.2 var(--f-body);margin:14px 0 6px}
+#stage{position:relative;width:100%;height:min(72vh,680px);min-height:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--stage);touch-action:none}
+#stage canvas{display:block;width:100%;height:100%}
+.hint{position:absolute;left:10px;bottom:8px;font-size:12px;color:#26302f;background:rgba(255,255,255,.8);padding:3px 8px;border-radius:4px;pointer-events:none}
+#sel{position:absolute;right:10px;top:10px;max-width:min(340px,72%);background:rgba(250,251,250,.95);color:#1b2528;border:1px solid #d2dada;border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.45}
+#sel b{font:600 18px/1.1 var(--f-display);display:block;margin-bottom:3px}
+#sel .dim{font-family:var(--f-mono);font-size:12px;color:#4d5a5d;display:block;margin-bottom:4px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sep{width:1px;height:26px;background:var(--line)}
+@media (max-width:820px){.sep{display:none}}
+button,select,input{font:500 14px var(--f-body);color:var(--ink)}
+button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button[aria-pressed="true"]{background:var(--chip);border-color:var(--accent);color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select,input[type=number]{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 8px;min-width:0}
+input[type=number]{width:92px;font-family:var(--f-mono);font-size:13.5px}
+.rng{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:5px 10px}
+.rng input{width:120px;accent-color:var(--accent)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+#status{font-size:13.5px;color:var(--muted);min-height:20px}
+#status.warn{color:var(--warn)}
+ul.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+ul.chk li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:7px 10px;border-radius:7px;font-size:14px}
+ul.chk li .ic{font:600 13px var(--f-mono);text-align:center;border-radius:4px;padding:1px 0}
+ul.chk li.ok{background:var(--ok-bg)} ul.chk li.ok .ic{color:var(--ok)}
+ul.chk li.warn{background:var(--warn-bg)} ul.chk li.warn .ic{color:var(--warn)}
+ul.chk li.bad{background:var(--bad-bg)} ul.chk li.bad .ic{color:var(--bad)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.y{color:var(--ok);font-family:var(--f-mono);text-align:center} td.o{color:var(--muted);text-align:center}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px 18px}
+.f{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.f label{font-size:14px}
+.f .u{font:12px var(--f-mono);color:var(--muted);margin-left:4px}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font:600 15px var(--f-body)}
+.note{font-size:13px;color:var(--muted);margin:8px 0 0;max-width:78ch}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.cols ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.big{font:600 28px/1 var(--f-display)}
+.kpi{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:6px}
+.kpi small{display:block;color:var(--muted);font-size:12.5px}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<link rel="stylesheet" href="assets/propuesta.css"><style>
+:root{--f-display:Georgia,serif;--f-body:Arial,Helvetica,sans-serif;--f-mono:Arial,sans-serif}body{background:#f6f5ef;color:#253b35}h1{font-weight:400}h2{font:22px Georgia,serif;margin:20px 0 10px}#stage{background:#e3e2d9;min-height:390px}#status{font:12px Arial;line-height:1.6;margin:10px 0}.extra{margin-top:16px;border:1px solid #d8ddcf;background:#fffefa;border-radius:9px;padding:14px}.extra summary{font:14px Arial;cursor:pointer}.extra[open]>summary{margin-bottom:16px}.extra .bar{margin:12px 0}#sel{font:12px/1.5 Arial;max-width:290px}.cards{margin-top:20px}.cards p{max-width:70ch}.modules button[aria-pressed=true]{background:#253b35;color:#fff}.rng{font:12px Arial;background:#fffefa}.rng select{max-width:160px}header .sub{font:13px Arial;margin:0 0 16px;color:#68746a}table{font:12px/1.5 Arial}.fields{margin-bottom:16px}summary:focus-visible{outline:3px solid #9bb77c}input[type=range]{accent-color:#253b35}.toolbar input{width:170px}@media(max-width:600px){.rng{flex-wrap:wrap;max-width:100%}.rng input{max-width:100%}}
+</style>
+<main>
+<header><a href="./">← Espacios 3D</a><div><span class="tag">CLÓSET 1 · OPCIÓN PROVISIONAL</span><h1>Clóset empotrado</h1><p class="sub" id="sub"></p></div><nav><a href="despiece-closet-opcion1.html">Despiece y herrajes ↗</a><a href="closet-opcion2.html">Comparar con clóset 2 ↗</a><a href="despiece-closet-opcion1.xlsx" download>Despiece provisional Excel ↓</a></nav></header>
+<div class="toolbar"><div id="views"><button data-v="iso" aria-pressed="true">Perspectiva</button><button data-v="front" aria-pressed="false">Frente</button><button data-v="top" aria-pressed="false">Planta</button><button data-v="side" aria-pressed="false">Lateral</button><button id="fit">Encuadrar ↗</button></div><label>Abrir todo <input id="open" type="range" min="0" max="1" step=".01" value="0"></label></div>
+<div class="layers"><button id="t-labels" aria-pressed="true">Cotas</button><button id="t-walls" aria-pressed="true">Muros</button><button id="t-doors" aria-pressed="true">Puertas</button><button id="t-track" aria-pressed="true">Rieles y cenefa</button><button id="t-clothes" aria-pressed="true">Ropa</button><button id="photo">Guardar imagen ↓</button></div>
+<div id="stage"><span class="hint">Arrastra para girar · pellizca para acercar · toca una hoja o cajón para abrirlo individualmente</span><div id="sel" hidden></div></div>
+<div class="modules" aria-label="Seleccionar tramo"><button data-module="B1">Colgar largo</button><button data-module="B2">Cajones izquierdos</button><button data-module="B3">Cajones derechos</button><button data-module="B4">Doble colgado</button><button data-module="MAL">Maletero</button></div><p id="status" role="status">Toca una hoja o un cajón para abrirlo.</p>
+<div class="cards"><section><small>MEDIDAS DE ESTA OPCIÓN</small><strong id="summary-size">288 × 240 × 51,2 cm</strong><p id="summary-fit">Frente de 288 cm para hueco nominal de 290. Estructura de 39,8 cm; fondo completo de 51,2 cm más 8 mm de reserva.</p></section><section><small>DISTRIBUCIÓN</small><strong>4 tramos y 6 cajones</strong><p>Colgar largo a la izquierda, dos bloques de cajones centrales y doble colgado a la derecha. Maletero independiente.</p><p>Cada hoja y cada cajón se mueven al tocarlos. Para abrir un cajón, deja su tramo libre de puertas.</p></section><section class="notice"><small>ANTES DE FABRICAR</small><strong>Fondo reducido</strong><p>Todo RH de 15 mm. Frentes separados 3 cm, sin repisas entre cajones. Revisar perchas, altura y anclajes. Despiece provisional: faltan cantos y herrajes definitivos.</p><p>El lado derecho se usa con la puerta de habitación cerrada. Pared derecha de 52 cm; marco por medir. FSCPCM73 no confirmado para tablero de 15 mm.</p></section></div>
+<details class="extra"><summary>Posiciones de puertas y vista interior</summary><div class="bar"><label class="rng">Puertas bajas <select id="doorPreset"></select></label><label class="rng">Maletero <select id="topPreset"></select></label><label class="rng">Abrir cajones <input id="drawerOpen" type="range" min="0" max="1" step=".01" value="0"></label><label class="rng">Ver interior <input id="clearView" type="range" min="0" max="1" step=".01" value="0"></label></div><div class="tw"><table id="access"></table></div></details>
+<details class="extra"><summary>Medidas e inventario preliminar</summary><div class="tw"><table id="meas"></table></div><h2>Inventario preliminar</h2><div class="kpi" id="kpi"></div><div class="tw"><table id="inv"></table></div><p class="note">Dimensiones terminadas sin descontar cantos. Estimación por área, sin optimización de corte ni pedido de materiales.</p></details>
+<details class="extra"><summary>Comprobaciones y pendientes</summary><ul class="chk" id="checks"></ul><div class="cols"><div><h3>Supuestos</h3><ul id="assume"></ul></div><div><h3>Por confirmar</h3><ul id="ask"></ul></div></div></details>
+<details class="extra"><summary>Ajustes exploratorios</summary><p class="note">Estos ajustes no cambian automáticamente el clóset de la terraza ni el Excel provisional.</p><h3>Nicho y base</h3><div class="fields" id="f-nicho"></div><h3>Distribución interior</h3><div class="fields" id="f-dist"></div><div class="fields" id="f-bays"></div><h3>Puertas y maletero</h3><div class="fields" id="f-puertas"></div><button id="reset">Restablecer valores</button></details>
+<footer>Opción provisional. <a href="index.html">Volver a la terraza ↗</a></footer>
+</main>
+<script src="assets/vendor/three-r128.min.js"></script>
+<script src="assets/vendor/OrbitControls-r128.js"></script>
+<script src="assets/models/closet-motion.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---------- Parámetros (mm) ---------- */
+const DEF={W:2880,H:2400,D:398,nicheW:2900,nicheDepth:520,sideGap:10,topGap:20,base:100,t:15,
+  bays:4,outerW:715,bayTypes:['largo','cajones','cajones','doble'],
+  drawers:3,frontH:210,gap:30,shelvesB:4,shoeShelves:2,shelfD:350,
+  rodHigh:1750,rodLow:900,maletero:1860,
+  ov:30,doorClear:35,floorGap:25,kit:70,topDoors:2,doorT:15};
+let P=JSON.parse(JSON.stringify(DEF));
+const NL=4, SHEET=[2440,2150], RAILS=[250,300,350,400,450,500,550], SHOE_CLEAR=180;
+const TYPES={largo:'Colgar largo',doble:'Doble colgado',cajones:'Colgar corto + cajones',zap:'Colgar + zapatero',estantes:'Estantes'};
+const DEFTYPES=['largo','cajones','cajones','doble','zap','estantes'];
+const cm=v=>{const s=(Math.round(v)/10).toFixed(1).replace('.',',');return s.endsWith(',0')?s.slice(0,-2):s;};
+const mm=v=>Math.round(v*10)/10===Math.round(v)?String(Math.round(v)):(Math.round(v*10)/10).toString().replace('.',',');
+const S=0.001;
+
+/* ---------- Cálculo ---------- */
+function distribute(y0,y1,count,t){const sp=(y1-y0-count*t)/(count+1);const ys=[];for(let k=0;k<count;k++)ys.push(y0+sp*(k+1)+t*k);return {ys,sp};}
+function intervals(pos,w,W){
+  const iv=pos.map(x=>[x,x+w]).sort((a,b)=>a[0]-b[0]);const m=[];
+  for(const a of iv){if(m.length&&a[0]<=m[m.length-1][1])m[m.length-1][1]=Math.max(m[m.length-1][1],a[1]);else m.push([a[0],a[1]]);}
+  const free=[];let cur=0;for(const q of m){if(q[0]>cur+0.01)free.push([cur,q[0]]);cur=Math.max(cur,q[1]);}
+  if(cur<W-0.01)free.push([cur,W]);return free;
+}
+function opens(free,x0,x1,margin,W){const a=Math.max(0,x0-margin),b=Math.min(W,x1+margin);return free.some(f=>f[0]<=a+0.01&&f[1]>=b-0.01);}
+/* Posiciones de las 4 puertas bajas. Índices 0 y 2: carril trasero; 1 y 3: carril delantero. */
+function mkPresets(R){
+  const W=R.W,w=R.door.w,p=R.door.pitch,m=10,out={'Cerradas':[0,p,2*p,3*p]};
+  const pose=(x0,x1)=>{
+    const a=x0-m,b=x1+m;
+    if(2*w<=a)return [0,0,w,w];
+    if(b<=W-2*w)return [W-2*w,W-2*w,W-w,W-w];
+    if(a-w>=0&&b<=W-w)return [a-w,a-w,b,b];
+    const xL=Math.max(0,a-w),xR=Math.min(W-w,Math.max(b,xL+w));return [xL,xL,xR,xR];
+  };
+  R.secs.forEach((s,i)=>{out['Abrir tramo '+(i+1)]=pose(s.x0,s.x1);});
+  if(R.secs.length>=3)out['Abrir centro']=[0,0,W-w,W-w];
+  return out;
+}
+function mkTop(R){
+  const W=R.W,nt=R.tdoor.n,w=R.tdoor.w,p=R.tdoor.pitch;
+  const out={'Cerradas':Array.from({length:nt},(_,k)=>k*p)};
+  const stack=right=>{const pos=[];const lanes=[[],[]];for(let k=0;k<nt;k++)lanes[k%2].push(k);
+    lanes.forEach(L=>L.forEach((k,j)=>{pos[k]=right?W-(L.length-j)*w:j*w;}));return pos;};
+  out['Abrir izquierda']=stack(true);out['Abrir derecha']=stack(false);
+  return out;
+}
+function compute(P){
+  const t=P.t,R={};R.W=P.W;R.H=P.H;R.D=P.D;R.t=t;
+  const n=P.bays,nv=n+1,avail=P.W-2*P.sideGap-nv*t;
+  let widths;
+  if(n>=3){const m=Math.floor((avail-2*P.outerW)/(n-2));widths=[P.outerW,...Array(n-2).fill(m),P.outerW];}
+  else widths=Array(n).fill(Math.floor(avail/n));
+  const used=nv*t+widths.reduce((a,b)=>a+b,0);
+  R.gapSide=(P.W-used)/2;R.used=used;R.verts=[];R.secs=[];
+  let x=R.gapSide;
+  for(let i=0;i<n;i++){
+    R.verts.push({x0:x,x1:x+t});x+=t;
+    R.secs.push({id:'B'+(i+1),kind:P.bayTypes[i],x0:x,x1:x+widths[i],w:widths[i]});x+=widths[i];
+  }
+  R.verts.push({x0:x,x1:x+t});
+  R.yb=P.base;R.yTop=P.H-P.topGap;R.Hv=R.yTop-R.yb;R.mal=P.maletero;R.floorTop=R.yb+t;
+  // cajones
+  const nd=P.drawers,fh=P.frontH,g=P.gap;
+  R.dr={n:nd,fh,g,zoneTop:R.floorTop+nd*fh+(nd+1)*g};
+  const reqRail=P.D-t-20;R.railLen=RAILS.filter(r=>r<=reqRail).pop()||250;R.drawMax=R.railLen-50;R.boxH=fh-40;
+  // zapatero y estantes
+  R.shoe={n:P.shoeShelves,ys:[],zoneTop:R.floorTop+P.shoeShelves*(SHOE_CLEAR+t)};
+  for(let i=0;i<P.shoeShelves;i++)R.shoe.ys.push(R.floorTop+SHOE_CLEAR+i*(SHOE_CLEAR+t));
+  const dB=distribute(R.floorTop,R.mal,P.shelvesB,t);R.bsh=dB.ys;R.bsp=dB.sp;
+  // puertas bajas
+  const w=(P.W+(NL-1)*P.ov)/NL;
+  R.door={n:NL,w,pitch:w-P.ov,top:P.maletero-10,lanePitch:35};
+  R.door.Hd=R.door.top-P.floorGap;
+  R.door.z=[P.D+P.doorClear,P.D+P.doorClear+R.door.lanePitch];
+  R.door.weight=(w*R.door.Hd*P.doorT*1e-9)*650;
+  // puertas del maletero
+  const nt=P.topDoors,tw=(P.W+(nt-1)*P.ov)/nt;
+  R.tdoor={n:nt,w:tw,pitch:tw-P.ov,y0:R.door.top+P.kit+5,y1:P.H-P.kit};
+  R.tdoor.Hd=R.tdoor.y1-R.tdoor.y0;R.tdoor.weight=(tw*R.tdoor.Hd*P.doorT*1e-9)*650;
+  R.track={z0:R.door.z[0]-12,z1:R.door.z[1]+P.doorT+12,h:45};
+  R.cenefaZ0=R.door.z[1]+P.doorT+14;
+  R.nicheD=R.cenefaZ0+t+8;
+  R.presets=mkPresets(R);R.tpresets=mkTop(R);
+  return R;
+}
+
+/* ---------- Escena ---------- */
+const stage=document.getElementById('stage');
+if(!window.THREE){stage.insertAdjacentHTML('beforeend','<p style="padding:20px">No se pudo cargar el motor 3D. Recarga la página.</p>');return;}
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xcdd5d4);
+const camera=new THREE.PerspectiveCamera(38,1,0.05,60);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.maxPolarAngle=Math.PI*0.52;controls.minDistance=0.8;controls.maxDistance=14;
+scene.add(new THREE.HemisphereLight(0xffffff,0x8f9a98,0.52));
+const sun=new THREE.DirectionalLight(0xfff6ea,0.55);sun.position.set(2.5,4.8,5.5);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-4,right:5,top:4,bottom:-1,near:0.5,far:18});
+sun.target.position.set(1.45,1.1,0.3);scene.add(sun,sun.target);
+const fill=new THREE.DirectionalLight(0xffffff,0.14);fill.position.set(-3,2,4);scene.add(fill);
+
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+function canvasTex(w,h,draw,rx=1,ry=1){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);t.anisotropy=4;return t;}
+const wood=canvasTex(256,512,(g,w,h)=>{g.fillStyle='#b48a62';g.fillRect(0,0,w,h);
+  for(let i=0;i<140;i++){const x=rnd()*w,a=0.04+rnd()*0.12;g.strokeStyle=rnd()>.5?`rgba(90,58,30,${a})`:`rgba(230,200,160,${a})`;
+    g.lineWidth=0.5+rnd()*2;g.beginPath();g.moveTo(x,0);for(let y=0;y<=h;y+=32)g.lineTo(x+Math.sin(y*0.02+i)*3,y);g.stroke();}});
+const brick=canvasTex(512,342,(g)=>{g.fillStyle='#cbbfad';g.fillRect(0,0,512,342);const bw=256,bh=171,j=7;
+  for(let r=0;r<2;r++){const off=r%2?bw/2:0;for(let k=-1;k<3;k++){const v=(rnd()-.5)*30;g.fillStyle=`rgb(${178+v|0},${86+v*.6|0},${52+v*.4|0})`;g.fillRect(k*bw+off+j/2,r*bh+j/2,bw-j,bh-j);}}});
+const PAL={
+  carc:{color:0xb08a64}, wood:{map:wood}, door0:{color:0xb08d63,roughness:.55}, door1:{color:0xc4a37a,roughness:.55},
+  rail:{color:0x9a7a58}, metal:{color:0xb9bec2,metalness:.75,roughness:.35}, dark:{color:0x3f4547,roughness:.6},
+  zoc:{color:0x5e4d3d}, floor:{color:0xa9b1ae,roughness:.9}
+};
+function mat(k){return new THREE.MeshStandardMaterial(Object.assign({roughness:.7,metalness:0},PAL[k]));}
+
+const root=new THREE.Group();scene.add(root);
+let all=[],bySec={},G={},drawerGroups=[],R=null,selected=null,LD=[],TD=[],Motion=null;
+
+function B(x0,x1,y0,y1,z0,z1,k,sec,parent,role){
+  const m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)*S,(y1-y0)*S,(z1-z0)*S),mat(k));
+  m.position.set((x0+x1)/2*S,(y0+y1)/2*S,(z0+z1)/2*S);m.castShadow=m.receiveShadow=true;
+  m.userData={sec,role:role||''};(parent||G.body).add(m);
+  if(sec){all.push(m);(bySec[sec]=bySec[sec]||[]).push(m);}
+  return m;
+}
+function disposeTree(o){o.traverse(c=>{if(c.geometry)c.geometry.dispose();if(c.material){if(c.material.map&&c.material.map.image&&c.material.map!==wood&&c.material.map!==brick)c.material.map.dispose();c.material.dispose();}});}
+function label(txt,x,y,z,size){
+  const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');
+  g.font='500 58px "JetBrains Mono", ui-monospace, monospace';const w=Math.min(500,g.measureText(txt).width+40);
+  g.fillStyle='rgba(250,251,250,.93)';g.fillRect((512-w)/2,24,w,80);g.strokeStyle='#0e6a73';g.lineWidth=3;g.strokeRect((512-w)/2,24,w,80);
+  g.fillStyle='#1b2528';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,256,66);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));
+  s.position.set(x*S,y*S,z*S);s.scale.set(size*4,size,1);s.renderOrder=10;G.labels.add(s);
+}
+function addRod(s,ry,len,D){
+  const c=new THREE.Mesh(new THREE.CylinderGeometry(12.5*S,12.5*S,(s.w-2)*S,18),mat('metal'));
+  c.rotation.z=Math.PI/2;c.position.set((s.x0+s.x1)/2*S,ry*S,D/2*S);c.castShadow=true;c.userData={sec:s.id};G.body.add(c);all.push(c);(bySec[s.id]=bySec[s.id]||[]).push(c);
+  B(s.x0,s.x0+10,ry-22,ry+22,D/2-28,D/2+28,'metal',s.id);B(s.x1-10,s.x1,ry-22,ry+22,D/2-28,D/2+28,'metal',s.id);
+  const cnt=Math.floor((s.w-50)/62);
+  for(let k=0;k<cnt;k++){
+    const gx=s.x0+30+k*62+(s.w-50-(cnt-1)*62)/2,gl=len*(0.88+rnd()*0.2),col=[0x8b9aa8,0xa7b5a0,0xc2a98f,0x6d7c86,0xb39c9c,0x9fa6ad][Math.floor(rnd()*6)];
+    const m=new THREE.Mesh(new THREE.BoxGeometry(14*S,gl*S,380*S),new THREE.MeshStandardMaterial({color:col,roughness:.95}));
+    m.position.set(gx*S,(ry-60-gl/2)*S,D/2*S);G.clothes.add(m);
+  }
+}
+
+function build(){
+  while(root.children.length){const c=root.children[0];root.remove(c);disposeTree(c);}
+  all=[];bySec={};drawerGroups=[];selected=null;seed=7;
+  G={body:new THREE.Group(),doors:new THREE.Group(),track:new THREE.Group(),walls:new THREE.Group(),labels:new THREE.Group(),clothes:new THREE.Group()};
+  for(const k in G)root.add(G[k]);
+  R=compute(P);
+  if(!R.presets[currentPreset])currentPreset='Cerradas';
+  if(!R.tpresets[currentTop])currentTop='Cerradas';
+  const {t}=R,D=P.D,W=P.W,H=P.H,yb=R.yb,yTop=R.yTop;
+  const xs=R.gapSide,xe=W-R.gapSide;
+
+  // divisores y laterales: de la base al techo, sin fondo
+  R.verts.forEach(v=>B(v.x0,v.x1,yb,yTop,0,D,'carc','EST'));
+  R.secs.forEach(s=>{
+    B(s.x0,s.x1,yb,yb+t,0,D,'carc',s.id);
+    B(s.x0,s.x1,yTop-t,yTop,0,D,'carc','MAL');
+    B(s.x0,s.x1,R.mal,R.mal+t,0,D,'carc','MAL');
+    B(s.x0,s.x1,yTop-t-100,yTop-t,0,t,'rail','EST');
+    B(s.x0,s.x1,yb+t,yb+t+100,0,t,'rail','EST');
+    if(s.kind==='cajones'){
+      const {n,fh,g}=R.dr,boxW=s.w-27;
+      for(let i=0;i<n;i++){
+        const y0=R.floorTop+g+i*(fh+g);
+        const grp=new THREE.Group();G.body.add(grp);
+        B(s.x0+3,s.x1-3,y0,y0+fh,D-t,D,'wood',s.id,grp,'front');
+        const bx0=s.x0+13.5,bx1=bx0+boxW,by0=y0+12,by1=by0+R.boxH,zF=D-t,zR=zF-R.railLen;
+        // Base aplicada debajo de las paredes: envolvente conservada, sin solapes.
+        B(bx0,bx0+t,by0+t,by1,zR,zF,'carc',s.id,grp);
+        B(bx1-t,bx1,by0+t,by1,zR,zF,'carc',s.id,grp);
+        B(bx0,bx1,by0,by0+t,zR,zF,'carc',s.id,grp);
+        B(bx0+t,bx1-t,by0+t,by1,zF-t,zF,'carc',s.id,grp);
+        B(bx0+t,bx1-t,by0+t,by1,zR,zR+t,'carc',s.id,grp);
+        drawerGroups.push({g:grp,sec:s});
+      }
+      addRod(s,P.rodHigh,Math.min(760,P.rodHigh-60-R.dr.zoneTop),D);
+    }else if(s.kind==='zap'){
+      R.shoe.ys.forEach(y=>B(s.x0,s.x1,y,y+t,D-P.shelfD,D-2,'carc',s.id));
+      addRod(s,P.rodHigh,Math.min(1000,P.rodHigh-60-R.shoe.zoneTop),D);
+    }else if(s.kind==='estantes'){
+      R.bsh.forEach(y=>B(s.x0,s.x1,y,y+t,0,D-2,'carc',s.id));
+    }else{
+      const rods=s.kind==='doble'?[P.rodHigh,P.rodLow]:[P.rodHigh];
+      rods.forEach((ry,ri)=>addRod(s,ry,s.kind==='doble'?(ri===0?750:700):1350,D));
+    }
+  });
+
+  // módulo base (marco 100 con patas, zócalo retranqueado 50)
+  const fl=20,zf=D-50;
+  const segs=Math.ceil((xe-xs)/SHEET[0]),segW=(xe-xs)/segs;
+  for(let i=0;i<segs;i++)B(xs+i*segW+(i?2:0),xs+(i+1)*segW-(i<segs-1?2:0),8,yb,zf-t,zf,'zoc','BASE');
+  for(let i=0;i<segs;i++)B(xs+i*segW,xs+(i+1)*segW,fl,yb,0,t,'zoc','BASE');
+  R.verts.forEach(v=>{
+    B(v.x0,v.x1,fl,yb,t,zf-t,'zoc','BASE');
+    [[t+20],[zf-t-35]].forEach(([z])=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(14*S,14*S,fl*S,12),mat('dark'));c.position.set((v.x0+v.x1)/2*S,fl/2*S,z*S);c.userData={sec:'BASE'};G.body.add(c);all.push(c);(bySec.BASE=bySec.BASE||[]).push(c);});
+  });
+
+  // puertas bajas, puertas del maletero, rieles y cenefas
+  LD=[];TD=[];
+  for(let i=0;i<NL;i++){
+    const lane=i%2;
+    const m=B(0,R.door.w,P.floorGap,R.door.top,R.door.z[lane],R.door.z[lane]+P.doorT,lane?'door1':'door0','PUERTAS',G.doors,'door');
+    LD.push({m,w:R.door.w,x:R.presets[currentPreset][i],tx:R.presets[currentPreset][i]});
+  }
+  for(let k=0;k<R.tdoor.n;k++){
+    const lane=k%2;
+    const m=B(0,R.tdoor.w,R.tdoor.y0,R.tdoor.y1,R.door.z[lane],R.door.z[lane]+P.doorT,lane?'door1':'door0','PUERTAS',G.doors,'door');
+    TD.push({m,w:R.tdoor.w,x:R.tpresets[currentTop][k],tx:R.tpresets[currentTop][k]});
+  }
+  B(0,W,R.door.top,R.door.top+R.track.h,R.track.z0,R.track.z1,'metal','RIEL',G.track);
+  B(0,W,H-R.track.h,H,R.track.z0,R.track.z1,'metal','RIEL',G.track);
+  for(let k=0,n=Math.ceil(W/SHEET[0]);k<n;k++){const x0=k*W/n,x1=(k+1)*W/n;
+  B(x0,x1,R.door.top,R.door.top+P.kit,R.cenefaZ0,R.cenefaZ0+t,'carc','RIEL',G.track);
+  B(x0,x1,H-P.kit,H,R.cenefaZ0,R.cenefaZ0+t,'carc','RIEL',G.track);}
+
+
+  // muros y piso
+  const wm=(w,h)=>{const tx=brick.clone();tx.needsUpdate=true;tx.repeat.set(w/0.6,h/0.4);return new THREE.MeshStandardMaterial({map:tx,roughness:.9,side:THREE.DoubleSide});};
+  const back=new THREE.Mesh(new THREE.PlaneGeometry(W*S,H*S),wm(W*S,H*S));back.position.set(W/2*S,H/2*S,-0.001);back.receiveShadow=true;G.walls.add(back);
+  const depthW=Math.max(R.nicheD+250,900);
+  const sideWalls=[{x:-(P.nicheW-W)/2,depth:depthW,side:'izquierdo'},{x:W+(P.nicheW-W)/2,depth:P.nicheDepth,side:'derecho'}];
+  sideWalls.forEach(({x,depth,side},i)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(depth*S,H*S),wm(depth*S,H*S));
+    m.rotation.y=Math.PI/2;m.position.set((x+(i?0.5:-0.5))*S,H/2*S,depth/2*S);m.receiveShadow=true;m.userData={wallSide:side,depthMm:depth};G.walls.add(m);});
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry((W+1600)*S,3.2),mat('floor'));floor.rotation.x=-Math.PI/2;floor.position.set(W/2*S,0,1.2);floor.receiveShadow=true;root.add(floor);
+
+  // cotas
+  R.secs.forEach(s=>label(cm(s.w),(s.x0+s.x1)/2,yb+18,R.door.z[0]+90,0.13));
+  label('alto '+cm(H),-190,H/2,60,0.14);
+  label('base '+cm(yb),-190,yb/2,60,0.12);
+  label('maletero '+cm(yTop-t-(R.mal+t)),W+190,(R.mal+yTop)/2,60,0.13);
+  label('barra '+cm(P.rodHigh),W+190,P.rodHigh,60,0.13);
+  label('fondo '+cm(D),W/2,H+110,D/2,0.13);
+
+  document.getElementById('sel').hidden=true;
+  Motion=window.EspaciosClosetMotion({P,R,LD,TD,drawerGroups,S});
+  Motion.setLow(currentPreset);Motion.setTop(currentTop);
+  fillPresets();
+  applyToggles();
+  refreshTables();
+  applyDoors();
+  applyClear();
+  frameCamera(false);
+}
+
+/* ---------- Interacción ---------- */
+let currentPreset='Cerradas',currentTop='Cerradas';
+const presetSel=document.getElementById('doorPreset'),topSel=document.getElementById('topPreset');
+function fillPresets(){
+  presetSel.innerHTML=Object.keys(R.presets).map(k=>`<option value="${k}"${k===currentPreset?' selected':''}>${k}</option>`).join('');
+  topSel.innerHTML=Object.keys(R.tpresets).map(k=>`<option value="${k}"${k===currentTop?' selected':''}>${k}</option>`).join('');
+}
+presetSel.addEventListener('change',()=>{currentPreset=presetSel.value;Motion.setLow(currentPreset);});
+topSel.addEventListener('change',()=>{currentTop=topSel.value;Motion.setTop(currentTop);});
+
+function applyDoors(){LD.concat(TD).forEach(d=>{d.m.position.x=(d.x+d.w/2)*S;});}
+const clearR=document.getElementById('clearView');
+function applyClear(){
+  const v=parseFloat(clearR.value);
+  const selFade=(selected&&selected!=='PUERTAS')?0.12:1;
+  G.doors.visible=doorsOn&&v<0.99;
+  G.doors.children.forEach(m=>{const o=Math.min(1-v*0.9,selFade);m.material.transparent=o<0.999;m.material.opacity=o;m.material.depthWrite=o>0.5;});
+}
+clearR.addEventListener('input',applyClear);
+let doorsOn=true,topMode=false;
+const pr=id=>document.getElementById(id).getAttribute('aria-pressed')==='true';
+function applyToggles(){doorsOn=pr('t-doors');G.track.visible=pr('t-track')&&!topMode;(bySec.MAL||[]).forEach(m=>{m.visible=!topMode;});G.walls.visible=pr('t-walls');G.labels.visible=pr('t-labels');G.clothes.visible=pr('t-clothes');applyClear();}
+function tog(id,fn){const b=document.getElementById(id);b.addEventListener('click',()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));fn(on);});}
+tog('t-doors',on=>{doorsOn=on;applyClear();});
+tog('t-track',on=>{G.track.visible=on&&!topMode;});
+tog('t-walls',on=>{G.walls.visible=on;});
+tog('t-labels',on=>{G.labels.visible=on;});
+tog('t-clothes',on=>{G.clothes.visible=on;});
+
+let VIEWS={};
+function setViews(){
+  const cx=P.W*S/2,h=P.H*S,d=Math.max(R.nicheD,700)*S;
+  const th=Math.tan(camera.fov*Math.PI/360),asp=camera.aspect||1.6;
+  const dist=Math.max((h/2*1.32)/th,(P.W*S/2*1.3)/(th*asp))+0.7;
+  VIEWS={iso:{p:[cx-dist*0.3,h*0.7,dist*0.95],t:[cx,h*0.46,0.3]},front:{p:[cx,h*0.5,dist],t:[cx,h*0.48,0.3]},
+         top:{p:[cx,(P.W*S/2*1.12)/(th*asp)+0.5,d*0.45+0.3],t:[cx,0,d*0.45]},side:{p:[-dist*0.9,h*0.5,1.4],t:[cx*0.6,h*0.46,0.3]}};
+}
+let anim=null;
+function go(v,instant){const V=VIEWS[v];if(!V)return;
+  if(instant){camera.position.set(...V.p);controls.target.set(...V.t);anim=null;}
+  else anim={p0:camera.position.clone(),t0:controls.target.clone(),p1:new THREE.Vector3(...V.p),t1:new THREE.Vector3(...V.t),k:0};
+  topMode=(v==='top');applyToggles();
+  document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));}
+function frameCamera(){setViews();go('iso',true);}
+document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.v)));
+
+const drawerR=document.getElementById('drawerOpen'),statusEl=document.getElementById('status');
+drawerR.addEventListener('input',()=>Motion.setDrawers(Number(drawerR.value)));
+document.getElementById('open').addEventListener('input',e=>Motion.setOpen(Number(e.target.value)));
+document.getElementById('fit').onclick=()=>frameCamera();
+document.getElementById('photo').onclick=()=>{renderer.render(scene,camera);const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download='closet-opcion1.png';a.click();};
+function updateDrawers(){statusEl.textContent=Motion.message||'Toca una hoja o cajón para moverlo individualmente. Despeja el tramo antes de abrir un cajón.';statusEl.className=Motion.message?'warn':'';}
+const selBox=document.getElementById('sel');
+function secInfo(id){
+  const s=R.secs.find(q=>q.id===id);
+  if(s){
+    const head=`Tramo ${id.slice(1)} · ${TYPES[s.kind]}`,dim=`${mm(s.w)} mm útiles · x ${mm(s.x0)}–${mm(s.x1)}`;
+    let tx='';
+    if(s.kind==='cajones')tx=`${R.dr.n} cajones: frentes ${mm(s.w-6)} × ${mm(R.dr.fh)} con ${mm(R.dr.g)} mm entre ellos para abrir sin manija. Caja ${mm(s.w-27)} × ${mm(R.boxH)}, riel de ${R.railLen}. Encima, una barra a ${cm(P.rodHigh)} cm con ${mm(P.rodHigh-60-R.dr.zoneTop)} mm de caída. No lleva repisa sobre los cajones.`;
+    else if(s.kind==='zap')tx=`${P.shoeShelves} repisas de ${P.shelfD} mm de fondo (menos material que a fondo completo) con ${SHOE_CLEAR} mm libres para zapatos. Encima, barra a ${cm(P.rodHigh)} cm.`;
+    else if(s.kind==='doble')tx=`Dos barras, a ${cm(P.rodHigh)} y ${cm(P.rodLow)} cm. Camisas y pantalones doblados por la mitad.`;
+    else if(s.kind==='largo')tx=`Una barra a ${cm(P.rodHigh)} cm. Cuelga abrigos y vestidos largos hasta ${cm(P.rodHigh-R.floorTop-60)} cm.`;
+    else tx=`${P.shelvesB} estantes con ${mm(R.bsp)} mm libres entre cada uno.`;
+    return {n:head,d:dim,t:tx};
+  }
+  const m={
+    EST:{n:'Estructura',d:`${R.verts.length} divisores · ${mm(R.Hv)} × ${P.D}`,t:'Divisores de piso a techo, sin fondo. Se rigidiza con travesaños traseros de 100 mm y se ancla al muro con escuadras.'},
+    MAL:{n:'Maletero y tapa',d:`libres ${mm(R.yTop-R.t-(R.mal+R.t))} mm de alto`,t:`Un estante por tramo a ${mm(R.mal)} mm y la tapa superior. Se accede por ${R.tdoor.n} puertas propias, livianas (${Math.round(R.tdoor.weight)} kg cada una).`},
+    BASE:{n:'Módulo base',d:`${mm(R.yb)} mm de alto · retranqueado 50 mm`,t:'Marco con patas niveladoras que absorbe el desnivel del piso. El zócalo frontal se parte en tramos que caben en la lámina.'},
+    PUERTAS:{n:'Puertas corredizas colgantes',d:`${NL} bajas ${mm(R.door.w)} × ${mm(R.door.Hd)} · ${R.tdoor.n} altas ${mm(R.tdoor.w)} × ${mm(R.tdoor.Hd)}`,t:`2 rieles y traslape de ${P.ov} mm en cada nivel. Peso por puerta baja ≈ ${Math.round(R.door.weight)} kg y alta ≈ ${Math.round(R.tdoor.weight)} kg en melamina de ${P.doorT}.`},
+    RIEL:{n:'Rieles y cenefas',d:`fondo de nicho necesario ≈ ${cm(R.nicheD)} cm`,t:'El riel de las puertas bajas va en una viga atornillada a los divisores del mueble, a la altura del maletero. El de las altas va en el bastidor de pino, anclado a los muros laterales. Las cenefas tapan rieles y herrajes.'}
+  };return m[id];
+}
+function select(id){
+  selected=selected===id?null:id;
+  for(const m of all){const on=!selected||m.userData.sec===selected;m.material.transparent=!on;m.material.opacity=on?1:0.15;m.material.depthWrite=on;}
+  applyClear();
+  if(!selected){selBox.hidden=true;return;}
+  const i=secInfo(selected);if(!i){selBox.hidden=true;return;}
+  selBox.hidden=false;selBox.innerHTML=`<b>${i.n}</b><span class="dim">${i.d}</span>${i.t}`;
+}
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();let down=null;
+renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
+renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;
+  const r=renderer.domElement.getBoundingClientRect();ptr.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ptr,camera);
+  const hit=ray.intersectObjects(all.filter(m=>m.userData.sec&&m.visible&&m.parent&&m.parent.visible!==false),false).find(h=>{let o=h.object;while(o){if(o.visible===false)return false;o=o.parent;}return h.object.material.opacity>0.5;});
+  if(hit){for(let o=hit.object;o;o=o.parent){if(o.userData.mover){const u=o.userData.mover;u.target=u.target>.5?0:1;return;}}select(hit.object.userData.sec);}else if(selected)select(selected);});
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(R){const active=document.querySelector('[data-v][aria-pressed="true"]')?.dataset.v||'iso';setViews();go(active,true);}}
+
+new ResizeObserver(resize).observe(stage);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function loop(){
+  if(anim){anim.k=reduce?1:Math.min(1,anim.k+0.045);const e=1-Math.pow(1-anim.k,3);
+    camera.position.lerpVectors(anim.p0,anim.p1,e);controls.target.lerpVectors(anim.t0,anim.t1,e);if(anim.k>=1)anim=null;}
+  if(R){
+    Motion.tick();
+    applyDoors();updateDrawers();
+  }
+  controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);
+}
+
+/* ---------- Tablas y chequeos ---------- */
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function refreshTables(){
+  const {t}=R,W=P.W;
+  document.getElementById('sub').textContent=`${cm(P.W)} cm de frente · ${cm(P.H)} cm de alto · ${cm(R.nicheD-8)} cm de fondo total. Puertas corredizas, cajones y maletero.`;
+  document.getElementById('summary-size').textContent=`${cm(P.W)} × ${cm(P.H)} × ${cm(R.nicheD-8)} cm`;
+  document.getElementById('summary-fit').textContent=`Frente ${cm(P.W)} cm en hueco nominal ${cm(P.nicheW)} cm. Estructura ${cm(P.D)} cm y reserva de nicho ${cm(R.nicheD)} cm; ${mm((P.nicheW-P.W)/2)} mm exteriores por lado si se centra.`;
+
+
+  const ck=[];const add=(l,tx)=>ck.push([l,tx]);
+  add('warn',`Pared lateral derecha limitada a ${P.nicheDepth} mm de fondo, en ladrillo a la vista. El marco de la puerta puede sobresalir: medir su saliente y el paso; no añadirlo al fondo útil automáticamente.`);
+  add(R.nicheD<=P.nicheDepth?'ok':'bad',`Profundidad necesaria ${R.nicheD} mm (frente completo ${R.nicheD-8} + reserva 8), frente a ${P.nicheDepth} mm disponibles. El herraje final debe respetar este límite.`);
+  add(P.nicheW>=W?'warn':'bad',`Hueco nominal ${P.nicheW} mm y frente ${W} mm: diferencia ${P.nicheW-W} mm, ${(P.nicheW-W)/2} mm por lado si se centra. Medir arriba, centro y abajo y comprobar plomo, diagonales y nivel antes de fabricar. El valor menor del hueco manda.`);
+  add(R.gapSide>=8?'ok':R.gapSide>=0?'warn':'bad',`Anchos: ${mm(R.gapSide)} + ${R.verts.length} divisores de ${t} + tramos de ${R.secs.map(s=>s.w).join(' + ')} + ${mm(R.gapSide)} = ${W}. Retranqueo interno de estructura ${mm(R.gapSide)} mm por lado, distinto de la holgura exterior de instalación.`);
+  add(R.Hv<=SHEET[0]?'ok':'bad',`Divisores de ${mm(R.Hv)} × ${P.D}: la veta corre en el largo y caben en la lámina de ${SHEET[0]}.`);
+  const seg=Math.ceil(R.used/SHEET[0]);
+  add(seg===1?'ok':'warn',seg===1?'Zócalo y cenefas caben enteros en una lámina.':`El zócalo (${mm(R.used)}) y las dos cenefas (${W}) superan los ${SHEET[0]}: se parten en ${seg} tramos con la unión sobre un divisor.`);
+  const hang=R.secs.filter(s=>s.kind!=='estantes');
+  if(hang.length){const mx=Math.max(...hang.map(s=>s.w));add(mx<=900?'ok':mx<=1000?'warn':'bad',`Barras: el tramo más ancho mide ${mx}. ${mx<=900?'La sección, carga y apoyos de la barra deben comprobarse con el herraje elegido.':'Pasa de 900: pon un apoyo central o parte el tramo.'}`);}
+  const sp=Math.max(...R.secs.map(s=>s.w));
+  add(sp<=800?'ok':sp<=900?'warn':'bad',`Estantes y maletero: luz máxima ${sp} en melamina de ${t}. ${sp<=800?'Comprobar flecha y refuerzos según carga de ropa y maletas.':sp<=900?'Agrega un refuerzo frontal de 60 mm de canto.':'Demasiado ancho: divide el tramo o usa 18 mm con refuerzo.'}`);
+  if(R.secs.some(s=>s.kind==='cajones')){
+    const hl=P.rodHigh-60-R.dr.zoneTop;
+    add(hl>=780?'ok':'warn',`Colgar corto sobre cajones: ${mm(hl)} mm de caída bajo la percha. ${hl>=780?'Caben camisas y chaquetas sin rozar los cajones.':'Solo prendas muy cortas: baja el frente de los cajones o su cantidad.'}`);
+    const bw=Math.min(...R.secs.filter(s=>s.kind==='cajones').map(s=>s.w))-27;
+    add(R.boxH>=100?'ok':'warn',`Cajones: ${R.dr.n} por tramo, frente ${mm(R.dr.fh)}, caja ${mm(bw)} × ${mm(R.boxH)}, riel de ${R.railLen} mm. La caja queda ${R.dr.fh-R.boxH} mm más baja que el frente para meter los dedos en la separación de ${P.gap} mm. Sin repisas intermedias: cada caja se fija a los laterales mediante sus correderas. Base inferior aplicada de 15 mm, paredes de 155 mm; unión y carga por proveedor.`);
+  }
+  const dbl=R.secs.find(s=>s.kind==='doble');
+  if(dbl){const sep=P.rodHigh-P.rodLow;add(sep>=850?'ok':'warn',`Doble colgado: barras separadas ${sep} mm. ${sep>=850?'Camisas de hasta 75 cm no se tocan.':'Con menos de 85 cm se cruzan las prendas.'}`);}
+  const lg=R.secs.find(s=>s.kind==='largo');
+  if(lg){const hl=P.rodHigh-R.floorTop-60;add(hl>=1400?'ok':'warn',`Colgar largo: ${mm(hl)} mm bajo la percha. ${hl>=1400?'Caben abrigos y vestidos largos.':'Solo ropa corta.'}`);}
+  if(R.secs.some(s=>s.kind==='zap')){const hz=P.rodHigh-60-R.shoe.zoneTop;add(hz>=900?'ok':'warn',`Colgar + zapatero: ${P.shoeShelves} repisas de ${P.shelfD} mm de fondo con ${SHOE_CLEAR} mm libres (no entran botas altas); encima quedan ${mm(hz)} mm de caída.`);}
+  add(P.D>=480?'ok':'warn',`Estructura de ${P.D} mm: el margen orientativo para perchas es ${P.D-60} mm. Con este poco fondo, comprobar perchas y prendas reales; las convencionales pueden no caber perpendiculares al frente. La ropa del 3D es esquemática.`);
+  add(R.door.weight<=35?'ok':'warn',`Puertas bajas de ${mm(R.door.w)} × ${mm(R.door.Hd)}: unos ${Math.round(R.door.weight)} kg cada una en melamina de ${P.doorT}. Al terminar en el estante del maletero pesan menos que las de piso a techo.`);
+  const topFree=Math.max(...Object.values(R.tpresets).map(pp=>Math.max(...intervals(pp,R.tdoor.w,W).map(f=>f[1]-f[0]))));
+  add(R.tdoor.weight<=15?'ok':'warn',`Puertas del maletero: ${R.tdoor.n} de ${mm(R.tdoor.w)} × ${mm(R.tdoor.Hd)}, unos ${Math.round(R.tdoor.weight)} kg cada una. Con 2 rieles se destapan como máximo ${mm(topFree)} mm de ancho${R.tdoor.n===3?'; con 2 puertas serían más':''}. La ventana útil mide ${mm(R.tdoor.Hd)} mm de alto: ${R.tdoor.Hd>=380?'caben maletas y cajas medianas':'justo para cajas bajas'}.`);
+  add('warn',`Fondo del nicho necesario: ${cm(R.nicheD)} cm (módulo + luz + 2 rieles + cenefa). Confirma la medida real.`);
+  add('warn',`Cielo falso: el mueble se sostiene solo, sus divisores terminan ${P.topGap} mm antes del techo y nada carga sobre el cielo falso. El bastidor de pino solo lleva el riel de las puertas del maletero y debe anclarse a los muros laterales (o a la placa), nunca al cielo falso. El riel de las puertas bajas se atornilla al mueble.`);
+  const keys=Object.keys(R.presets).filter(k=>k!=='Cerradas');
+  const free={};keys.forEach(k=>{free[k]=intervals(R.presets[k],R.door.w,W);});
+  const mg=s=>s.kind==='cajones'?10:0;
+  const unreach=R.secs.filter(s=>!keys.some(k=>opens(free[k],s.x0,s.x1,mg(s),W)));
+  add(unreach.length?'bad':'ok',unreach.length?`Con 4 puertas en 2 rieles el tramo ${unreach.map(s=>s.id.slice(1)).join(' y ')} no queda libre completo en ninguna posición. Ajusta anchos o traslape.`:'Cada tramo queda libre por completo en alguna posición de las puertas bajas (los de cajones con 10 mm de margen a cada lado).');
+  document.getElementById('checks').innerHTML=ck.map(([l,tx])=>`<li class="${l}"><span class="ic">${l==='ok'?'OK':l==='warn'?'!':'X'}</span><span>${esc(tx)}</span></li>`).join('');
+
+  // acceso
+  let h='<tr><th>Tramo</th>'+keys.map(k=>`<th>${k.replace('Abrir ','')}</th>`).join('')+'</tr>';
+  R.secs.forEach(s=>{
+    h+=`<tr><td>${s.id.slice(1)} · ${TYPES[s.kind]}</td>`+keys.map(k=>opens(free[k],s.x0,s.x1,mg(s),W)?'<td class="y">✓</td>':'<td class="o">–</td>').join('')+'</tr>';
+  });
+  document.getElementById('access').innerHTML=h;
+
+  // medidas
+  const rows=[];
+  rows.push(['Mueble',`${P.W} × ${P.H} × ${P.D}`,'ancho × alto × fondo del módulo']);
+  rows.push(['Holgura exterior nominal',mm((P.nicheW-P.W)/2)+' por lado','hueco menos frente; confirmar medidas mínimas']);
+  rows.push(['Retranqueo de estructura',mm(R.gapSide)+' por lado','interno, se oculta tras las puertas']);
+  rows.push(['Pared lateral derecha',mm(P.nicheDepth),'hasta el marco de acceso; saliente del marco por medir']);
+  rows.push(['Profundidad total',mm(R.nicheD-8),'estructura, rieles, puertas y cenefa; reserva de nicho '+mm(R.nicheD)]);
+  rows.push(['Divisores y laterales',`${R.verts.length} × ${mm(R.Hv)} × ${P.D}`,'de la base al techo, sin fondo']);
+  R.secs.forEach(s=>rows.push(['Tramo '+s.id.slice(1)+' ('+TYPES[s.kind]+')',`${mm(s.w)} útiles`,`x ${mm(s.x0)}–${mm(s.x1)}`]));
+  rows.push(['Base',`${mm(R.yb)} de alto`,'marco retranqueado 50 con patas']);
+  if(R.secs.some(s=>s.kind==='cajones'))rows.push(['Cajón',`frente ${mm(R.secs.find(s=>s.kind==='cajones').w-6)} × ${mm(R.dr.fh)}`,`${R.dr.n} por tramo · riel ${R.railLen}`]);
+  rows.push(['Maletero',`estante a ${mm(R.mal)}`,`libre de ${mm(R.mal+R.t)} a ${mm(R.yTop-R.t)}`]);
+  rows.push(['Puerta baja',`${mm(R.door.w)} × ${mm(R.door.Hd)}`,`${NL} puertas · traslape ${P.ov} · luz al piso ${P.floorGap}`]);
+  rows.push(['Puerta del maletero',`${mm(R.tdoor.w)} × ${mm(R.tdoor.Hd)}`,`${R.tdoor.n} puertas · desde ${mm(R.tdoor.y0)} hasta ${mm(R.tdoor.y1)}`]);
+  document.getElementById('meas').innerHTML='<tr><th>Parte</th><th>Medida (mm)</th><th>Detalle</th></tr>'+rows.map(r=>`<tr><td>${esc(r[0])}</td><td class="n">${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('');
+
+  // inventario
+  const inv=[];const addp=(n,q,L,A)=>{if(q>0&&L>0&&A>0)inv.push({n,q,L,A,area:q*L*A/1e6});};
+  addp('Divisores y laterales',R.verts.length,R.Hv,P.D);
+  R.secs.forEach(s=>{
+    addp('Pisos (sobre la base)',1,s.w,P.D);addp('Tapa superior',1,s.w,P.D);addp('Estante maletero',1,s.w,P.D);
+    addp('Travesaños traseros',2,s.w,100);
+    if(s.kind==='cajones'){const bw=s.w-27,n=R.dr.n;
+      addp('Frentes de cajón',n,s.w-6,R.dr.fh);addp('Cajas de cajón: costados',2*n,R.railLen,R.boxH-t);
+      addp('Cajas de cajón: frente y trasera',2*n,bw-2*t,R.boxH-t);addp('Cajas de cajón: base aplicada',n,bw,R.railLen);}
+    if(s.kind==='zap')addp('Repisas de zapatero',P.shoeShelves,s.w,P.shelfD);
+    if(s.kind==='estantes')addp('Estantes',P.shelvesB,s.w,P.D-2);
+  });
+  const segs=Math.ceil(R.used/SHEET[0]);for(let k=0;k<segs;k++)addp('Zócalo frontal',1,R.used/segs-(k?2:0)-(k<segs-1?2:0),R.yb-8);addp('Marco base: trasero',segs,R.used/segs,R.yb-20);addp('Marco base: travesaños',R.verts.length,P.D-50-2*R.t,R.yb-20);
+  addp('Puertas bajas',NL,R.door.w,R.door.Hd);addp('Puertas del maletero',R.tdoor.n,R.tdoor.w,R.tdoor.Hd);
+  const cs=Math.ceil(W/SHEET[0]);addp('Cenefas (media y alta)',2*cs,W/cs,P.kit);
+  const merged=[];inv.forEach(it=>{const f=merged.find(m=>m.n===it.n&&m.L===it.L&&m.A===it.A);if(f){f.q+=it.q;f.area+=it.area;}else merged.push({...it});});
+  const area=merged.reduce((a,b)=>a+b.area,0);
+  const sheets=area/(SHEET[0]*SHEET[1]/1e6)/0.82;
+  document.getElementById('kpi').innerHTML=`<div><span class="big">${area.toFixed(1).replace('.',',')} m²</span><small>de RH de ${t} mm en todas las piezas</small></div><div><span class="big">${Math.ceil(sheets-0.25)}–${Math.ceil(sheets+0.5)}</span><small>equivalente por área; falta optimización de corte</small></div>`;
+  document.getElementById('inv').innerHTML='<tr><th>Pieza</th><th class="n">Cant.</th><th class="n">Largo</th><th class="n">Ancho</th><th class="n">m²</th></tr>'+merged.map(m=>`<tr><td>${esc(m.n)}</td><td class="n">${m.q}</td><td class="n">${m.L}</td><td class="n">${m.A}</td><td class="n">${m.area.toFixed(2).replace('.',',')}</td></tr>`).join('');
+
+  document.getElementById('assume').innerHTML=[
+    `Partí del modelo de referencia: tramos de colgar a los lados, cajones al centro bajo una barra corta, y un maletero arriba con sus propias puertas.`,
+    `Los ${P.bays} tramos van alineados con las ${NL} puertas bajas: los dos centrales (cajones) quedan libres con una sola posición, "Abrir centro". Los de los extremos son más anchos (${P.outerW}) y los centrales más angostos (${R.secs[1]?R.secs[1].w:'–'}).`,
+    `Ahorro de material: ningún tramo lleva estantes de sobra. Sin repisa sobre los cajones, zapatero con repisas de ${P.shelfD} mm de fondo y solo ${P.shoeShelves} repisas. Interpreté "como hicieron los laterales" como pocas repisas en los lados.`,
+    `Las puertas bajas terminan en el maletero (${mm(R.door.Hd)} mm de alto, ≈${Math.round(R.door.weight)} kg). Las altas son ${R.tdoor.n} hojas corredizas propias; "que levanten" (abatibles hacia arriba con pistón) no está modelado.`,
+    `Con cielo falso el mueble es autoportante: los divisores del maletero son del mueble, no del techo, y se mantienen para que el estante y la tapa no pasen de ${Math.max(...R.secs.map(s=>s.w))} mm de luz.`,
+    `Sin panel trasero: los travesaños traseros de 100 mm rigidizan y se anclan al muro. El muro en farol queda a la vista tras la ropa.`,
+    `Módulo base de ${P.base} mm con patas de 20 mm de ajuste; el zócalo va retranqueado 50 mm. Los ${cm(P.W)} cm son el frente completo. La holgura exterior depende del hueco ${cm(P.nicheW)} cm; el retranqueo interno de estructura se calcula por separado.`
+  ].map(t=>`<li>${esc(t)}</li>`).join('');
+  document.getElementById('ask').innerHTML=[
+    `¿Qué fondo tiene el nicho? Con ${cm(P.D)} cm de módulo y dos rieles hacen falta unos ${cm(R.nicheD)} cm.`,
+    '¿El bastidor de pino va anclado a los muros laterales o a la placa? ¿Lo hace el carpintero o ya existe? Con cielo falso no puede cargar las puertas.',
+    `¿Cuántos cajones por bloque: ${P.drawers} (como la referencia) o 2 más altos? ¿Y prefieres uno o dos bloques?`,
+    `¿Puertas altas: ${R.tdoor.n} corredizas o abatibles con pistón? Con 2 se destapa más ancho; con 3 quedan más livianas.`,
+    'RH15 confirmado en todas las piezas: elegir un sistema de puertas que admita ese espesor.',
+    'Con este fondo reducido, ¿conviene colgado frontal, perchas inclinadas o más estantes? Confirmar las prendas reales antes del despiece.',
+    '¿Cuánto desnivel tiene el piso? Mídelo en tres puntos con un nivel.'
+  ].map(t=>`<li>${esc(t)}</li>`).join('');
+}
+
+/* ---------- Formularios ---------- */
+const FIELDS={
+  'f-nicho':[['nicheW','Ancho nominal del hueco',2000,4100,5,'mm'],['W','Ancho total del frente',2000,4000,5,'mm'],['H','Alto (hasta el cielo raso)',2000,3000,5,'mm'],['D','Fondo del módulo',300,650,1,'mm'],['nicheDepth','Fondo total disponible',350,800,1,'mm'],['sideGap','Retranqueo lateral de estructura',5,30,1,'mm'],['topGap','Holgura al techo',10,50,1,'mm'],['base','Alto del módulo base',60,200,5,'mm']],
+  'f-dist':[['bays','Cantidad de tramos',2,6,1,''],['outerW','Ancho útil de los tramos de los extremos',450,900,5,'mm'],['drawers','Cajones por bloque',2,4,1,''],['frontH','Alto del frente de cajón',150,350,5,'mm'],['gap','Separación entre frentes',15,40,1,'mm'],['shoeShelves','Repisas del zapatero',0,4,1,''],['shelfD','Fondo de las repisas del zapatero',250,500,5,'mm'],['shelvesB','Estantes del tramo "estantes"',0,8,1,''],['rodHigh','Altura de la barra alta',1500,2000,10,'mm'],['rodLow','Altura de la barra baja',700,1200,10,'mm'],['maletero','Altura del estante maletero',1700,2200,10,'mm']],
+  'f-puertas':[['topDoors','Puertas del maletero',2,3,1,''],['ov','Traslape entre puertas',15,60,1,'mm'],['doorClear','Luz entre módulo y puerta',20,80,1,'mm'],['floorGap','Luz de las puertas al piso',10,50,1,'mm'],['kit','Alto de cenefas y riel',40,120,5,'mm']]
+};
+const inputs={};
+function mkField(host,[k,label,min,max,step,u]){
+  const d=document.createElement('div');d.className='f';
+  d.innerHTML=`<label for="i-${k}">${label}</label><span><input id="i-${k}" type="number" min="${min}" max="${max}" step="${step}" value="${P[k]}">${u?`<span class="u">${u}</span>`:''}</span>`;
+  host.appendChild(d);const inp=d.querySelector('input');inputs[k]=inp;
+  inp.addEventListener('change',()=>{let v=parseFloat(inp.value);if(!isFinite(v))v=DEF[k];v=Math.min(max,Math.max(min,v));inp.value=v;P[k]=v;if(k==='bays')fixBays();rebuild();});
+}
+for(const id in FIELDS){const host=document.getElementById(id);FIELDS[id].forEach(f=>mkField(host,f));}
+function fixBays(){while(P.bayTypes.length<P.bays)P.bayTypes.push(DEFTYPES[P.bayTypes.length%DEFTYPES.length]);P.bayTypes=P.bayTypes.slice(0,P.bays);renderBays();}
+function renderBays(){
+  const host=document.getElementById('f-bays');host.innerHTML='';
+  for(let i=0;i<P.bays;i++){
+    const d=document.createElement('div');d.className='f';
+    d.innerHTML=`<label for="bt-${i}">Tramo ${i+1}</label><select id="bt-${i}">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}"${P.bayTypes[i]===k?' selected':''}>${v}</option>`).join('')}</select>`;
+    host.appendChild(d);d.querySelector('select').addEventListener('change',e=>{P.bayTypes[i]=e.target.value;rebuild();});
+  }
+}
+function rebuild(){build();}
+document.getElementById('reset').addEventListener('click',()=>{P=JSON.parse(JSON.stringify(DEF));for(const k in inputs)inputs[k].value=P[k];renderBays();currentPreset='Cerradas';currentTop='Cerradas';drawerR.value=0;clearR.value=0;document.getElementById('open').value=0;rebuild();});
+
+renderBays();build();resize();loop();
+document.querySelectorAll('[data-module]').forEach(b=>b.onclick=()=>{select(b.dataset.module);document.querySelectorAll('[data-module]').forEach(q=>q.setAttribute('aria-pressed',String(q.dataset.module===selected)));});
+window.__closet={get R(){return R;},P:()=>P,select:id=>select(id),get motion(){return Motion;},get doors(){return LD.concat(TD);},get drawers(){return drawerGroups;},camera,canvas:renderer.domElement};
+})();
+</script>
+
+</body></html>
