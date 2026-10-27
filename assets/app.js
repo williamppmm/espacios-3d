@@ -38,7 +38,7 @@ try{renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true}
  const fill=new THREE.DirectionalLight(0xffffff,.3);fill.position.set(-5,7,-6);scene.add(fill);
 }catch(e){fail(e);return;}
 function mat(color){return new THREE.MeshStandardMaterial({color,roughness:.85});}
-const palette={slab:mat(0xcac9bd),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:0xa6c8c2,transparent:true,opacity:.35,roughness:.3}),roof:new THREE.MeshStandardMaterial({color:0xb7c3b3,transparent:true,opacity:.45,side:THREE.DoubleSide})};
+const palette={fence:new THREE.MeshStandardMaterial({color:0xffffff,metalness:.65,roughness:.35}),slab:mat(0xcac9bd),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:0xa6c8c2,transparent:true,opacity:.35,roughness:.3}),roof:new THREE.MeshStandardMaterial({color:0xb7c3b3,transparent:true,opacity:.45,side:THREE.DoubleSide})};
 // Farol en aparejo trabado, generado localmente: no requiere fuentes ni texturas remotas.
 const bc=document.createElement('canvas');bc.width=256;bc.height=170;const bg=bc.getContext('2d');bg.fillStyle='#c4b7a1';bg.fillRect(0,0,256,170);for(let r=0;r<2;r++)for(let c=-1;c<3;c++){bg.fillStyle=(c+r)%2?'#b67557':'#bc7b5a';bg.fillRect(c*128+r*64+3,r*85+3,122,79);}
 function brick(len,h){const tex=new THREE.CanvasTexture(bc);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(len/.6,h/.4);tex.encoding=THREE.sRGBEncoding;return new THREE.MeshStandardMaterial({map:tex,roughness:1});}
@@ -50,12 +50,23 @@ function group(parent){const g=new THREE.Group();parent.add(g);return g;}
 function wall(parent,axis,s1,s2,c,h,t=.12,ops=[]){let cur=s1;function segment(a,b,y0,y1){if(b-a<.001||y1-y0<.001)return;const len=b-a,hh=y1-y0;box(parent,axis==='x'?len:t,hh,axis==='x'?t:len,axis==='x'?(a+b)/2:c,(y0+y1)/2,axis==='x'?c:(a+b)/2,brick(len,hh));}for(const o of [...ops].sort((a,b)=>a.a-b.a)){segment(cur,o.a,0,h);segment(o.a,o.b,0,Math.min(h,o.sill||0));segment(o.a,o.b,Math.min(h,o.top),h);cur=o.b;}segment(cur,s2,0,h);}
 const dispose=root=>{const gs=new Set(),ms=new Set(),ts=new Set();root.traverse(o=>{if(o.geometry)gs.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:o.material?[o.material]:[])if(!Object.values(palette).includes(m)){ms.add(m);if(m.map)ts.add(m.map);}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());if(root.parent)root.parent.remove(root);};
 room=group(scene);const floor=group(room),perimeter=group(room),architecture=group(room),roof=group(room),vault=group(room),furnishings=group(room),labels=group(room);
-// Patios P1 y P2: se dejan vacíos, como en la maqueta recibida.
+// Patios P1 y P2: se dejan vacíos, como en la maqueta recibida, con antepechos de ladrillo de 12 cm por dentro del borde.
 const pits=[{x1:9.5,x2:12.2,z1:0,z2:2.3},{x1:0,x2:2.6,z1:3.85,z2:5.75}];
 [[0,2.6,0,3.85],[2.6,9.5,0,W],[9.5,12.2,2.3,W],[12.2,L,0,W]].forEach(([a,b,c,d])=>box(floor,b-a,.1,d-c,(a+b)/2,-.05,(c+d)/2,palette.slab));
-function rail(x1,z1,x2,z2){const len=Math.hypot(x2-x1,z2-z1),along=x1!==x2;box(floor,along?len:.035,.035,along?.035:len,(x1+x2)/2,.9,(z1+z2)/2,palette.dark);const n=Math.ceil(len/.6);for(let j=0;j<=n;j++)box(floor,.025,.9,.025,x1+(x2-x1)*j/n,.45,z1+(z2-z1)*j/n,palette.dark);}
-rail(9.5,0,9.5,2.3);rail(9.5,2.3,12.2,2.3);rail(12.2,2.3,12.2,0);rail(0,3.85,2.6,3.85);rail(2.6,3.85,2.6,5.75);
-function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);wall(perimeter,'z',0,W,L+.06,h,.12,[{a:.85,b:2.3,top:2.1},{a:3.75,b:4.7,top:2.1}]);perimeter.traverse(o=>{if(o.material&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});wall(perimeter,'x',-.12,L+.12,-.06,2.5);}
+// P1 (central) a 1,20 m, como el muro exterior; P2 (trasero) a 0,60 m.
+wall(floor,'z',0,2.3,9.56,1.2);wall(floor,'x',9.62,12.08,2.24,1.2);wall(floor,'z',0,2.3,12.14,1.2);wall(floor,'x',0,2.6,3.91,.6);wall(floor,'z',3.97,W,2.54,.6);
+// Frente de entrada: reja metálica blanca fija de 1,20 m, conservando los accesos.
+function frontGrille(){
+ const g=group(perimeter);g.name='front-grille';
+ for(const [a,b] of [[0,.85],[2.3,3.75],[4.7,W]]){
+  const profile=.035;
+  for(const y of [profile/2,1.2-profile/2])box(g,profile,profile,b-a,L+.06,y,(a+b)/2,palette.fence);
+  for(const z of [a+profile/2,b-profile/2])box(g,profile,1.2,profile,L+.06,.6,z,palette.fence);
+  const n=Math.ceil((b-a)/.12);
+  for(let j=1;j<n;j++)box(g,.02,1.2-2*profile,.02,L+.06,.6,a+(b-a)*j/n,palette.fence);
+ }
+}
+function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});wall(perimeter,'x',-.12,L+.12,-.06,2.5);}
 wall(architecture,'z',0,2.32,2.06,2.5);wall(architecture,'x',2,3.32,2.26,2.5,.12,[{a:2.6,b:3.3,top:2.05}]);wall(architecture,'z',0,3,3.38,2.5);wall(architecture,'x',3.32,7.5,2.94,2.5,.12,[{a:3.9,b:5.6,sill:.6,top:2.1},{a:5.96,b:6.86,top:2.05}]);wall(architecture,'z',0,3,7.44,2.5);
 box(architecture,1.7,1.5,.02,4.75,1.35,2.94,palette.glass);// Hojas de baño (70 cm) y habitación (90 cm): bisagra del lado de la habitación/clóset, abren hacia adentro.
 const buildingDoors=[[3.3,2.2,.7],[6.86,2.88,.9]].map(([x,z,w])=>{const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);pivot.position.set(x,0,z);box(pivot,w,2.03,.035,-w/2,1.025,.0175,palette.door);box(pivot,.12,.025,.1,.08-w,1,.0175,palette.dark);return pivot;});
