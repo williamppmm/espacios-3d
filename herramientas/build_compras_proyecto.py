@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from build_despiece import page, tabla, fmt
 
 RAIZ = Path(__file__).resolve().parent.parent
-FECHA = "27/10/2026"
+FECHA = "28/10/2026"
 PRECIO = {"RH15": 365872, "RH6": 212534, "rigido": 531600, "flexible": 285600, "bisagra_par": 17750}
 ROLLO = {"rigido": 100, "flexible": 200}
 RESERVA_BORDE, MARGEN = 0.05, 0.10   # m por borde y margen sobre el total de canto
@@ -74,7 +74,7 @@ def pedido():
 
 
 # ------------------------------------------------------------ encaje conjunto en láminas
-K, BW, BH = 4, 2440 - 20, 2150 - 20   # sierra 4 mm; refilado 10 mm por lado; sin rotar (veta)
+K, BW, BH = 5, 2440 - 20, 2150 - 20   # sierra 5 mm según PDF Madecentro; refilado 10 mm por lado
 
 
 def piezas_de_manifiestos(excluir, sobremedida):
@@ -172,7 +172,7 @@ def compras(n_rh, n_fondo, canto):
     filas = []   # grupo, ítem, mueble, cantidad, unidad, precio, nota
     add = lambda *f: filas.append(list(f))
     add("Tableros y cantos", "Tablero melamina Cartagena RH15 · 2440 × 2150", "Cocina, clóset y baño", n_rh, "lámina", PRECIO["RH15"],
-        f"Encaje conjunto de las piezas RH15 de los tres muebles en {n_rh} láminas (hoja Láminas). Por separado serían 10.")
+        f"Encaje conjunto de las piezas RH15 de los tres muebles en {n_rh} láminas (hoja Láminas). El total por separado se muestra en Resumen.")
     add("Tableros y cantos", "Fondo melamina blanco RH6 · 2440 × 2150", "Cocina y baño", n_fondo, "lámina", PRECIO["RH6"],
         "Los 9 fondos de la cocina y el fondo del gabinete del baño caben en una lámina.")
     r, f = canto["2"], canto["0.45"]
@@ -271,9 +271,11 @@ def main():
     titulo(ws, "Compras del proyecto · cocina, clóset y baño",
            f"Estimación conjunta del {FECHA}, generada desde los Excel de cada mueble (herramientas/build_compras_proyecto.py).")
     encabezado(ws, 6, ["Concepto", "Por separado", "Conjunto", "Nota"], [42, 16, 16, 90])
-    sep_rh = 10
+    cocina_sep = libro("despiece-cocina.xlsx")["Compras"]["C2"].value
+    closet_sep = libro("despiece-closet.xlsx")["Compras"]["C7"].value
+    sep_rh = cocina_sep + closet_sep + 1
     resumen = [
-        ["Láminas RH15", sep_rh, len(lam_rh), "Cocina 4 + clóset 5 + baño 1 por separado; encaje conjunto en la hoja Láminas."],
+        ["Láminas RH15", sep_rh, len(lam_rh), f"Cocina {cocina_sep} + clóset {closet_sep} + baño 1 por separado; encaje conjunto en la hoja Láminas."],
         ["Láminas de fondo RH6", 2, len(lam_fondo), "El fondo del baño cabe en la lámina de fondo de la cocina."],
         ["Rollos de canto rígido 100 m", 2, canto["2"]["rollos"], f"Más {canto['2']['sueltos']} m sueltos en la sucursal."],
         ["Rollos de canto flexible 200 m", 2, canto["0.45"]["rollos"], f"Sobran unos {canto['0.45']['sobrante']} m para cantear piezas pequeñas en el armado."],
@@ -307,7 +309,7 @@ def main():
     # Láminas
     ws = wb.create_sheet("Láminas")
     titulo(ws, "Encaje conjunto en láminas · propuesta de factibilidad",
-           "Cortes pasantes, sin rotar por la veta, refilado 10 mm por lado y sierra 4 mm. El plano de corte definitivo lo define la seccionadora del proveedor.")
+           "Cortes pasantes, sin rotar por la veta, refilado 10 mm por lado y sierra 5 mm. El plano de corte definitivo lo define la seccionadora del proveedor.")
     encabezado(ws, 6, ["Material", "Lámina", "Ocupación", "Piezas"], [12, 8, 11, 120])
     r = 7
     for mat, lams in (("RH15", lam_rh), ("Fondo RH6", lam_fondo)):

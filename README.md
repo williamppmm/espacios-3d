@@ -41,7 +41,7 @@ Mesón 260 × 62 cm. Módulos bajos 18 + 60 + 67 + 70 + 40 cm:
 
 ## Clóset principal (`closet.html`)
 
-Cuerpo 195 × 56 × 238 cm (58,5 cm hasta las manijas), dos hojas corredizas colgantes de 2175 × 975 mm con riel PERALMA50B sobre un listón de pino 4 × 4 cm encajonado en los laterales, guía inferior sin carga y tope que conserva 50 mm de desfase. Cuerpo izquierdo de 83 cm útiles con tres cajones (rieles HRE320-45) y colgado corto; cuerpo derecho de 107,5 cm con doble colgado. Solapa frontal de 12 cm que tapa el riel. 44 piezas RH15, previsión de 5 láminas.
+Cuerpo 195 × 56 × 238 cm (58,5 cm hasta las manijas), dos hojas corredizas colgantes de 2175 × 975 mm con riel PERALMA50B sobre un listón de pino 4 × 4 cm encajonado en los laterales, guía inferior sin carga y tope que conserva 50 mm de desfase. Cuerpo izquierdo de 83 cm útiles con tres cajones (rieles HRE320-45) y colgado corto; cuerpo derecho de 107,5 cm con doble colgado. Solapa frontal de 12 cm que tapa el riel. 48 piezas RH15, 15,501170 m² netos; previsión individual de 4 láminas. Sin panel posterior: marco perimetral completo con amarres superiores e inferiores y montantes de extremo C3-025 a C3-030. El divisor central existente une los dos cuerpos. Flexible de 0,45 mm solo en cada borde libre del cuadro interior. Uniones y anclajes al muro posterior resistente y al izquierdo por dimensionar.
 
 Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 195 cm supone el eje a 288 cm del muro izquierdo y debe confirmarse en obra.
 
@@ -52,9 +52,9 @@ Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 1
 | Hoja | Para qué |
 | --- | --- |
 | Resumen | Láminas, rollos y bisagras por separado frente al conjunto, y total con precio conocido |
-| Pedido de corte | Pedido único: 108 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
-| Láminas | Encaje conjunto propuesto (8 láminas RH15 y 1 de fondo frente a 10 + 2 por separado) |
-| Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 172 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
+| Pedido de corte | Pedido único: 112 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
+| Láminas | Encaje conjunto propuesto (8 láminas RH15 y 1 de fondo frente a 9 + 2 por separado) |
+| Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 181 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
 | Compras | Lista consolidada; las bisagras HBM897-01 de cocina y baño se compran juntas |
 | Bloqueos | Lo que impide cortar: hoy solo confirmar en obra el eje de la puerta de la habitación (ancho del clóset) |
 | En el armado | Piezas que no se piden (bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
@@ -148,3 +148,9 @@ Granito provisional550 ×470 ×20mm: cara superior a750mm del suelo. Se interpre
 `despiece-bano.xlsx/html`: 17 paneles RH15 de suministro (1,538983m²; el panel B06 da dos puertas y resultan18 piezas montadas) y un fondo RH6 (0,221216m²), más espejo y granito. Su tablero, fondo, canto y bisagras se compran junto con los de cocina y clóset en `compras-proyecto.xlsx`; el resto sigue por cotizar. Generar vista web con `python herramientas/build_despiece_bano.py`.
 
 La terraza inicial incorpora el baño en x212,z220cm,giro90°, en la pared del sanitario, manteniendo la esquina del baño. Al abrir proyectos previos se incorpora una sola vez y se corrige una vez la ubicación anterior en la pared de la puerta; después se respeta si el usuario decide quitarlo. Sustituye la referencia esquemática anterior del lavamanos.
+
+### Marco posterior completo sin panel · 28/10/2026
+
+Se retiran C3-005 y C3-011. Pared estucada a la vista, marco completo C3-025 a C3-030: dos superiores de 830×100 y 1075×100, dos inferiores de las mismas medidas y dos montantes de 2050×100, RH15. Solo flexible de 0,45 mm en el borde largo libre interior de cada tira; el resto son uniones ocultas sin canto. Se mantienen pisos, divisor, amarres del maletero y bastidor de pino. El marco ocupa la franja z=0–15 mm del respaldo anterior y no mueve hojas, rieles ni cajones. Es obligatorio dimensionar y ejecutar uniones y fijaciones al muro posterior resistente y al izquierdo; no basta el estuco ni apoyar en la esquina. Un marco abierto no garantiza por sí solo la resistencia del respaldo completo.
+
+El PDF anterior de Madecentro (98 referencias RH15, 141 piezas) incluye los respaldos retirados y no corresponde a esta revisión. El formato actualizado lleva 102 referencias RH15, 145 piezas, además de 10 fondos RH6 de cocina y baño. El encaje conjunto encontrado mantiene 8 láminas RH15 y 1 RH6; menos superficie no se presupone ahorro de láminas.
