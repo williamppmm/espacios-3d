@@ -21,7 +21,9 @@ Los cambios se guardan en el almacenamiento de **ese navegador**, sin cuenta ni 
 
 Reproduce la maqueta compartida: 20,30 × 5,75 m; sobre la medianera, 2 m libres hasta el baño, baño de 1,20 m libres, habitación y cocina de 2 m libres hasta el patio 1; franja construida de 3,00 × 7,50 m, muros nuevos de 12 cm y 2,50 m de alto, patios P1 y P2 sin losa, con antepechos de ladrillo de 12 cm: P1 (central) de 1,20 m y P2 (trasero) de 0,60 m. La altura inicial del perímetro, 1,10 m, es un supuesto ajustable. Frente de entrada: reja metálica blanca de 1,20 m con los accesos de escalera (1,45 m) y entrada (0,95 m) libres.
 
-La cocina va contra el muro transversal de 3 m, con origen a 750 cm del fondo y 260 cm de la medianera, giro 90°: en el rincón, con el extremo del basurero contra la medianera y 40 cm libres en el extremo opuesto del muro. El aviso de ubicación detecta salidas del perímetro, ocupación de los patios y el cruce entre el clóset y la puerta de la habitación; no sustituye planos de obra ni de fabricación.
+La cocina va contra el muro transversal de 3 m, con origen a 750 cm del fondo y 260 cm de la medianera, giro 90°: en el rincón, con el extremo del basurero contra la medianera y 40 cm libres en el extremo opuesto del muro. **Propuesta para la cocina** (Terraza y capas): capa opcional que no cambia el modelo real. Prolonga el antepecho del patio 1 hasta la línea del muro de la habitación y cierra de 1,20 a 2,50 m hacia el patio con A) ventana corrediza, B) celosía de bloque calado o C) panel translúcido; el tramo detrás de la nevera queda macizo y se dibujan rejillas de ventilación arriba y abajo, necesarias con estufa y horno a gas. Es una idea para evaluar: el antepecho está al borde del vacío del patio y subirlo a 2,50 m debe validarlo el constructor.
+
+El aviso de ubicación detecta salidas del perímetro, ocupación de los patios y el cruce entre el clóset y la puerta de la habitación; no sustituye planos de obra ni de fabricación.
 
 ## Cocina final (`cocina.html`)
 
