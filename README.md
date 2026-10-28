@@ -4,7 +4,7 @@ Visor de muebles y distribuciones para navegador, con controles táctiles para i
 
 **[Abrir Espacios 3D](https://williamppmm.github.io/espacios-3d/)**
 
-El proyecto contiene los dos diseños elegidos para la terraza de Cartagena: la **cocina final de 260 cm** y el **clóset principal de 195 cm**. Cada uno tiene visor 3D detallado, despiece en Excel, pedido de corte, compras y pendientes. Las alternativas descartadas (Cocina 1 y 2, clóset opciones 1 y 2) se retiraron de `main` el 27/10/2026 y quedan en el historial de Git.
+El proyecto contiene los diseños elegidos para la terraza de Cartagena: la **cocina final de 260 cm**, el **clóset principal de 195 cm** y el **mueble flotante del baño con gabinete de espejo**. Cada uno tiene visor 3D detallado, despiece en Excel, pedido de corte, compras y pendientes; **`compras-proyecto.xlsx`** reúne los tres en un solo pedido de corte y un solo presupuesto. Las alternativas descartadas (Cocina 1 y 2, clóset opciones 1 y 2) se retiraron de `main` el 27/10/2026 y quedan en el historial de Git.
 
 ## Qué puedes hacer
 
@@ -43,9 +43,25 @@ Cuerpo 195 × 56 × 238 cm (58,5 cm hasta las manijas), dos hojas corredizas col
 
 Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 195 cm supone el eje a 288 cm del muro izquierdo y debe confirmarse en obra.
 
+## Compras del proyecto (`compras-proyecto.html`)
+
+`compras-proyecto.xlsx` es lo que se lleva a la sucursal: se genera desde los Excel de los tres muebles con `herramientas/build_compras_proyecto.py` y no se edita a mano.
+
+| Hoja | Para qué |
+| --- | --- |
+| Resumen | Láminas, rollos y bisagras por separado frente al conjunto, y total con precio conocido |
+| Pedido de corte | Pedido único: 108 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
+| Láminas | Encaje conjunto propuesto (8 láminas RH15 y 1 de fondo frente a 10 + 2 por separado) |
+| Cantos | Metros netos por mueble y compra conjunta: 1 rollo rígido de 100 m más metros sueltos, y 1 rollo flexible de 200 m |
+| Compras | Lista consolidada; las bisagras HBM897-01 de cocina y baño se compran juntas |
+| Bloqueos | Lo que impide cortar: hoy solo confirmar en obra el eje de la puerta de la habitación (ancho del clóset) |
+| En el armado | Piezas que no se piden (bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
+
+El espejo, el retal de granito y el mesón son de otros proveedores; lavamanos, grifería y equipos se eligen aparte.
+
 ## Los Excel de despiece
 
-`despiece-cocina.xlsx` y `despiece-closet.xlsx` son la fuente de verdad. Hojas:
+`despiece-cocina.xlsx`, `despiece-closet.xlsx` y `despiece-bano.xlsx` son la fuente de verdad de cada mueble. Los tres tienen las mismas hojas (Distribución solo en la cocina):
 
 | Hoja | Para qué |
 | --- | --- |
@@ -57,7 +73,7 @@ Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 1
 | Decisiones | Registro de lo ya aplicado |
 | Distribución (cocina) | Cotas de cada módulo sobre el muro |
 
-Criterio de cantos: sin canto en bordes ocultos contra otra pieza, el fondo, el muro o el mesón; con canto en bordes vistos, en el borde inferior de los laterales bajos, el superior de muebles altos y laterales del clóset, y en los cuatro bordes de las piezas expuestas a humedad.
+Criterio de cantos en cocina y clóset: sin canto en bordes ocultos contra otra pieza, el fondo, el muro o el mesón; con canto en bordes vistos, en el borde inferior de los laterales bajos, el superior de muebles altos y laterales del clóset, y en los cuatro bordes de las piezas expuestas a humedad. El baño, por ser zona húmeda, lleva canto en todos los bordes, incluidos los ocultos.
 
 ## Archivos
 
@@ -72,7 +88,9 @@ Criterio de cantos: sin canto en bordes ocultos contra otra pieza, el fondo, el 
 | `assets/models/cocina-herrajes.js`, `closet-herrajes.js` | Herrajes repartidos por módulo para el visor de detalles |
 | `assets/module-detail.js`, `assets/fullscreen.js` | Detalles del módulo y pantalla completa, compartidos |
 | `assets/vendor/` | Three.js r128 y OrbitControls locales; no dependen de un CDN |
+| `bano.html`, `assets/bano.js`, `assets/models/bano-data.js`, `bano-modelo.js` | Visor, piezas, herrajes por módulo y geometría del baño |
 | `despiece-*.xlsx`, `despiece-*.html` | Excel fuente y su vista web de solo lectura |
+| `compras-proyecto.xlsx`, `compras-proyecto.html` | Pedido de corte y presupuesto conjuntos, generados desde los tres Excel |
 | `herramientas/` | Scripts para regenerar las vistas web y auditar los Excel |
 | `recorridos/terraza-cartagena-realista.mp4` | Recorrido en vídeo de 31 s, 1280 × 720 |
 
@@ -96,9 +114,13 @@ python herramientas/build_despiece.py          # despiece-cocina.html
 python herramientas/build_despiece_closet.py   # despiece-closet.html
 python herramientas/auditar_despiece.py        # cocina: Excel ↔ 3D, choques, cantos, láminas
 python herramientas/auditar_closet.py 5        # clóset: cantos, láminas y flechas
+python herramientas/build_despiece_bano.py     # despiece-bano.html
+python herramientas/auditar_bano.py            # baño: Excel ↔ 3D, cortes y cantos
+cd herramientas && python build_compras_proyecto.py   # compras-proyecto.xlsx y .html
 ```
 
-4. Haz commit del Excel, su HTML y los archivos del modelo juntos.
+4. Abre `compras-proyecto.xlsx` en Excel y guárdalo, para que conserve los totales calculados.
+5. Haz commit del Excel, su HTML, los archivos del modelo y las compras del proyecto juntos.
 
 Las auditorías solo leen archivos y devuelven un código de error si encuentran diferencias. Cambiar una ubicación en la terraza no altera el Excel. Antes de fabricar, verifica fichas, plantillas de recorte y medidas en obra.
 
@@ -109,3 +131,13 @@ Cada mueble se compone de un Excel de despiece (`despiece-<mueble>.xlsx`), un ma
 ## Dependencias
 
 Three.js y OrbitControls r128, licencia MIT, © autores de Three.js. Fuentes: [Three.js r128](https://github.com/mrdoob/three.js/tree/r128). Los avisos de licencia se conservan en `assets/vendor/LICENSE.txt`.
+
+## Baño (`bano.html`)
+
+Conjunto nuevo basado en las fotos IMG_4304–4307 y medidas del usuario: cuerpo inferior de 520 ×470 ×450mm, base a260mm del suelo, dos puertas con separación central diagonal y nicho de150mm bajo el granito. Con puertas cerradas llega a465mm de fondo. Gabinete superior450 ×500 ×130mm, con tapa/espejo320 ×500mm a la izquierda, dos repisas interiores y columna derecha abierta de115mm con una repisa. RH15 como cocina y clóset; fondo blanco RH6 aplicado detrás del gabinete.
+
+Granito provisional550 ×470 ×20mm: cara superior a750mm del suelo. Se interpretan510mm desde esa cara al gabinete superior, que va de1260 a1760mm. El conjunto tiene1500mm de altura entre piezas extremas y arranca a260mm. LavamanosØ350 ×140mm, grifería, sifón, agujeros y muesca trasera del entrepaño son ilustrativos: necesitan equipos y plantillas reales. El frente B06 se pide como un solo panel de517 ×299mm terminado (RH sin canto513 ×295mm si el proveedor descuenta los cuatro cantos de2mm). El corte central se hace en el armado: 75° provisional desde horizontal, dentro de 70–80°, con el disco Diablo Ultra Finish 7-1/4" (corte de 0,059" ≈ 1,5 mm) y canto flexible 0,45 mm en ambos lados. Con ese disco la holgura entre puertas queda en ≈0,6 mm tras cantear; lo usual son 2–3 mm, así que antes del corte se decide si se da una segunda pasada o se lijan los bordes. No se modela un bisel superior a45°. Suspensión flotante, soportes del granito y anclajes por dimensionar con el instalador.
+
+`despiece-bano.xlsx/html`: 17 paneles RH15 de suministro (1,538983m²; el panel B06 da dos puertas y resultan18 piezas montadas) y un fondo RH6 (0,221216m²), más espejo y granito. Su tablero, fondo, canto y bisagras se compran junto con los de cocina y clóset en `compras-proyecto.xlsx`; el resto sigue por cotizar. Generar vista web con `python herramientas/build_despiece_bano.py`.
+
+La terraza inicial incorpora el baño en x212,z220cm,giro90°, en la pared del sanitario, manteniendo la esquina del baño. Al abrir proyectos previos se incorpora una sola vez y se corrige una vez la ubicación anterior en la pared de la puerta; después se respeta si el usuario decide quitarlo. Sustituye la referencia esquemática anterior del lavamanos.
