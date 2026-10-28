@@ -140,7 +140,7 @@ def despiece_html(v):
     b = [f'<p><a href="./">← Proyecto</a> · <a href="cocina-{v["slug"]}.html">Ver 3D</a> · '
          f'<a href="despiece-{v["slug"]}.xlsx" download>Descargar Excel</a></p>',
          f'<span class="tag">{html.escape(v["nombre"])}</span><h1>Despiece y compras</h1>',
-         '<nav class="tabs"><a href="#despiece">Despiece</a><a href="#herrajes">Herrajes</a>'
+         '<nav class="tabs"><a href="#despiece">Despiece</a><a href="#pedido">Pedido de corte</a><a href="#herrajes">Herrajes</a>'
          '<a href="#compras">Compras</a><a href="#cantos">Cantos</a><a href="#distribucion">Distribución</a>'
          '<a href="#revision">Revisión</a></nav>']
 
@@ -150,6 +150,17 @@ def despiece_html(v):
     hdr = [c.value for c in ws[4]][:13]
     rows = filas(ws, 5, ncols=13)
     b.append(tabla(rows, hdr, num_cols=(4, 5, 6, 11, 12), tot_pred=lambda r: r[0] is None))
+
+    if "Pedido de corte" in wb.sheetnames:
+        ws = wb["Pedido de corte"]
+        b.append('<h2 id="pedido">Pedido de corte</h2>')
+        b += [f'<p class="note">{html.escape(str(ws.cell(i,1).value))}</p>' for i in (3, 4) if ws.cell(i,1).value]
+        b.append(f'<p class="note">Supuestos por confirmar en la sucursal: medida terminada con descuento de canto = '
+                 f'{fmt(ws["Q2"].value)}; la canteadora acepta piezas desde {fmt(ws["Q3"].value)} mm de lado menor '
+                 f'y {fmt(ws["Q4"].value)} mm de lado mayor.</p>')
+        rows = filas(ws, 7, ncols=14)
+        b.append(tabla(rows, [c.value for c in ws[6]][:14], num_cols=(4, 5, 6), wrap_cols=(13,),
+                       tot_pred=lambda r: r[0] is None))
 
     ws = wb["Herrajes"]
     b.append('<h2 id="herrajes">Herrajes</h2>')

@@ -25,6 +25,7 @@ function set(on){if(on===stage.classList.contains('fs-on'))return;stage.classLis
  try{if(on){const p=(stage.requestFullscreen||stage.webkitRequestFullscreen)?.call(stage);p?.catch?.(()=>{});}else if(native()){const p=(document.exitFullscreen||document.webkitExitFullscreen).call(document);p?.catch?.(()=>{});}}catch(e){}
  window.dispatchEvent(new CustomEvent('espacios-fullscreen',{detail:on}));(on?close:open).focus({preventScroll:true});}
 open.onclick=()=>set(true);close.onclick=()=>set(false);
+window.EspaciosFullscreen={set,bar,on:()=>stage.classList.contains('fs-on')};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false);});
 for(const ev of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(ev,()=>{if(!native())set(false);});
 })();
