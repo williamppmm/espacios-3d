@@ -2,8 +2,7 @@
 
 Uso, desde la raíz del repositorio:
 
-    python herramientas/build_despiece.py            # todas las versiones
-    python herramientas/build_despiece.py actual     # solo una
+    python herramientas/build_despiece.py            # despiece-cocina.xlsx -> despiece-cocina.html
 
 Requisitos: Python 3.9+ y openpyxl  (pip install openpyxl).
 
@@ -22,10 +21,9 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+# Cada mueble: despiece-<slug>.xlsx genera despiece-<slug>.html, enlazado a su visor 3D.
 VERSIONES = [
-    dict(slug="propuesta", nombre="Diseño final 260 · condimentero, puertas y basurero"),
-    dict(slug="actual", nombre="Cocina 1 · mesón 260 · cajonero único 75"),
-    dict(slug="280", nombre="Cocina 2 · mesón 280"),
+    dict(slug="cocina", nombre="Cocina final 260 · condimentero, puertas y basurero", visor="cocina.html"),
 ]
 
 
@@ -137,12 +135,15 @@ def filas(ws, desde, hasta=None, ncols=None):
 
 def despiece_html(v):
     wb = openpyxl.load_workbook(v["xlsx_calc"], data_only=True)
-    b = [f'<p><a href="./">← Proyecto</a> · <a href="cocina-{v["slug"]}.html">Ver 3D</a> · '
+    b = [f'<p><a href="./">← Proyecto</a> · <a href="{v["visor"]}">Ver 3D</a> · '
          f'<a href="despiece-{v["slug"]}.xlsx" download>Descargar Excel</a></p>',
          f'<span class="tag">{html.escape(v["nombre"])}</span><h1>Despiece y compras</h1>',
-         '<nav class="tabs"><a href="#despiece">Despiece</a><a href="#pedido">Pedido de corte</a><a href="#herrajes">Herrajes</a>'
-         '<a href="#compras">Compras</a><a href="#cantos">Cantos</a><a href="#distribucion">Distribución</a>'
-         '<a href="#revision">Revisión</a></nav>']
+         '<nav class="tabs">' + "".join(f'<a href="#{a}">{t}</a>' for a, t, s in (
+             ("despiece", "Despiece", "Despiece"), ("pedido", "Pedido de corte", "Pedido de corte"),
+             ("herrajes", "Herrajes", "Herrajes"), ("compras", "Compras", "Compras"), ("cantos", "Cantos", "Cantos"),
+             ("pendientes", "Pendientes", "Pendientes"), ("decisiones", "Decisiones", "Decisiones"),
+             ("distribucion", "Distribución", "Distribución"), ("revision", "Revisión", "Revisión"))
+             if s in wb.sheetnames) + '</nav>']
 
     ws = wb["Despiece"]
     b.append('<h2 id="despiece">Despiece</h2>')
@@ -162,14 +163,16 @@ def despiece_html(v):
         b.append(tabla(rows, [c.value for c in ws[6]][:14], num_cols=(4, 5, 6), wrap_cols=(13,),
                        tot_pred=lambda r: r[0] is None))
 
-    ws = wb["Herrajes"]
-    b.append('<h2 id="herrajes">Herrajes</h2>')
-    rows = filas(ws, 2, ncols=3)
-    corte = next((i for i, r in enumerate(rows) if str(r[0]).startswith("Riel seleccionado")), len(rows))
-    b.append(tabla(rows[:corte], [c.value for c in ws[1]][:3], num_cols=(1,), wrap_cols=(2,)))
-    if corte < len(rows):
-        b.append(f"<h2>{html.escape(rows[corte][0])}</h2>")
-        b.append(tabla(rows[corte+2:], rows[corte+1], num_cols=(1,), wrap_cols=(2,)))
+    # Libros antiguos traen una hoja Herrajes aparte; los actuales la tienen fusionada en Compras.
+    if "Herrajes" in wb.sheetnames:
+        ws = wb["Herrajes"]
+        b.append('<h2 id="herrajes">Herrajes</h2>')
+        rows = filas(ws, 2, ncols=3)
+        corte = next((i for i, r in enumerate(rows) if str(r[0]).startswith("Riel seleccionado")), len(rows))
+        b.append(tabla(rows[:corte], [c.value for c in ws[1]][:3], num_cols=(1,), wrap_cols=(2,)))
+        if corte < len(rows):
+            b.append(f"<h2>{html.escape(rows[corte][0])}</h2>")
+            b.append(tabla(rows[corte+2:], rows[corte+1], num_cols=(1,), wrap_cols=(2,)))
 
     ws = wb["Compras"]
     b.append('<h2 id="compras">Compras</h2>')
@@ -199,6 +202,15 @@ def despiece_html(v):
         elif r[0] == "N°": continue
         else: b.append(f'<p class="note"><b>{fmt(r[0])} · {fmt(r[1])} ({fmt(r[2])})</b>: {fmt(r[3])}</p>')
 
+    # Pendientes y Decisiones: título en A2, nota en A3, encabezado en la fila 6.
+    for nombre, ancla in (("Pendientes", "pendientes"), ("Decisiones", "decisiones")):
+        if nombre not in wb.sheetnames: continue
+        ws = wb[nombre]
+        b.append(f'<h2 id="{ancla}">{nombre}</h2>')
+        if ws["A3"].value: b.append(f'<p class="note">{html.escape(str(ws["A3"].value))}</p>')
+        hdr = [c.value for c in ws[6] if c.value is not None]
+        b.append(tabla(filas(ws, 7, ncols=len(hdr)), hdr, wrap_cols=tuple(range(1, len(hdr)))))
+
     ws = wb["Distribución"]
     b.append('<h2 id="distribucion">Distribución</h2>')
     b.append(f'<p class="note">{fmt(ws["A2"].value)}</p>')
@@ -214,11 +226,12 @@ def despiece_html(v):
         elif r[1] is None:
             b.append(f'<p class="note">{fmt(r[0])}</p>')
 
-    ws = wb["Revisión"]
-    b.append('<h2 id="revision">Revisión</h2>')
-    hdr_row = next(i for i in range(1, 6) if ws.cell(i, 1).value == "Estado")
-    rows = filas(ws, hdr_row + 1, ncols=5)
-    b.append(tabla(rows, [c.value for c in ws[hdr_row]][:5], wrap_cols=(2, 4), status_col=0))
+    if "Revisión" in wb.sheetnames:
+        ws = wb["Revisión"]
+        b.append('<h2 id="revision">Revisión</h2>')
+        hdr_row = next(i for i in range(1, 6) if ws.cell(i, 1).value == "Estado")
+        rows = filas(ws, hdr_row + 1, ncols=5)
+        b.append(tabla(rows, [c.value for c in ws[hdr_row]][:5], wrap_cols=(2, 4), status_col=0))
 
     b.append(f'<footer>Generado desde <code>despiece-{v["slug"]}.xlsx</code>. El Excel es la fuente; '
              'esta vista es de solo lectura.</footer>')

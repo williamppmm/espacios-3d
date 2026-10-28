@@ -1,5 +1,5 @@
 /* Herrajes de la cocina final repartidos por módulo: [cantidad, herraje, detalle].
-   Salen de la hoja Herrajes de despiece-propuesta.xlsx; las cantidades por módulo suman las del Excel
+   Salen de la hoja Compras de despiece-cocina.xlsx; las cantidades por módulo suman las del Excel
    (24 bisagras = 2 por puerta en 11 puertas + 2 en el techo de S2; 24 soportes = 4 por entrepaño; 10 fijaciones de gola).
    Si cambia el Excel, actualizar también este reparto. */
 window.CocinaPropuestaHerrajes={

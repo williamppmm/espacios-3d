@@ -7,9 +7,5 @@ __pycache__/
 *.blend
 *.blend[0-9]*
 
-# Respaldo local del clóset; las opciones vigentes se guardan en Git
-/respaldo-closet-2026-10-27/
-
-# Copias locales previas a los ajustes de los clósets
-/respaldo-opcion1-2-2026-10-27/
-/respaldo-opcion3-2026-10-27/
+# Diseños alternativos descartados: copia local, fuera de Pages (siguen en el historial de Git)
+/alternativas/

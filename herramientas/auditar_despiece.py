@@ -1,14 +1,14 @@
-"""Auditoría automática de una versión de cocina: Excel de despiece  <->  modelo 3D.
+"""Auditoría automática de la cocina: Excel de despiece  <->  modelo 3D.
 
 Uso, desde la raíz del repositorio:
 
-    python herramientas/auditar_despiece.py              # versión "propuesta"
-    python herramientas/auditar_despiece.py propuesta 4  # versión y nº de láminas RH15 previstas
+    python herramientas/auditar_despiece.py              # despiece-cocina.xlsx
+    python herramientas/auditar_despiece.py cocina 4     # mueble y nº de láminas RH15 previstas
 
 Requisitos: Python 3.9+ y openpyxl (pip install openpyxl). Solo lee archivos; no modifica nada.
 
 Qué comprueba (cada bloque imprime OK / ATENCIÓN):
-  1. Que despiece-<v>.xlsx y assets/models/cocina-<v>-data.js describan las MISMAS piezas
+  1. Que despiece-<mueble>.xlsx y assets/models/<mueble>-data.js describan las MISMAS piezas
      (id, módulo, largo, ancho, cantidad, cantos, material).
   2. Que cada pieza 3D tenga las dimensiones de su fila del despiece y que haya tantas como "Cant.".
   3. Que dos piezas no ocupen el mismo volumen (choques de más de 0,5 mm).
@@ -28,7 +28,7 @@ from pathlib import Path
 import openpyxl
 
 RAIZ = Path(__file__).resolve().parent.parent
-slug = sys.argv[1] if len(sys.argv) > 1 else "propuesta"
+slug = sys.argv[1] if len(sys.argv) > 1 else "cocina"
 LAMINAS = int(sys.argv[2]) if len(sys.argv) > 2 else 4
 ESPESOR = {"Melamina Cartagena RH 15": 15, "Fondo melamina 6": 6}
 errores = 0
@@ -50,7 +50,7 @@ def aviso(msg):
 
 # ---------------------------------------------------------------- carga
 xlsx = RAIZ / f"despiece-{slug}.xlsx"
-js = RAIZ / "assets" / "models" / f"cocina-{slug}-data.js"
+js = RAIZ / "assets" / "models" / f"{slug}-data.js"
 if not xlsx.exists() or not js.exists():
     sys.exit(f"Faltan {xlsx.name} o {js.name}")
 txt = js.read_text(encoding="utf-8")

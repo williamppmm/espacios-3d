@@ -1,5 +1,5 @@
 /* Clóset principal (opción 3) agrupado en módulos para el visor de detalles, con sus herrajes: [cantidad, herraje, detalle].
-   Los herrajes salen de las compras de despiece-closet-opcion3.html; si cambian allí, actualizar este reparto. */
+   Los herrajes salen de la hoja Compras de despiece-closet.xlsx; si cambian allí, actualizar este reparto. */
 window.ClosetCompactHerrajes={
  modules:[
   {id:'EST',chip:'Estructura',title:'Estructura, base y bastidor',sections:['EST','BASE','BASTIDOR'],note:'Laterales, divisor, solapa frontal, base y listón de pino que sostiene el riel colgante.',hardware:[[1,'Listón de pino 4 × 4 cm · bastidor del riel','1920 mm libres más el encaje en cada lateral (máx. 7 mm por lado). Va encajonado y atornillado; el riel se atornilla a su cara inferior.'],[6,'Apoyo de base','Dos bajo cada lateral y bajo el divisor. Producto y regulación por elegir.'],[1,'Uniones y anclajes · lote','Fijación de fondos, estructura y refuerzos. El extremo derecho queda libre: anclaje posterior e izquierdo según el muro.'],[1,'Tornillos del bastidor y del riel · lote','El kit del sistema puede traer los suyos. Escuadras solo si el rebaje en los laterales queda corto.']]},

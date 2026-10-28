@@ -1,9 +1,9 @@
-"""Auditoría automática del despiece de un clóset (solo lee el Excel; no modifica nada).
+"""Auditoría automática del despiece del clóset principal (solo lee el Excel; no modifica nada).
 
 Uso, desde la raíz del repositorio:
 
-    python herramientas/auditar_closet.py 2        # clóset opción 2
-    python herramientas/auditar_closet.py 2 6      # y nº de láminas RH15 previstas
+    python herramientas/auditar_closet.py          # despiece-closet.xlsx
+    python herramientas/auditar_closet.py 5        # y nº de láminas RH15 previstas
 
 Requisitos: Python 3.9+ y openpyxl (pip install openpyxl).
 
@@ -16,7 +16,7 @@ Qué comprueba (cada bloque imprime OK / ATENCIÓN):
      con los refuerzos del despiece, frente al criterio L/200. Cálculo orientativo:
      apoyo simple, E = 2000 MPa (aglomerado RH, supuesto prudente), fluencia x2.
 Los pesos de uso son supuestos editables al inicio del bloque 4.
-El 3D no se lee aquí: compárelo abriendo closet-opcion2.html (conteo de piezas e inventario).
+El 3D no se lee aquí: compárelo abriendo closet.html (conteo de piezas e inventario).
 """
 import math, random, sys
 if hasattr(sys.stdout, "reconfigure"):
@@ -25,8 +25,7 @@ from pathlib import Path
 import openpyxl
 
 RAIZ = Path(__file__).resolve().parent.parent
-opc = sys.argv[1] if len(sys.argv) > 1 else "2"
-LAMINAS = int(sys.argv[2]) if len(sys.argv) > 2 else None
+LAMINAS = int(sys.argv[1]) if len(sys.argv) > 1 else None
 errores = 0
 
 
@@ -38,7 +37,7 @@ def aviso(m):
     print("  ATENCIÓN  " + m)
 
 
-xlsx = RAIZ / f"despiece-closet-opcion{opc}.xlsx"
+xlsx = RAIZ / "despiece-closet.xlsx"
 if not xlsx.exists():
     sys.exit(f"Falta {xlsx.name}")
 wb = openpyxl.load_workbook(xlsx, data_only=True)
