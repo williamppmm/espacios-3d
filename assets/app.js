@@ -1,8 +1,8 @@
 /* Espacios 3D — proyecto local, sin servicios ni cargas de archivos al servidor. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
-const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cartagena',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true},items:[
- {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:280,rotation:90,visible:true,open:0},
+const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cartagena',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true},items:[
+ {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
  {id:'bathroom-1',type:'bathroom',variant:'final',name:'Baño · lavamanos y espejo',w:55,d:47,h:150,x:212,z:220,rotation:90,visible:true,open:0}
 ]});
@@ -22,11 +22,11 @@ function validate(v){
   ids.add(i.id);
   for(const [k,min,max] of [['w',30,500],['d',20,120],['h',30,300],['x',-3000,3000],['z',-3000,3000],['rotation',-360,360],['open',0,1]])if(!finite(i[k],min,max))throw Error('Medidas inválidas en '+i.name+'.');
   if(typeof i.visible!=='boolean')throw Error('Visibilidad inválida.');
-  const variant=variantOf(i),moved=variant&&((i.variant!==variant.id)||(i.type==='bathroom'&&v.room?.bathroomWallCorrected!==true))&&variant.placement;return {id:i.id,type:i.type,...variant&&{variant:variant.id},name:i.type==='closet'&&i.variant!==variant?.id?closetName():i.name,w:fixedVariant({...i,variant:variant?.id})?variant.w:i.w,d:fixedVariant({...i,variant:variant?.id})?(variant.d||62):i.d,h:fixedVariant({...i,variant:variant?.id})?(variant.h||215):i.h,x:moved?moved.x:i.x,z:moved?moved.z:i.z,rotation:moved?moved.rotation:i.rotation,visible:i.visible,open:i.open};
+  const variant=variantOf(i),moved=variant&&((i.variant!==variant.id)||(i.type==='bathroom'&&v.room?.bathroomWallCorrected!==true))&&variant.placement;return {id:i.id,type:i.type,...variant&&{variant:variant.id},name:i.type==='closet'&&i.variant!==variant?.id?closetName():i.name,w:fixedVariant({...i,variant:variant?.id})?variant.w:i.w,d:fixedVariant({...i,variant:variant?.id})?(variant.d||62):i.d,h:fixedVariant({...i,variant:variant?.id})?(variant.h||215):i.h,x:moved?moved.x:i.x,z:moved?moved.z:i.type==='kitchen'&&v.room?.kitchenCorner!==true&&i.x===750&&i.z===280&&i.rotation===90?260:i.z,rotation:moved?moved.rotation:i.rotation,visible:i.visible,open:i.open};
  });
  if(v.room?.bathroomDesigned!==true&&items.length<30&&!items.some(i=>i.type==='bathroom'))items.push(initial().items.find(i=>i.type==='bathroom'));
  if(!v.room||!finite(v.room.wallHeight,.9,2.5)||['roof','architecture','furnishings','labels'].some(k=>typeof v.room[k]!=='boolean'))throw Error('Opciones de terraza inválidas.');
- return {schema:'espacios-3d',version:1,name:v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true},items};
+ return {schema:'espacios-3d',version:1,name:v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true},items};
 }
 let state=initial(),storageNotice='';try{const raw=localStorage.getItem(KEY);if(raw)state=validate(JSON.parse(raw));}catch(e){storageNotice='No se pudo recuperar el guardado anterior. Puedes abrir un proyecto descargado.';}
 let renderer,scene,camera,controls,room,models=new Map(),solo,stageFloor,selectionBox;
@@ -150,7 +150,7 @@ let viewName='general';function view(name){viewName=name;flight=null;
 // Pantalla completa (assets/fullscreen.js): accesos a la terraza completa o a un módulo concreto.
 function focusOn(mode,id,name){state.mode=mode;if(id)state.selected=id;transform();renderUI();view(name);save();renderFullscreenBar();}
 function renderFullscreenBar(){const bar=$('fs-bar');if(!bar)return;bar.replaceChildren();if(!stage.classList.contains('fs-on'))return;const closets=state.items.filter(i=>i.type==='closet').length;
- const chips=[['Terraza completa',state.mode==='room'&&viewName!=='bath',()=>focusOn('room',null,'general')],...state.items.map(i=>[i.type==='kitchen'?'Cocina':i.type==='bathroom'?'Baño':i.type==='closet'&&closets===1?'Clóset':i.name,state.mode==='item'&&i.id===state.selected,()=>focusOn('item',i.id,'general')]),['Ambiente baño',state.mode==='room'&&viewName==='bath',()=>focusOn('room',null,'bath')]];
+ const chips=[['Terraza completa',state.mode==='room',()=>focusOn('room',null,'general')],...state.items.map(i=>[i.type==='kitchen'?'Cocina':i.type==='bathroom'?'Baño':i.type==='closet'&&closets===1?'Clóset':i.name,state.mode==='item'&&i.id===state.selected,()=>focusOn('item',i.id,'general')])];
  for(const [txt,on,fn] of chips){const b=document.createElement('button');b.type='button';b.textContent=txt;b.setAttribute('aria-pressed',String(on));b.onclick=fn;bar.append(b);}}
 window.addEventListener('espacios-fullscreen',renderFullscreenBar);
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},60000);}

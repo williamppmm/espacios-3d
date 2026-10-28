@@ -3,7 +3,7 @@
 Solo lectura. Uso: python herramientas/auditar_cantos.py
 """
 from pathlib import Path
-import json,openpyxl
+import json,re,openpyxl
 import build_compras_proyecto as b
 
 R=Path(__file__).resolve().parent.parent
@@ -29,7 +29,11 @@ for slug,first,cols in [('cocina',5,(5,6,7,8,12)),('closet',7,(5,6,4,9,13)),('ba
 rows,_=b.pedido();rows=[r for r in rows if b.NO_PEDIR not in str(r[15])]
 w=openpyxl.load_workbook(R/'compras-proyecto.xlsx',data_only=True)
 actual=[[w['Pedido de corte'].cell(i,c).value for c in range(1,17)] for i in range(7,7+len(rows))]
-assert actual==rows,'Consolidado desactualizado'
+# Excel puede guardar los números concatenados en texto con punto o coma según
+# la configuración regional. Las dimensiones numéricas sí se comparan exactas.
+def normalizar(filas):
+    return [[re.sub(r'(?<=\d)\.(?=\d)', ',', v) if isinstance(v,str) else v for v in fila] for fila in filas]
+assert normalizar(actual)==normalizar(rows),'Consolidado desactualizado'
 for material,name in [('RH15','cortes-madecentro-RH15-Cartagena-medidas-finales.xlsx'),('RH6','cortes-madecentro-fondo-RH6-blanco-medidas-finales.xlsx')]:
     path=R/name
     if not path.exists():continue
