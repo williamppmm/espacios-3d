@@ -52,7 +52,7 @@ Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 1
 | Resumen | Láminas, rollos y bisagras por separado frente al conjunto, y total con precio conocido |
 | Pedido de corte | Pedido único: 108 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
 | Láminas | Encaje conjunto propuesto (8 láminas RH15 y 1 de fondo frente a 10 + 2 por separado) |
-| Cantos | Metros netos por mueble y compra conjunta: 1 rollo rígido de 100 m más metros sueltos, y 1 rollo flexible de 200 m |
+| Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 172 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
 | Compras | Lista consolidada; las bisagras HBM897-01 de cocina y baño se compran juntas |
 | Bloqueos | Lo que impide cortar: hoy solo confirmar en obra el eje de la puerta de la habitación (ancho del clóset) |
 | En el armado | Piezas que no se piden (bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
@@ -74,6 +74,10 @@ El espejo, el retal de granito y el mesón son de otros proveedores; lavamanos, 
 | Distribución (cocina) | Cotas de cada módulo sobre el muro |
 
 Criterio de cantos en cocina y clóset: sin canto en bordes ocultos contra otra pieza, el fondo, el muro o el mesón; con canto en bordes vistos, en el borde inferior de los laterales bajos, el superior de muebles altos y laterales del clóset, y en los cuatro bordes de las piezas expuestas a humedad. El baño, por ser zona húmeda, lleva canto en todos los bordes, incluidos los ocultos.
+
+El optimizador de Madecentro admite un solo tipo de canto por pieza. Criterio revisado: rígido de 2 mm en puertas y frentes de cocina, hojas y frentes de cajón del clóset, terminal exterior P037 y perímetro del panel B06 del baño. Flexible de 0,45 mm en estructura, entrepaños, interiores, solapa del clóset y portador del espejo. Se conservan los bordes que ya estaban protegidos; P029 lleva flexible en sus cuatro bordes. El baño conserva todos sus bordes protegidos. El canto rígido se reserva por golpes y desgaste: el espesor no convierte el RH en impermeable; sellar juntas, recortes y perforaciones. B06 es un panel único rígido en el pedido; los dos bordes diagonales nuevos se cantean con flexible durante el armado, fuera del optimizador.
+
+Las medidas terminadas y posiciones del modelo no cambian. Cambian los descuentos del tablero, metrajes y plano de corte. Los dos formatos cortes-madecentro-*-medidas-finales.xlsx llevan medidas finales con canto incluido y una hoja de recepción para registrar bordes pendientes; el proveedor debe descontar el canto una sola vez, incluso si no lo instala. Decorativo y referencia compatible se confirman antes de cortar.
 
 ## Archivos
 
@@ -116,6 +120,7 @@ python herramientas/auditar_despiece.py        # cocina: Excel ↔ 3D, choques, 
 python herramientas/auditar_closet.py 5        # clóset: cantos, láminas y flechas
 python herramientas/build_despiece_bano.py     # despiece-bano.html
 python herramientas/auditar_bano.py            # baño: Excel ↔ 3D, cortes y cantos
+python herramientas/auditar_cantos.py          # canto único por pieza y coherencia del pedido conjunto
 cd herramientas && python build_compras_proyecto.py   # compras-proyecto.xlsx y .html
 ```
 

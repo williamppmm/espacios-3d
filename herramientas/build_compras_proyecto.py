@@ -62,6 +62,8 @@ def pedido():
             v = [pc.cell(r, c).value for c in range(1, 15)]
             if not v[0] or v[0] not in cortes:
                 continue
+            if {"R", "F"}.issubset(set(v[7:11])):
+                raise ValueError(f"{m['nombre']} {v[0]}: el optimizador admite un solo tipo de canto por pieza")
             cl, ca, fl, fa = cortes[v[0]]
             extra = lambda pedir, fin: pedir - fin if num(pedir) is not None and num(fin) is not None and pedir > fin else 0
             dl, da = extra(v[5], fl), extra(v[6], fa)
@@ -291,7 +293,7 @@ def main():
     # Pedido de corte
     ws = wb.create_sheet("Pedido de corte")
     titulo(ws, "Pedido de corte y canteado · pedido único de los tres muebles",
-           "Medidas en mm; largo en sentido de veta. R = rígido 2 mm · F = flexible 0,45 mm · — = sin canto. Se pide canto en todas las piezas indicadas.")
+           "Medidas finales en mm, con canto incluido; largo en sentido de veta. R = rígido 2 mm · F = flexible 0,45 mm · — = sin canto. Un solo tipo de canto por pieza, únicamente en los bordes indicados.")
     ws["A4"] = ("Supuestos de cada despiece: el proveedor pide medida terminada y descuenta el canto; piezas pequeñas = lado menor < 100 mm "
                 "o mayor < 250 mm. Si la sucursal pide medida de corte, usar la columna «Corte sin canto».")
     encabezado(ws, 6, ["Mueble", "ID", "Módulo", "Pieza", "Material", "Cant.", "Largo a pedir", "Ancho a pedir", "Largo 1", "Largo 2",
