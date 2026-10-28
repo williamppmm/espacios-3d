@@ -2,8 +2,8 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['ventana','acrilico','lamas','movil'];
-const proposalNotes={lamas:'C · Lamas blancas giradas 45° sobre el antepecho: filtran la vista desde la entrada y dejan pasos de luz y aire.',movil:'D · Tres hojas de lamas que se recogen detrás de la nevera en tres guías. Usa el control para abrirlas. Recorrido y anclajes por definir en obra.'};
-const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cartagena',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'',proposalOpen:0},items:[
+const proposalNotes={ventana:'A · Ventana de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',acrilico:'B · Panel translúcido de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',lamas:'C · Lamas blancas giradas 45° a todo el ancho: filtran la vista desde la entrada y dejan pasos de luz y aire.',movil:'D · Tres hojas de lamas de 1 m que cubren los 3 m y se apilan hacia el extremo de la nevera en tres guías. Recogidas ocupan aproximadamente 1 m de ancho. Recorrido y anclajes por definir en obra.'};
+const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cartagena',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'lamas',proposalOpen:0},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
  {id:'bathroom-1',type:'bathroom',variant:'final',name:'Baño · lavamanos y espejo',w:55,d:47,h:150,x:212,z:220,rotation:90,visible:true,open:0}
@@ -76,10 +76,10 @@ function frontGrille(){
 }
 // Propuesta opcional de cerramiento entre la cocina y el patio 1. No forma parte del estado real: solo se dibuja si se elige.
 // Prolonga el antepecho del patio (x=9,56) hasta la línea del muro de la habitación (z=3,00) y cierra de 1,20 a 2,50 m;
-// detrás de la nevera (z<0,75) queda macizo. Rejillas arriba y abajo: ventilación permanente para la estufa y el horno a gas.
+// las cuatro opciones cubren los 3 m completos, incluido el tramo sobre la nevera.
 function buildProposal(){while(proposal.children.length)dispose(proposal.children[0]);const k=state.room.proposal;if(!PROPOSALS.includes(k))return;
- const x=9.56,t=.12,y0=1.2,y1=2.5,a=.75,b=3,len=b-a,mid=(a+b)/2;
- wall(proposal,'z',2.3,b,x,y0);box(proposal,t,y1-y0,a,x,(y0+y1)/2,a/2,brick(a,y1-y0));
+ const x=9.56,t=.12,y0=1.2,y1=2.5,a=0,b=3,len=b-a,mid=(a+b)/2;
+ wall(proposal,'z',2.3,b,x,y0);
  const rejilla=(z,y,w,h)=>{box(proposal,t+.02,h,w,x,y,z,palette.dark);for(let s=y-h/2+.02;s<y+h/2-.01;s+=.03)box(proposal,t+.04,.008,w-.02,x,s,z,palette.white);};
  const louverPanel=(parent,xx,z0,width)=>{const height=y1-y0,g=group(parent);g.position.set(xx,y0,z0);for(const z of [.025,width-.025])box(g,.045,height,.05,0,height/2,z,palette.white);for(const y of [.025,height-.025])box(g,.045,.05,width,0,y,width/2,palette.white);const n=Math.max(1,Math.round((width-.1)/.105)),step=(width-.1)/n;for(let i=0;i<n;i++){const blade=box(g,.025,height-.1,.13,0,height/2,.05+step*(i+.5),palette.white);blade.rotation.y=Math.PI/4;}return g;};
  if(k==='lamas'){louverPanel(proposal,x,a,len);}
