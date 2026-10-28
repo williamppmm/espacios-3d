@@ -96,7 +96,10 @@ wall(architecture,'z',0,2.32,2.06,2.5);wall(architecture,'x',2,3.32,2.26,2.5,.12
 box(architecture,1.7,1.5,.02,4.75,1.35,2.94,palette.glass);// Hojas de baño (70 cm) y habitación (90 cm): bisagra del lado de la habitación/clóset, abren hacia adentro.
 const buildingDoors=[[3.3,2.2,.7],[6.86,2.88,.9]].map(([x,z,w])=>{const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);pivot.position.set(x,0,z);box(pivot,w,2.03,.035,-w/2,1.025,.0175,palette.door);box(pivot,.12,.025,.1,.08-w,1,.0175,palette.dark);return pivot;});
 const setDoors=t=>setMovers(buildingDoors,t);// Cielo raso sobre la franja construida; el paso exterior frente al baño queda sin cielo raso.
-box(roof,1.48,.04,2.34,2.64,2.52,1.09,palette.roof);box(roof,6.22,.04,3.4,6.49,2.52,1.62,palette.roof);
+box(roof,1.48,.04,2.34,2.64,2.52,1.09,palette.roof);
+// Filo exterior de la habitación: z=3.00; encuentro con la cara exterior de C: x=9.62.
+const ceiling={x0:3.38,x1:9.62,z0:-.08,z1:3};
+box(roof,ceiling.x1-ceiling.x0,.04,ceiling.z1-ceiling.z0,(ceiling.x0+ceiling.x1)/2,2.52,(ceiling.z0+ceiling.z1)/2,palette.roof);
 // Medianera derecha de 2,50 m; lado izquierdo abierto sobre pilares cada ~4 m que reciben el techo en arco (flecha 0,50 m).
 {const n=Math.round(L/4);for(let j=0;j<=n;j++)box(floor,.2,2.5,.2,Math.min(L-.1,Math.max(.1,L*j/n)),1.25,W+.06,palette.white);
 const z0=-.06,z1=W+.06,c=z1-z0,f=.5,R=(c*c/4+f*f)/(2*f),arc=z=>2.5+Math.sqrt(R*R-(z-(z0+z1)/2)**2)-(R-f),shape=new THREE.Shape(),N=48;
