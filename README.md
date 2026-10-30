@@ -4,7 +4,7 @@ Visor de muebles y distribuciones para navegador, con controles táctiles para i
 
 **[Abrir Espacios 3D](https://williamppmm.github.io/espacios-3d/)**
 
-El proyecto contiene los diseños elegidos para la terraza de Cartagena: la **cocina final de 260 cm**, el **clóset principal de 195 cm** y el **mueble flotante del baño con gabinete de espejo**. Cada uno tiene visor 3D detallado, despiece en Excel, pedido de corte, compras y pendientes; **`compras-proyecto.xlsx`** reúne los tres en un solo pedido de corte y un solo presupuesto. Las alternativas descartadas (Cocina 1 y 2, clóset opciones 1 y 2) se retiraron de `main` el 27/10/2026 y quedan en el historial de Git.
+El proyecto contiene los diseños elegidos para la terraza en Cali: la **cocina final de 260 cm**, el **clóset principal de 195 cm** y el **mueble flotante del baño con gabinete de espejo**. Cada uno tiene visor 3D detallado, despiece en Excel, pedido de corte, compras y pendientes; **`compras-proyecto.xlsx`** reúne los tres en un solo pedido de corte y un solo presupuesto. Las alternativas descartadas (Cocina 1 y 2, clóset opciones 1 y 2) se retiraron de `main` el 27/10/2026 y quedan en el historial de Git.
 
 ## Qué puedes hacer
 
