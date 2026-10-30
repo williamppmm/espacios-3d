@@ -2,7 +2,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['ventana','acrilico','lamas','movil'];
-const proposalNotes={ventana:'A · Ventana de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',acrilico:'B · Panel translúcido de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',lamas:'C · Lamas blancas giradas 45° a todo el ancho: filtran la vista desde la entrada y dejan pasos de luz y aire.',movil:'D · Tres hojas de lamas de 1 m que cubren los 3 m y se apilan hacia el extremo de la nevera en tres guías. Recogidas ocupan aproximadamente 1 m de ancho. Recorrido y anclajes por definir en obra.'};
+const proposalNotes={ventana:'A · Ventana de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',acrilico:'B · Panel translúcido de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',lamas:'C · Tres módulos fijos de 14 lamas (42 total), a 45°. Marco T-244 de 38,1 × 76,2 mm y enchape F-006 de 96,7 × 4,2 mm; largo provisional 1220 mm. Fijaciones y rigidez por validar en taller.',movil:'D · Tres hojas de lamas de 1 m que cubren los 3 m y se apilan hacia el extremo de la nevera en tres guías. Recogidas ocupan aproximadamente 1 m de ancho. Recorrido y anclajes por definir en obra.'};
 const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'lamas',proposalOpen:0},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
@@ -82,7 +82,15 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
  wall(proposal,'z',2.3,b,x,y0);
  const rejilla=(z,y,w,h)=>{box(proposal,t+.02,h,w,x,y,z,palette.dark);for(let s=y-h/2+.02;s<y+h/2-.01;s+=.03)box(proposal,t+.04,.008,w-.02,x,s,z,palette.white);};
  const louverPanel=(parent,xx,z0,width)=>{const height=y1-y0,g=group(parent);g.position.set(xx,y0,z0);for(const z of [.025,width-.025])box(g,.045,height,.05,0,height/2,z,palette.white);for(const y of [.025,height-.025])box(g,.045,.05,width,0,y,width/2,palette.white);const n=Math.max(1,Math.round((width-.1)/.105)),step=(width-.1)/n;for(let i=0;i<n;i++){const blade=box(g,.025,height-.1,.13,0,height/2,.05+step*(i+.5),palette.white);blade.rotation.y=Math.PI/4;}return g;};
- if(k==='lamas'){louverPanel(proposal,x,a,len);}
+ if(k==='lamas'){
+  const p=window.VENTANA_PERFILES,width=len/p.modules,height=y1-y0,projection=(p.bladeWidth+p.bladeDepth)/Math.sqrt(2),margin=projection/2+p.edgeClearance,step=(width-2*p.face-2*margin)/(p.bladesPerModule-1);
+  for(let j=0;j<p.modules;j++){
+   const g=group(proposal);g.name='alutech-module';g.position.set(x,y0,a+j*width);
+   for(const z of [p.face/2,width-p.face/2]){const frame=box(g,p.depth,height,p.face,0,height/2,z,palette.white);frame.name='alutech-frame-side';}
+   for(const y of [p.face/2,height-p.face/2]){const frame=box(g,p.depth,p.face,width-2*p.face,0,y,width/2,palette.white);frame.name='alutech-frame-horizontal';}
+   for(let i=0;i<p.bladesPerModule;i++){const blade=box(g,p.bladeDepth,p.bladeHeight,p.bladeWidth,0,height/2,p.face+margin+i*step,palette.white);blade.rotation.y=Math.PI/4;blade.name='alutech-blade';}
+  }
+ }
  else if(k==='movil'){const width=len/3;for(const y of [y0+.025,y1-.025])box(proposal,.36,.035,b,x+.21,y,b/2,palette.dark);for(let i=0;i<3;i++){const start=a+i*width,panel=louverPanel(proposal,x+.09+i*.12,start,width);panel.userData.slideStart=start;}setProposalOpen();}
  else{const top=k==='ventana'?2.1:2.3;box(proposal,.02,top-y0,len,x,(y0+top)/2,mid,k==='ventana'?palette.glass:palette.acrylic);
   for(let i=0;i<=3;i++)box(proposal,.06,top-y0,.04,x,(y0+top)/2,Math.min(b-.02,Math.max(a+.02,a+len*i/3)),palette.dark);
