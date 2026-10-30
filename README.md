@@ -166,3 +166,13 @@ Quedan 76 referencias de cocina, 88 piezas RH15 y nueve fondos. Pedido conjunto:
 ## División cocina–patio (`ventana-cocina-patio.html`)
 
 Ficha independiente de la propuesta C para cotización: 3D, alzado, detalle en planta, texto para enviar e impresión. Cielo raso al filo de la pared/ventanal, como en la terraza general. Vista inicial desde patio con tres módulos de 14 lamas (42 total): T-244 de 38,1 mm de cara y 76,2 mm de fondo, F-006 representado por su envolvente de 96,7 × 4,2 mm y largo provisional de 1220 mm. Horizontales entre montantes de 923,8 mm. Conserva las comparaciones originales de 27 y 28 lamas. Cortes orientativos y cotización aportada; sección del enchape, rigidez, fijaciones y holguras por validar antes de fabricar. Página visual resumida y detalles técnicos desplegables. La fijación superior se solicita a estructura resistente, no a la placa del cielo raso. No modifica la geometría general ni los muebles/despieces. Enlace accesible desde la navegación principal, con librerías 3D locales para Safari/iPad.
+
+
+## Estudio de fijación de lamas
+
+`Detalle de fijación de lamas.html` incorpora el estudio aportado: dos lamas, escuadras a 45°, tornillos esquemáticos, vista completa, planta, separación de piezas y marco transparente. Accesible desde la terraza y la ficha del ventanal; utiliza las bibliotecas locales y pantalla completa. No modifica la geometría ni el corte del ventanal. El estudio propone 1213,8 mm de lama frente a los 1220 mm provisionales del modelo general; validar la unión antes de adoptar esa medida.
+
+
+## Apartado de ventana de cocina
+
+`ventana.html` reúne los estudios con un único acceso desde la navegación de `index.html`: ventanal F-006, fijación con escuadras y alternativa T-237 con placas e insertos propuestos. Cada visor permite volver al apartado y a la terraza. La T-237 conserva la geometría del archivo aportado, 51 lamas con sección ovalada aproximada; no sustituye la propuesta C de la terraza ni altera muebles, despieces o compras.
