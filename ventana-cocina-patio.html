@@ -1,0 +1,83 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#2f5d50"><title>División cocina–patio 1 · ficha para cotizar</title><style>
+/* Layout: ficha técnica de una sola columna — modelo 3D, alzado acotado y datos para la cotización, de lo visual a lo que se envía. */
+:root{
+  --bg:#f3f4f1; --panel:#ffffff; --ink:#1f2b27; --muted:#5d6a64; --line:#d5dbd6;
+  --accent:#2f5d50; --brick:#b5603f; --brick-dim:#d9a48c; --alu:#e9ecea; --alu-edge:#8d989b; --dim:#b04a2a;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1d2421; --ink:#e4ebe7; --muted:#9aa8a1; --line:#33403b;
+  --accent:#7fb6a2; --brick:#c9775a; --brick-dim:#7a4a39; --alu:#d7dcda; --alu-edge:#6f7a7d; --dim:#e98a67; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a18; --panel:#1d2421; --ink:#e4ebe7; --muted:#9aa8a1; --line:#33403b;
+  --accent:#7fb6a2; --brick:#c9775a; --brick-dim:#7a4a39; --alu:#d7dcda; --alu-edge:#6f7a7d; --dim:#e98a67; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body)}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+header{display:grid;gap:6px}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(28px,4.4vw,42px)/1.08 var(--f-display);letter-spacing:-.01em;margin:0;text-wrap:balance}
+h2{font:700 20px/1.2 var(--f-display);margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:0;max-width:68ch}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.key div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:2px}
+.key small{font:500 11px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.key strong{font:500 22px/1.2 var(--f-mono);font-variant-numeric:tabular-nums}
+section{display:grid;gap:12px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.views{display:flex;flex-wrap:wrap;gap:6px}
+button{font:600 14px var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 12px;min-height:40px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#stage{position:relative;height:min(62vh,520px);min-height:340px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);touch-action:none}
+#stage canvas{display:block;width:100%;height:100%}
+#stage .hint{position:absolute;left:10px;bottom:10px;font:12px var(--f-mono);color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:4px;pointer-events:none}
+.drawing{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
+.drawing svg{display:block;width:100%;min-width:640px;height:auto}
+.note{color:var(--muted);font-size:14px;margin:0;max-width:75ch}
+table{width:100%;border-collapse:collapse;font-size:15px}
+.table{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);width:34%}
+td .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.copybox{display:grid;gap:10px}
+pre{margin:0;white-space:pre-wrap;font:13.5px/1.6 var(--f-mono);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;max-height:360px;overflow:auto}
+.status{font:13px var(--f-mono);color:var(--accent);min-height:1.2em}
+ul.checks{margin:0;padding-left:20px;display:grid;gap:6px;max-width:75ch}
+
+body{margin:0}a{color:var(--accent)}select{font:inherit;color:var(--ink);background:var(--panel);padding:9px;border:1px solid var(--line);border-radius:6px;max-width:100%}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.controls label{display:flex;gap:7px;align-items:center;flex-wrap:wrap;min-width:0;max-width:100%}.alert{padding:14px 16px;border-left:4px solid #ac793b;background:#fff0d4;color:#503b22;margin:0;font-size:15px}.badge{font:12px var(--f-mono);padding:5px 8px;background:var(--panel);border:1px solid var(--line);border-radius:5px}.small-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.drawing.plan svg{min-width:560px}.calc{font-family:var(--f-mono);font-size:14px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field-grid label{display:grid;gap:3px;font-size:14px}.field-grid input{padding:9px;border:1px solid var(--line);border-radius:5px;font:inherit;color:var(--ink);background:var(--panel);width:100%}#print-image{display:none}nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}.sources{font-size:13px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:650px){.small-grid,.field-grid{grid-template-columns:1fr}.wrap{gap:22px;padding-top:18px}td,th{padding:9px}th{width:31%}input{font-size:16px}}@media print{body{background:white;color:#222;font-size:10pt}.wrap{display:block;padding:0;max-width:none}header{margin-bottom:12px}h1{font-size:23pt}h2{font-size:14pt}section{margin:15px 0;break-inside:avoid}.controls,nav,.views,.no-print,#stage,.fs-open,button,#status,.field-grid{display:none!important}#print-image{display:block;width:100%;max-height:80mm;object-fit:contain}.drawing{overflow:visible;padding:0;border:0}.drawing svg{min-width:0;width:100%;max-height:125mm}.key{grid-template-columns:repeat(5,1fr);gap:5px}.key div{padding:7px}.key strong{font-size:15px}.key small{font-size:9px}table{font-size:9pt}pre{max-height:none;overflow:visible;font-size:8pt}th,td{padding:5px}.alert{font-size:10pt}.small-grid{display:block}.sources{font-size:8pt}}
+.wrap{grid-template-columns:minmax(0,1fr)}.bar,.views,.controls{min-width:0;max-width:100%}select{min-width:0}</style></head><body><main class="wrap">
+<nav><a href="index.html">Volver a Espacios 3D</a><a href="#datos">Datos para cotizar</a><a href="#ficha-title">Ficha para enviar</a><a href="#confirmar">Confirmar en obra</a></nav>
+<header><span class="eyebrow">Terraza Cartagena · propuesta C · revisión 29/10/2026</span><h1>División cocina–patio 1</h1><p class="lead">Celosía fija de lamas verticales de aluminio blanco, desde la medianera hasta el filo exterior de la habitación. Referencia para acordar apariencia y solicitar cotización. El cielo raso remata al mismo filo que en la terraza general.</p></header>
+<p class="alert"><b>Dimensiones de referencia para cotizar, no medidas de corte.</b> El fabricante debe levantar el lugar, proponer perfiles, refuerzos, juntas y anclajes. El cielorraso es un acabado: la fijación superior debe resolverse contra una estructura resistente, no suponerse atornillada a la placa.</p>
+<div class="key"><div><small>Ancho a cubrir</small><strong>3000 mm</strong></div><div><small>Alto a cubrir</small><strong>1300 mm</strong></div><div><small>Antepecho</small><strong>1200 mm</strong></div><div><small>Lamas ilustradas</small><strong id="key-count"></strong></div><div><small>Giro en planta</small><strong id="key-angle"></strong></div></div>
+<section><div class="bar"><h2>Modelo 3D independiente</h2><div class="views" role="group" aria-label="Vistas"><button id="v-cocina" data-v="cocina" aria-pressed="true">Desde cocina</button><button id="v-patio" data-v="patio" aria-pressed="false">Desde patio</button><button id="v-frente" data-v="frente" aria-pressed="false">Frente</button><button id="v-planta" data-v="planta" aria-pressed="false">Desde arriba</button></div></div>
+<div class="controls"><label>Construcción <select id="layout"><option value="continuo">Continuo · 28 lamas, referencia de la terraza</option><option value="modulos">Tres módulos · 9 + 9 + 9 lamas, alternativa</option></select></label><button id="flip">Invertir orientación</button><label><input type="checkbox" id="ceiling" checked> Cielo raso</label><label><input type="checkbox" id="fridge" checked> Nevera</label><label><input type="checkbox" id="labels" checked> Cotas</label></div>
+<div id="stage"><span class="hint">Arrastra para girar · dos dedos para mover/acercar</span></div><img id="print-image" alt="Vista del modelo para imprimir"><p id="mode-note" class="note"></p><p class="note">La vista separada sólo representa la zona del encuentro. El patio tiene 2300 mm de ancho en esta dirección: el tramo restante corresponde a la prolongación del antepecho hacia la circulación. El oscuro representa vacío, sin afirmar su profundidad real.</p>
+<div class="controls no-print"><button id="save-view">Guardar imagen de esta vista</button><button id="print">Imprimir ficha</button></div></section>
+<section><h2>Alzado acotado · visto desde cocina</h2><div class="drawing" id="drawing" role="img" aria-label="Alzado con cotas en milímetros"></div><p class="note">Cotas desde piso terminado y desde la cara de la medianera. Las medidas nominales incluyen el marco. El sistema no descuenta holguras de instalación, juntas entre módulos ni encastres de los perfiles.</p></section>
+<section><h2>Detalle en planta: lamas, marco y cielo raso</h2><div class="drawing plan" id="plan" role="img" aria-label="Sección horizontal de las lamas"></div><p id="projection-note" class="note"></p></section>
+<section id="datos"><h2>Datos para solicitar la cotización</h2><div class="table"><table>
+<tr><th>Uso y tipo</th><td>Celosía fija de aluminio para privacidad y ventilación permanente. Sin vidrio ni hojas abatibles. La geometría ilustrada no acredita estanqueidad frente a lluvia, aislamiento acústico ni función de reja de seguridad.</td></tr>
+<tr><th>Envolvente</th><td>3000 × 1300 mm (ancho × alto), entre antepecho a +1200 y cielo raso a +2500 mm. Ocupa los 3 m completos, también sobre la nevera.</td></tr>
+<tr><th>Encuentro superior</th><td>Cielo raso a +2500 mm. Su borde termina en el mismo filo exterior de la pared de la habitación y en la cara exterior del antepecho del patio; no sobresale 600 mm como en la vista anterior. El encuentro visual enrasado no define por sí solo la unión estructural.</td></tr>
+<tr><th>Marco propuesto</th><td>Envolvente ilustrativa 50 mm de cara × 45 mm de fondo. El fabricante propone serie comercial, espesor de pared del aluminio, refuerzos y remates. La sección dibujada no representa un perfil macizo.</td></tr>
+<tr><th>Lamas</th><td id="blade-spec"></td></tr>
+<tr><th>Módulos</th><td id="module-spec"></td></tr>
+<tr><th>Orientación</th><td id="orientation-spec"></td></tr>
+<tr><th>Fijaciones</th><td>Inferior al soporte resistente del antepecho; superior a viga, perfil reforzado u otra estructura calculada; izquierda a medianera verificada. Extremo derecho libre: proponer cómo rigidizarlo. Identificar ladrillo hueco, concreto y refuerzos existentes, y especificar tipo/cantidad de anclajes según soporte y viento.</td></tr>
+<tr><th>Exterior y acabado</th><td>Blanco, código y textura a acordar con muestra. Cotizar pretratamiento y acabado apropiados para exposición costera, tornillería compatible con aluminio, garantía y mantenimiento. Identificar perfil comercial y espesor real del metal.</td></tr>
+<tr><th>Lluvia y drenaje</th><td>Proponer goterón, pendientes y drenajes para que el agua no quede atrapada en marco o coronación. Si se necesita impedir entrada de lluvia con viento, cotizar una solución con prestaciones declaradas; no atribuirlas automáticamente a estas lamas verticales.</td></tr>
+<tr><th>Rejillas bajas</th><td>Dos rejillas nominales de 300 × 150 mm, ejes a 1400 y 2400 mm desde medianera, centros a +250 mm. Suman 900 cm² de área bruta; marco y malla reducen el área efectiva. Pedir área libre neta declarada y malla desmontable para limpieza.</td></tr>
+<tr><th>Ventilación de gas</th><td>Validar ubicación y área libre efectiva con el instalador autorizado de gas, considerando también la nevera, mallas y otras obstrucciones. Los 900 cm² brutos y los huecos visuales de lamas no constituyen una aprobación de ventilación.</td></tr>
+<tr><th>Nevera y mantenimiento</th><td>Volumen de referencia 670 × 556 × 1685 mm. Confirmar modelo real, holguras de ventilación y acceso para limpiar por ambas caras de la celosía. El panel fijo y el vacío del patio condicionan ese acceso.</td></tr>
+<tr><th>Desglose solicitado</th><td>Perfiles/lamas, refuerzos, uniones de módulos, anclajes, rejillas y malla, sellos/remates, acabado, transporte, acceso seguro sobre el patio e instalación. Indicar peso total estimado, plazo, garantía y exclusiones. Entregar plano de taller antes de fabricar.</td></tr>
+</table></div></section>
+<section class="copybox"><div class="bar"><h2 id="ficha-title">Ficha para enviar al fabricante</h2><button id="copy">Copiar ficha seleccionada</button></div><pre id="ficha"></pre><span class="status" id="status" role="status"></span></section>
+<section id="confirmar"><h2>Levantamiento y decisiones por confirmar</h2><ul class="checks"><li>Medir ancho arriba/centro/abajo; altura izquierda/centro/derecha; diagonales, plomo y nivel. Verificar cotas con piso y revestimientos terminados.</li><li>Medir la estructura disponible sobre el cielo raso y el soporte real en medianera y antepecho; no asumir que un anclaje en placa o ladrillo hueco admite las cargas.</li><li>Confirmar tolerancias de instalación y dilatación, sección real de lamas y marco, cantidad final y orientación mirando una muestra desde cocina y patio.</li><li>Acordar lluvia admisible, privacidad desde ambos lados, acceso de limpieza y mallas antes de elegir el sistema.</li><li>Solicitar plano de taller con cotas de fabricación, juntas, uniones, apoyos y anclajes. El esquema de tres módulos es una alternativa independiente y no cambia la terraza general.</li></ul></section>
+<section><h2>Referencias del criterio</h2><p class="sources">Geometría de contexto: modelo vigente de Espacios 3D, propuesta C. Para distinguir fijación a acabado y estructura: <a href="https://knauf.com/api/download-center/v1/assets/59ac9b50-6faa-47a7-b13a-6a01035b2e1e?country=es&amp;download=true&amp;locale=es-ES" target="_blank" rel="noopener">Knauf, techos suspendidos y cargas</a>. Para pedir prestaciones de ventilación y lluvia por separado: <a href="https://www.greenheck.com/resources/blog/louver-fundamentals--understanding-louver-performance-criteria" target="_blank" rel="noopener">Greenheck, criterios de funcionamiento de celosías</a>. No son especificaciones de un producto elegido para esta obra.</p></section>
+<footer class="note">Ficha independiente para cotizar. No altera muebles, despieces, presupuesto ni propuestas A–D de la terraza. Medidas nominales del modelo: confirmar en obra antes de fabricar.</footer>
+</main><script src="assets/vendor/three-r128.min.js"></script><script src="assets/vendor/OrbitControls-r128.js"></script><script src="assets/ventana-cocina-patio.js?v=20261029-1"></script><script src="assets/fullscreen.js"></script></body></html>

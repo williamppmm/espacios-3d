@@ -1,0 +1,94 @@
+/* Ficha aislada. No lee ni escribe el estado de la terraza ni sus despieces. */
+(()=>{'use strict';
+const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',G={len:3,t:.12,sill:1.2,ceil:2.5,frame:{face:.05,depth:.045},blade:{w:.13,t:.025},ceiling:{x0:-.08,x1:3,z0:-.06,z1:2.4},fridge:{w:.67,d:.556,h:1.685},vents:[1.4,2.4],vent:{w:.3,h:.15,y:.25}};
+const fmt=(n,p=1)=>n.toLocaleString('es-CO',{maximumFractionDigits:p}),mm=n=>Math.round(n*1000),projection=(G.blade.w+G.blade.t)/Math.sqrt(2),overhang=(projection-G.frame.depth)/2;
+let mode='continuo',sign=1,currentView='cocina',scene,camera,renderer,controls,assembly,labels,ceiling,fridge,lastModel;
+function model(){const count=mode==='continuo'?1:3,width=G.len/count,groups=[];for(let i=0;i<count;i++){const n=mode==='continuo'?28:9,clear=width-2*G.frame.face,margin=projection/2+.002,pitch=(clear-2*margin)/(n-1),centers=Array.from({length:n},(_,j)=>i*width+G.frame.face+margin+j*pitch);groups.push({a:i*width,b:(i+1)*width,n,pitch,centers});}return{groups,total:groups.reduce((n,g)=>n+g.n,0),bladeH:G.ceil-G.sill-2*G.frame.face,pitch:groups[0].pitch};}
+const orientation=()=>sign===1?'45° como la propuesta C de la terraza':'−45°, orientación invertida respecto a la propuesta C';
+function updateText(d){$('key-count').textContent=d.total+' × 130 mm';$('key-angle').textContent=sign*45+'°';$('blade-spec').textContent=d.total+' lamas verticales. Envolvente 130 × 25 mm; largo visible de referencia '+mm(d.bladeH)+' mm y paso aproximado '+fmt(d.pitch*1000)+' mm entre ejes. El fabricante debe recalcular longitudes de corte, encastres y cantidad con el perfil elegido.';
+$('module-spec').textContent=mode==='continuo'?'Marco continuo nominal de 3000 mm y 28 lamas, referencia del modelo general. Cotizar refuerzos y método de transporte/armado; no se presupone que se pueda transportar el conjunto entero.':'Alternativa de tres marcos nominales de 1000 mm, cada uno con 9 lamas (27 en total). Las dos juntas suman dos caras de 50 mm = 100 mm visibles en cada encuentro. No conserva automáticamente las 28 lamas del marco continuo. Falta descontar juntas/holguras de instalación.';
+$('orientation-spec').textContent=orientation()+'. Confirmar el sentido mirando la muestra desde cocina y desde patio; no basta escribir sólo «45°».';
+$('mode-note').textContent=(mode==='continuo'?'Referencia continua: misma envolvente y 28 lamas que la propuesta C.':'Alternativa para cotizar: tres módulos, 27 lamas y dos encuentros dobles. No cambia la propuesta C del modelo general.')+' Cielo raso al filo exterior del ventanal y al filo de la pared de la habitación. Los extremos de las lamas tienen 2 mm de separación geométrica frente a las caras internas del marco; no es una tolerancia de taller.';
+$('projection-note').textContent='A 45°, una envolvente de 130 × 25 mm proyecta '+fmt(projection*1000)+' mm de fondo y de frente. Frente a un marco de 45 mm, sobresale aproximadamente '+fmt(overhang*1000)+' mm por cada cara. El fabricante debe resolver soportes/encastres; la abertura aparente no equivale al área libre efectiva de ventilación. El trazo verde es el filo del cielo raso, a ras de la cara exterior del antepecho.';
+$('ficha').textContent=`SOLICITUD DE COTIZACIÓN · DIVISIÓN COCINA–PATIO 1 · CARTAGENA
+Revisión 29/10/2026. Referencia visual; rectificar medidas en obra antes de fabricar.
+
+1. SOLUCIÓN SELECCIONADA
+Celosía FIJA de aluminio blanco, sin vidrio ni hojas abatibles.
+${mode==='continuo'?'Marco continuo nominal de 3000 mm, con 28 lamas de referencia. Solicito propuesta de transporte, armado y refuerzos.':'Tres módulos nominales de 1000 mm; 9 lamas por módulo (27 total). Encuentros dobles de marcos de 50 mm. Recalcular al definir juntas y tolerancias.'}
+Orientación: ${orientation()}, vista en planta. Confirmar con muestra por ambos lados.
+
+2. MEDIDAS NOMINALES A CUBRIR
+3000 mm de ancho × 1300 mm de alto, de la cara de la medianera al final del muro.
+Antepecho a +1200 mm; cara inferior del cielo raso a +2500 mm desde piso terminado.
+Cielo raso al filo exterior del ventanal y de la pared de habitación, sin el vuelo lateral de 600 mm del dibujo anterior.
+Son cotas de referencia de la obra; NO son medidas de corte de perfiles. Levantar anchos arriba/centro/abajo, alturas a ambos lados/centro, diagonales, plomo y nivel.
+
+3. PERFILES Y LAMAS A PROPONER
+Marco ilustrativo: cara 50 mm, fondo 45 mm.
+Lama ilustrativa: envolvente 130 × 25 mm, largo visible 1200 mm, paso aproximado ${fmt(d.pitch*1000)} mm.
+A 45° ocupa ${fmt(projection*1000)} mm de fondo: sobresale ${fmt(overhang*1000)} mm por cada cara del marco de 45 mm. Resolver soportes y extremos.
+Proponer serie comercial, espesor real del metal, refuerzos, peso total, uniones, sellos, tolerancias y dilatación. No se especifica perfil macizo.
+Blanco: acordar código, textura y muestra. Acabado para exposición costera y tornillería compatible con aluminio; detallar garantía y mantenimiento.
+
+4. ANCLAJES Y REMATES
+Apoyo inferior en soporte resistente del antepecho, superior en viga/perfil reforzado u otra estructura verificada, e izquierdo en medianera. El extremo derecho queda libre: definir su rigidez.
+NO suponer fijación al acabado del cielo raso. Identificar sustrato real, refuerzos y anclajes según peso y viento. Proponer drenaje, pendientes y goterón, sin retener agua en perfiles o coronación.
+La celosía no tiene prestaciones acreditadas de estanqueidad, aislamiento o seguridad. Si se necesita impedir lluvia con viento, indicar y cotizar un sistema adecuado.
+
+5. REJILLAS Y EQUIPOS
+Dos rejillas nominales de 300 × 150 mm, centros a +250 mm y ejes a 1400 y 2400 mm desde medianera.
+Área bruta total 900 cm²; declarar área libre neta descontando marco y malla desmontable. Validar ventilación con instalador de gas autorizado, también para el panel superior y las obstrucciones.
+Nevera de referencia 670 × 556 × 1685 mm: confirmar equipo, holguras y acceso de limpieza; no considerar libre su zona sin revisión.
+Patio: hay vacío frente a los primeros 2300 mm. Prever acceso seguro para instalar y limpiar.
+
+6. ENTREGA SOLICITADA
+Cotizar materiales, acabado, refuerzos, uniones, anclajes, rejillas/malla, remates/sellos, transporte e instalación sobre el patio. Indicar plazo, peso, garantía, mantenimiento y exclusiones.
+Entregar plano de taller con dimensiones de fabricación, orientación, módulos, juntas, soportes y anclajes para revisar antes de fabricar.
+Referencia visual: ventana-cocina-patio.html de Espacios 3D. No altera los muebles ni sus pedidos.`;
+}
+function svgNode(tag,attrs={},parent){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(parent)parent.append(e);return e;}
+function text(svg,x,y,value,attrs={}){const e=svgNode('text',{x,y,'font-family':'Arial, sans-serif','font-size':55,'text-anchor':'middle',fill:'var(--ink)',...attrs},svg);e.textContent=value;return e;}
+function elevation(d){const s=svgNode('svg',{viewBox:'-420 -330 3820 3420'}),Y=y=>2600-mm(y),rect=(x,y,w,h,fill,attrs={})=>svgNode('rect',{x,y,width:w,height:h,fill,...attrs},s);
+const hdim=(a,b,y,label)=>{svgNode('line',{x1:a,y1:y,x2:b,y2:y,stroke:'var(--dim)','stroke-width':4},s);for(const x of[a,b])svgNode('line',{x1:x-18,y1:y+18,x2:x+18,y2:y-18,stroke:'var(--dim)','stroke-width':6},s);text(s,(a+b)/2,y-20,label,{fill:'var(--dim)'});};
+const vdim=(a,b,x,label)=>{const ya=Y(a),yb=Y(b);svgNode('line',{x1:x,y1:ya,x2:x,y2:yb,stroke:'var(--dim)','stroke-width':4},s);for(const y of[ya,yb])svgNode('line',{x1:x-18,y1:y+18,x2:x+18,y2:y-18,stroke:'var(--dim)','stroke-width':6},s);text(s,x-30,(ya+yb)/2,label,{fill:'var(--dim)',transform:`rotate(-90 ${x-30} ${(ya+yb)/2})`});};
+rect(0,Y(G.sill),3000,mm(G.sill),'var(--brick)');rect(-120,Y(2.5),120,2500,'var(--brick-dim)');rect(mm(G.ceiling.x0),Y(2.54),mm(3-G.ceiling.x0),40,'var(--muted)');
+svgNode('line',{x1:-160,y1:2600,x2:3250,y2:2600,stroke:'var(--ink)','stroke-width':6},s);
+for(const g of d.groups){const a=mm(g.a),b=mm(g.b);rect(a,Y(G.ceil),b-a,1300,'none',{stroke:'var(--alu-edge)','stroke-width':4});for(const y of [G.sill+.05,G.ceil])rect(a,Y(y),b-a,50,'var(--alu)');for(const x of [a,b-50])rect(x,Y(2.45),50,1200,'var(--alu)');for(const cx of g.centers)rect(cx*1000-projection*500,Y(2.45),projection*1000,1200,'var(--alu)',{stroke:'var(--alu-edge)','stroke-width':3});hdim(a,b,Y(2.5)-180,mode==='continuo'?'3000 · marco continuo':'1000 nominal');}
+for(const cx of G.vents){rect(mm(cx)-150,Y(.325),300,150,'var(--alu-edge)');for(let y=.20;y<.32;y+=.03)rect(mm(cx)-137,Y(y+.008),274,8,'var(--alu)');}
+rect(5,Y(G.fridge.h),mm(G.fridge.w),mm(G.fridge.h),'none',{stroke:'var(--muted)','stroke-width':6,'stroke-dasharray':'23 15'});text(s,340,Y(.6),'nevera',{fill:'var(--muted)'});
+hdim(0,3000,2760,'3000 · ancho a cubrir');hdim(0,1400,2930,'1400 · eje rejilla 1');hdim(1400,2400,3060,'1000 · entre ejes');vdim(0,1.2,3200,'1200');vdim(1.2,2.5,3200,'1300');vdim(0,2.5,-250,'2500');vdim(0,.25,1140,'250');
+svgNode('line',{x1:2300,y1:2600,x2:2300,y2:2720,stroke:'var(--muted)','stroke-width':3,'stroke-dasharray':'10 8'},s);text(s,1150,2690,'patio / vacío hasta x = 2300',{fill:'var(--muted)','font-size':42});$('drawing').replaceChildren(s);
+}
+function plan(d){const s=svgNode('svg',{viewBox:'-160 -250 1450 650'});text(s,440,-190,'Detalle del primer tramo · visto desde arriba',{'font-size':39});text(s,440,-130,'PATIO',{'font-size':31,fill:'var(--muted)'});text(s,440,185,'COCINA',{'font-size':31,fill:'var(--muted)'});
+for(const y of[-22.5,22.5])svgNode('line',{x1:0,y1:y,x2:1000,y2:y,stroke:'var(--alu-edge)','stroke-width':2,'stroke-dasharray':'10 8'},s);
+svgNode('line',{x1:0,y1:-60,x2:1000,y2:-60,stroke:'var(--accent)','stroke-width':4},s);text(s,450,-80,'filo del cielo raso / cara exterior del antepecho',{'font-size':25,fill:'var(--accent)'});
+for(const g of d.groups){for(const x of [g.a,g.b-.05])if(x<=1.05)svgNode('rect',{x:mm(x),y:-22.5,width:50,height:45,fill:'var(--alu-edge)'},s);for(const cx of g.centers){if(cx>1.0)continue;const a=sign*Math.PI/4,points=[[-65,-12.5],[65,-12.5],[65,12.5],[-65,12.5]].map(([x,z])=>[cx*1000+x*Math.cos(a)+z*Math.sin(a),-x*Math.sin(a)+z*Math.cos(a)].join(',')).join(' ');svgNode('polygon',{points,fill:'var(--alu)',stroke:'var(--alu-edge)','stroke-width':2},s);}}
+for(const[x,a,b,label]of [[1050,-projection*500,projection*500,fmt(projection*1000)+' mm'],[1190,-22.5,22.5,'45 mm']]){svgNode('line',{x1:x,y1:a,x2:x,y2:b,stroke:'var(--dim)','stroke-width':2},s);for(const y of[a,b])svgNode('line',{x1:x-10,y1:y,x2:x+10,y2:y,stroke:'var(--dim)','stroke-width':2},s);text(s,x+20,15,label,{'font-size':27,fill:'var(--dim)',transform:`rotate(-90 ${x+20} 15)`});}
+text(s,450,270,'Lama ilustrada 130 × 25 mm · '+orientation(),{'font-size':29});text(s,450,325,'45 mm es el fondo del marco, no el de la celosía completa.',{'font-size':29});$('plan').replaceChildren(s);
+}
+const stage=$('stage'),T=window.THREE;
+if(!T||!T.OrbitControls){stage.insertAdjacentHTML('beforeend','<p style="padding:16px">No se pudo cargar el motor 3D. Puedes consultar las cotas y copiar la ficha de abajo.</p>');}
+else try{renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));renderer.outputEncoding=T.sRGBEncoding;stage.prepend(renderer.domElement);scene=new T.Scene();scene.background=new T.Color(0xe7ece8);camera=new T.PerspectiveCamera(40,1,.03,60);controls=new T.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.51;controls.minDistance=.5;controls.maxDistance=14;scene.add(new T.HemisphereLight(0xffffff,0x8f8a80,.85));const sun=new T.DirectionalLight(0xfff4e6,.85);sun.position.set(2,6,5);scene.add(sun);
+const c=document.createElement('canvas');c.width=512;c.height=342;const g=c.getContext('2d');g.fillStyle='#c9bfae';g.fillRect(0,0,512,342);for(let r=0;r<2;r++)for(let k=-1;k<3;k++){g.fillStyle=(r+k)%2?'#af6344':'#be714c';g.fillRect(k*256+r*128+4,r*171+4,248,163);}const brick=(w,h)=>{const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(w/.6,h/.4);return new T.MeshStandardMaterial({map:t,roughness:1});};
+const M={alu:new T.MeshStandardMaterial({color:0xf2f3f1,metalness:.25,roughness:.5}),vent:new T.MeshStandardMaterial({color:0x4a5359}),floor:new T.MeshStandardMaterial({color:0xd9d4c6}),void:new T.MeshStandardMaterial({color:0x303735}),fridge:new T.MeshStandardMaterial({color:0xe8e8e2,transparent:true,opacity:.5}),ceiling:new T.MeshStandardMaterial({color:0xb7c3b3,transparent:true,opacity:.35,depthWrite:false})};
+function box(x1,x2,y1,y2,z1,z2,m,parent=scene,name=''){const b=new T.Mesh(new T.BoxGeometry(x2-x1,y2-y1,z2-z1),m);b.position.set((x1+x2)/2,(y1+y2)/2,(z1+z2)/2);b.name=name;parent.add(b);return b;}
+box(-.12,3.6,-.05,0,.06,2.4,M.floor);box(2.3,3.6,-.05,0,-2.64,-.06,M.floor);box(0,2.3,-.2,-.19,-2.64,-.06,M.void,scene,'patio-void');box(-.12,0,0,2.5,-2.64,2.4,brick(5.04,2.5));box(2.88,3,0,2.5,2.06,2.4,brick(.34,2.5),scene,'room-wall-return');
+ceiling=box(G.ceiling.x0,G.ceiling.x1,2.5,2.54,G.ceiling.z0,G.ceiling.z1,M.ceiling,scene,'ceiling-flush');box(0,3,0,1.2,-.06,.06,brick(3,1.2));
+for(const cx of G.vents){box(cx-.15,cx+.15,.175,.325,-.066,.066,M.vent);for(let y=.19;y<.32;y+=.03)box(cx-.137,cx+.137,y,y+.008,-.072,.072,M.alu);}
+fridge=box(.005,.005+G.fridge.w,0,G.fridge.h,.07,.07+G.fridge.d,M.fridge,scene,'fridge-reference');assembly=new T.Group();assembly.name='louver-assembly';labels=new T.Group();scene.add(assembly,labels);
+function label(txt,x,y,z){const c=document.createElement('canvas');c.width=512;c.height=96;const g=c.getContext('2d');g.fillStyle='#fffffff0';g.fillRect(0,0,512,96);g.fillStyle='#253b35';g.textAlign='center';g.textBaseline='middle';g.font='500 36px Arial';g.fillText(txt,256,48);const map=new T.CanvasTexture(c);map.encoding=T.sRGBEncoding;const sp=new T.Sprite(new T.SpriteMaterial({map,depthTest:false,depthWrite:false}));sp.position.set(x,y,z);sp.scale.set(.66,.124,1);sp.renderOrder=20;labels.add(sp);}
+label('3000 mm · ancho total',1.5,2.69,.1);label('+1200 · antepecho',2.63,1.08,.16);label('+2500 · cielo raso',2.5,2.6,.2);label('filo de habitación',3.0,2.66,2.08);
+window.__ventana={G,get model(){return lastModel;},scene,ceiling,fridge,assembly,controls,camera,renderer};
+window.__ventana.rebuild=d=>{while(assembly.children.length){const o=assembly.children.pop();o.parent=null;o.geometry.dispose();}for(const a of d.groups){const f=G.frame.face,fd=G.frame.depth/2;box(a.a,a.b,1.2,1.25,-fd,fd,M.alu,assembly,'frame-bottom');box(a.a,a.b,2.45,2.5,-fd,fd,M.alu,assembly,'frame-top');box(a.a,a.a+f,1.25,2.45,-fd,fd,M.alu,assembly,'frame-side');box(a.b-f,a.b,1.25,2.45,-fd,fd,M.alu,assembly,'frame-side');for(const cx of a.centers){const b=box(-.065,.065,0,d.bladeH,-.0125,.0125,M.alu,assembly,'blade');b.position.set(cx,1.25+d.bladeH/2,0);b.rotation.y=sign*Math.PI/4;}}};
+const resize=()=>{const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};new ResizeObserver(resize).observe(stage);resize();
+(function loop(){controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})();
+}catch(e){stage.insertAdjacentHTML('beforeend','<p style="padding:16px">El 3D no pudo iniciarse en este dispositivo. Las cotas y la ficha siguen disponibles.</p>');console.error(e);}
+function go(name){currentView=name;if(!camera)return;const aspect=stage.clientWidth/stage.clientHeight,dist=Math.max(2.8,3.3/aspect)/(2*Math.tan(Math.PI/9))*1.2,target=new T.Vector3(1.5,1.35,.1),offset=name==='patio'?[-.22,.18,-1]:name==='frente'?[0,0,1]:name==='planta'?[0,1,.001]:[.25,.12,1];camera.up.set(...(name==='planta'?[0,0,-1]:[0,1,0]));controls.target.copy(target);camera.position.copy(target).add(new T.Vector3(...offset).normalize().multiplyScalar(dist));controls.update();labels.visible=$('labels').checked&&name!=='planta';document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===name)));}
+function refresh(){lastModel=model();updateText(lastModel);elevation(lastModel);plan(lastModel);if(window.__ventana){window.__ventana.rebuild(lastModel);go(currentView);}}
+$('layout').onchange=()=>{mode=$('layout').value;refresh();};$('flip').onclick=()=>{sign*=-1;refresh();};for(const[id,obj]of [['ceiling',()=>ceiling],['fridge',()=>fridge],['labels',()=>labels]])$(id).onchange=()=>{if(obj())obj().visible=$(id).checked;};document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('ficha').textContent);$('status').textContent='Ficha copiada con la alternativa y orientación seleccionadas.';}catch{const r=document.createRange();r.selectNodeContents($('ficha'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('status').textContent='Texto seleccionado: usa Copiar para enviarlo.';}};
+function snapshot(){if(!renderer)return null;renderer.render(scene,camera);return renderer.domElement.toDataURL('image/png');}
+$('save-view').onclick=()=>{const src=snapshot();if(!src){$('status').textContent='El modelo 3D no está disponible para guardar imagen.';return;}const a=document.createElement('a');a.href=src;a.download='division-cocina-patio-'+mode+'.png';a.click();};
+const beforePrint=()=>{const src=snapshot();if(src)$('print-image').src=src;};window.addEventListener('beforeprint',beforePrint);$('print').onclick=()=>{beforePrint();window.print();};refresh();
+})();
