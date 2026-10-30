@@ -2,50 +2,24 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',G={len:3,t:.12,sill:1.2,ceil:2.5,frame:{face:.05,depth:.045},blade:{w:.13,t:.025},ceiling:{x0:-.08,x1:3,z0:-.06,z1:2.4},fridge:{w:.67,d:.556,h:1.685},vents:[1.4,2.4],vent:{w:.3,h:.15,y:.25}};
 const fmt=(n,p=1)=>n.toLocaleString('es-CO',{maximumFractionDigits:p}),mm=n=>Math.round(n*1000),projection=(G.blade.w+G.blade.t)/Math.sqrt(2),overhang=(projection-G.frame.depth)/2;
-let mode='continuo',sign=1,currentView='cocina',scene,camera,renderer,controls,assembly,labels,ceiling,fridge,lastModel;
+let mode='modulos',sign=1,currentView='cocina',scene,camera,renderer,controls,assembly,labels,ceiling,fridge,lastModel;
 function model(){const count=mode==='continuo'?1:3,width=G.len/count,groups=[];for(let i=0;i<count;i++){const n=mode==='continuo'?28:9,clear=width-2*G.frame.face,margin=projection/2+.002,pitch=(clear-2*margin)/(n-1),centers=Array.from({length:n},(_,j)=>i*width+G.frame.face+margin+j*pitch);groups.push({a:i*width,b:(i+1)*width,n,pitch,centers});}return{groups,total:groups.reduce((n,g)=>n+g.n,0),bladeH:G.ceil-G.sill-2*G.frame.face,pitch:groups[0].pitch};}
 const orientation=()=>sign===1?'45° como la propuesta C de la terraza':'−45°, orientación invertida respecto a la propuesta C';
-function updateText(d){$('key-count').textContent=d.total+' × 130 mm';$('key-angle').textContent=sign*45+'°';$('blade-spec').textContent=d.total+' lamas verticales. Envolvente 130 × 25 mm; largo visible de referencia '+mm(d.bladeH)+' mm y paso aproximado '+fmt(d.pitch*1000)+' mm entre ejes. El fabricante debe recalcular longitudes de corte, encastres y cantidad con el perfil elegido.';
-$('module-spec').textContent=mode==='continuo'?'Marco continuo nominal de 3000 mm y 28 lamas, referencia del modelo general. Cotizar refuerzos y método de transporte/armado; no se presupone que se pueda transportar el conjunto entero.':'Alternativa de tres marcos nominales de 1000 mm, cada uno con 9 lamas (27 en total). Las dos juntas suman dos caras de 50 mm = 100 mm visibles en cada encuentro. No conserva automáticamente las 28 lamas del marco continuo. Falta descontar juntas/holguras de instalación.';
-$('orientation-spec').textContent=orientation()+'. Confirmar el sentido mirando la muestra desde cocina y desde patio; no basta escribir sólo «45°».';
-$('mode-note').textContent=(mode==='continuo'?'Referencia continua: misma envolvente y 28 lamas que la propuesta C.':'Alternativa para cotizar: tres módulos, 27 lamas y dos encuentros dobles. No cambia la propuesta C del modelo general.')+' Cielo raso al filo exterior del ventanal y al filo de la pared de la habitación. Los extremos de las lamas tienen 2 mm de separación geométrica frente a las caras internas del marco; no es una tolerancia de taller.';
-$('projection-note').textContent='A 45°, una envolvente de 130 × 25 mm proyecta '+fmt(projection*1000)+' mm de fondo y de frente. Frente a un marco de 45 mm, sobresale aproximadamente '+fmt(overhang*1000)+' mm por cada cara. El fabricante debe resolver soportes/encastres; la abertura aparente no equivale al área libre efectiva de ventilación. El trazo verde es el filo del cielo raso, a ras de la cara exterior del antepecho.';
-$('ficha').textContent=`SOLICITUD DE COTIZACIÓN · DIVISIÓN COCINA–PATIO 1 · CARTAGENA
-Revisión 29/10/2026. Referencia visual; rectificar medidas en obra antes de fabricar.
+function updateText(d){$('key-count').textContent=mode==='modulos'?'9 + 9 + 9':d.total+' lamas';$('key-angle').textContent=sign*45+'°';
+$('blade-spec').textContent='Lamas de referencia 130 × 25 mm, largo visible '+mm(d.bladeH)+' mm; paso aproximado '+fmt(d.pitch*1000)+' mm. Ajustar al perfil elegido.';
+$('module-spec').textContent=mode==='modulos'?'Tres módulos nominales de 1000 mm, con nueve lamas cada uno. Confirmar juntas y holguras.':'Marco continuo de 3000 mm, con 28 lamas.';
+$('orientation-spec').textContent=orientation()+'. Confirmar el sentido con una muestra.';
+$('mode-note').textContent=mode==='modulos'?'Tres módulos de aproximadamente 1000 mm, con 9 lamas cada uno.':'Alternativa de marco continuo, con 28 lamas.';
+$('projection-note').textContent='La lama de 130 × 25 mm a 45° ocupa aproximadamente '+fmt(projection*1000)+' mm de fondo; sobresale '+fmt(overhang*1000)+' mm por cada cara del marco de 45 mm. Resolver apoyos y encastres con el perfil real.';
+$('ficha').textContent=`Quiero una división fija de aluminio blanco entre la cocina y el patio, como en el modelo.
 
-1. SOLUCIÓN SELECCIONADA
-Celosía FIJA de aluminio blanco, sin vidrio ni hojas abatibles.
-${mode==='continuo'?'Marco continuo nominal de 3000 mm, con 28 lamas de referencia. Solicito propuesta de transporte, armado y refuerzos.':'Tres módulos nominales de 1000 mm; 9 lamas por módulo (27 total). Encuentros dobles de marcos de 50 mm. Recalcular al definir juntas y tolerancias.'}
-Orientación: ${orientation()}, vista en planta. Confirmar con muestra por ambos lados.
+• Medida total: 3000 mm de ancho × 1300 mm de alto.
+• ${mode==='modulos'?'Tres módulos de unos 1000 mm, con 9 lamas cada uno (27 en total).':'Marco continuo de 3000 mm, con 28 lamas.'}
+• Lamas verticales a ${sign*45}°, de referencia 130 × 25 mm, para dar privacidad y dejar pasar aire y luz.
+• Antepecho a 1200 mm del piso y remate superior a 2500 mm, al filo del cielo raso y la pared.
+• Dos rejillas bajas de 300 × 150 mm.
 
-2. MEDIDAS NOMINALES A CUBRIR
-3000 mm de ancho × 1300 mm de alto, de la cara de la medianera al final del muro.
-Antepecho a +1200 mm; cara inferior del cielo raso a +2500 mm desde piso terminado.
-Cielo raso al filo exterior del ventanal y de la pared de habitación, sin el vuelo lateral de 600 mm del dibujo anterior.
-Son cotas de referencia de la obra; NO son medidas de corte de perfiles. Levantar anchos arriba/centro/abajo, alturas a ambos lados/centro, diagonales, plomo y nivel.
-
-3. PERFILES Y LAMAS A PROPONER
-Marco ilustrativo: cara 50 mm, fondo 45 mm.
-Lama ilustrativa: envolvente 130 × 25 mm, largo visible 1200 mm, paso aproximado ${fmt(d.pitch*1000)} mm.
-A 45° ocupa ${fmt(projection*1000)} mm de fondo: sobresale ${fmt(overhang*1000)} mm por cada cara del marco de 45 mm. Resolver soportes y extremos.
-Proponer serie comercial, espesor real del metal, refuerzos, peso total, uniones, sellos, tolerancias y dilatación. No se especifica perfil macizo.
-Blanco: acordar código, textura y muestra. Acabado para exposición costera y tornillería compatible con aluminio; detallar garantía y mantenimiento.
-
-4. ANCLAJES Y REMATES
-Apoyo inferior en soporte resistente del antepecho, superior en viga/perfil reforzado u otra estructura verificada, e izquierdo en medianera. El extremo derecho queda libre: definir su rigidez.
-NO suponer fijación al acabado del cielo raso. Identificar sustrato real, refuerzos y anclajes según peso y viento. Proponer drenaje, pendientes y goterón, sin retener agua en perfiles o coronación.
-La celosía no tiene prestaciones acreditadas de estanqueidad, aislamiento o seguridad. Si se necesita impedir lluvia con viento, indicar y cotizar un sistema adecuado.
-
-5. REJILLAS Y EQUIPOS
-Dos rejillas nominales de 300 × 150 mm, centros a +250 mm y ejes a 1400 y 2400 mm desde medianera.
-Área bruta total 900 cm²; declarar área libre neta descontando marco y malla desmontable. Validar ventilación con instalador de gas autorizado, también para el panel superior y las obstrucciones.
-Nevera de referencia 670 × 556 × 1685 mm: confirmar equipo, holguras y acceso de limpieza; no considerar libre su zona sin revisión.
-Patio: hay vacío frente a los primeros 2300 mm. Prever acceso seguro para instalar y limpiar.
-
-6. ENTREGA SOLICITADA
-Cotizar materiales, acabado, refuerzos, uniones, anclajes, rejillas/malla, remates/sellos, transporte e instalación sobre el patio. Indicar plazo, peso, garantía, mantenimiento y exclusiones.
-Entregar plano de taller con dimensiones de fabricación, orientación, módulos, juntas, soportes y anclajes para revisar antes de fabricar.
-Referencia visual: ventana-cocina-patio.html de Espacios 3D. No altera los muebles ni sus pedidos.`;
+Confirmar medidas, perfiles y fijaciones a estructura resistente en obra. Cotizar fabricación, acabado blanco para exterior e instalación.`;
 }
 function svgNode(tag,attrs={},parent){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(parent)parent.append(e);return e;}
 function text(svg,x,y,value,attrs={}){const e=svgNode('text',{x,y,'font-family':'Arial, sans-serif','font-size':55,'text-anchor':'middle',fill:'var(--ink)',...attrs},svg);e.textContent=value;return e;}
