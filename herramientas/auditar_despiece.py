@@ -16,7 +16,7 @@ Qué comprueba (cada bloque imprime OK / ATENCIÓN):
   5. Que las medidas de cada módulo de la hoja Distribución sean consistentes con sus piezas
      (ancho del módulo = largo del piso + 30) y que los totales tecleados coincidan con el conteo.
   6. Que las piezas quepan en N láminas de 2440 x 2150 con cortes pasantes (guillotina),
-     sin rotar (veta), refilado 10 mm por lado y sierra 4 mm. Es una prueba de factibilidad,
+     sin rotar (veta), refilado 10 mm por lado y sierra 5 mm. Es una prueba de factibilidad,
      no el plano de corte definitivo: la seccionadora del proveedor manda.
 
 Convenciones del Excel (hoja Despiece): E = largo (veta), F = ancho, G = cantidad,
@@ -155,7 +155,7 @@ if fijos:
 
 # ---------------------------------------------------------------- 6
 titulo(f"5. Encaje en {LAMINAS} láminas RH15 (guillotina, sin rotar)")
-K, BW, BH = 4, 2440 - 20, 2150 - 20
+K, BW, BH = 5, 2440 - 20, 2150 - 20
 
 
 def corte(p):

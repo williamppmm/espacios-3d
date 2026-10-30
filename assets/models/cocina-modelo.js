@@ -12,7 +12,7 @@ window.EspaciosModels.kitchenProposal=function(THREE){
   const parent=key[0]==='S'?groups.uppers:body,g=new THREE.Group();parent.add(g);
   if(v.type==='hinge')g.position.set(v.pivot[0]/1000,0,v.pivot[1]/1000);
   if(v.type==='lift')g.position.set(0,v.pivot[0]/1000,v.pivot[1]/1000);
-  const apply=v.type==='slide'?t=>g.position.z=t*v.dist/1000:v.type==='lift'?t=>{g.rotation.x=-t*Math.PI/2;armUpdates.forEach(fn=>fn());}:t=>g.rotation.y=t*v.sign*1.75;
+  const apply=v.type==='slide'?t=>g.position.z=t*v.dist/1000:v.type==='lift'?t=>{g.rotation.x=-t*Math.PI/2;armUpdates.forEach(fn=>fn());}:t=>g.rotation.y=t*v.sign*(v.angle!==undefined?v.angle*Math.PI/180:1.75);
   const u={t:0,target:0,apply};g.userData.mover=u;moving[key]=g;movers.push(u);
  }
  for(const p of D.parts){const parent=p.move?moving[p.move]:p.module[0]==='S'?groups.uppers:body;
@@ -37,9 +37,14 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  for(const a of [[1755,1785,95,525,880,885],[2275,2305,95,525,880,885],[1785,2275,95,125,880,885],[1785,2275,495,525,880,885],[1785,1787,125,495,720,885],[2273,2275,125,495,720,885],[1785,2275,125,127,720,885],[1785,2275,493,495,720,885],[1785,2275,125,495,718,720]])box(a,'inox','B5',E);
  box([2030,2045,45,60,900,1210],'inox','B5',E);box([2030,2045,45,220,1195,1210],'inox','B5',E);
  // Horno y estufa: envolventes ilustrativas; ventilación y nicho por manual.
- box([413,1007,46,586,115,735],'inox','B2',E);box([470,950,586,603,265,635],'black','B2',E);box([490,930,603,625,660,680],'inox','B2',E);
+ // Separar el cuerpo empotrado del marco frontal evita dibujar acero dentro de los laterales RH.
+ box([440,980,46,586,115,720],'inox','B2',E);box([413,1007,586,590,115,735],'inox','B2',E);box([470,950,590,603,265,635],'black','B2',E);box([490,930,603,625,660,680],'inox','B2',E);
  box([410,1010,55,565,900,912],'black','B2',E);for(const [x,z] of [[540,180],[880,180],[540,430],[880,430]]){const ring=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.008,24),mats.inox);ring.position.set(x/1000,.918,z/1000);E.add(ring);}
- box([410,1010,0,480,1550,1700],'black','S2',E);
+ // Tofu 9002650 rev.00: chasis 596 × 335 × 84; envolvente con vidrio 596 × 458 × 94.
+ // Fijación superior a P075, apoyada por P076; se marca con la campana real.
+ for(const a of D.hoodMount.hoodBounds)box(a,'black','S2',E);
+ // Cuatro escuadras entre base y apoyos, sólo referencia visual; seleccionar fijaciones reales.
+ for(const x of [440,965])for(const z of [35,245]){box([x,x+15,z,z+20,1670,1673],'inox','S2',groups.uppers);const v=x===440?x:x+12;box([v,v+3,z,z+20,1670,1690],'inox','S2',groups.uppers);}
  // Cubiertero removible.
  box([1053.5,1413.5,56,536,690,740],'dark','B3',moving['B3-cajon']);
  // Condimentero: cestas 100 × 446 × 470 y rieles laterales izquierdos; conjunto de 135 mm (medido por el usuario) dentro de 150 mm libres.

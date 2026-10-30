@@ -34,10 +34,10 @@ Mesón 260 × 62 cm. Módulos bajos 18 + 60 + 67 + 70 + 40 cm:
 - **B3 (67 cm):** cajón cubiertero (riel HRE550-55N) y dos puertas con entrepaño.
 - **B5 (70 cm):** lavaplatos Socoda AS350 de submontar; entrepaño desmontable con recorte de sifón en obra.
 - **B4 (40 cm):** puerta superior y basurero extraíble HSO688-00 sobre bastidor provisional (P072–P074) con riel HRE126-55.
-- **S2 sobre la campana:** puerta abatible hacia arriba con dos brazos HEC060-03 y faja de agarre fija.
+- **S2 sobre la campana (45 cm de alto):** deja 15 cm libres para la campana Tofu 60 (84 mm de chasis y 94 mm con vidrio según ficha; soporte al mueble por definir). Puerta abatible de 447 × 597 hacia arriba con dos brazos HEC060-03 y faja de agarre fija P071, cortada de un retal. Las demás puertas altas sobresalen 2 cm por debajo como agarre.
 - **Golas:** superior y media; los rebajes en laterales y travesaños se hacen en el armado, cuando se defina el borde del granito.
 
-85 piezas RH15 y 9 fondos de 6 mm; caben en 4 láminas RH15 y 1 de fondo (prueba de factibilidad; el plano de corte lo define el proveedor).
+88 piezas RH15 y 9 fondos de 6 mm; caben en 4 láminas RH15 y 1 de fondo (prueba de factibilidad; el plano de corte lo define el proveedor).
 
 ## Clóset principal (`closet.html`)
 
@@ -52,12 +52,12 @@ Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 1
 | Hoja | Para qué |
 | --- | --- |
 | Resumen | Láminas, rollos y bisagras por separado frente al conjunto, y total con precio conocido |
-| Pedido de corte | Pedido único: 112 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
+| Pedido de corte | Pedido único: 113 líneas de cocina, clóset y baño, con medida terminada y corte sin canto. Las hojas del clóset (2195) y P011 (160) se piden con sobremedida para recortar arriba en el armado |
 | Láminas | Encaje conjunto propuesto (8 láminas RH15 y 1 de fondo frente a 9 + 2 por separado) |
-| Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 181 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
+| Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 186 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
 | Compras | Lista consolidada; las bisagras HBM897-01 de cocina y baño se compran juntas |
 | Bloqueos | Lo que impide cortar: hoy solo confirmar en obra el eje de la puerta de la habitación (ancho del clóset) |
-| En el armado | Piezas que no se piden (bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
+| En el armado | Piezas que no se piden (faja P071 de la campana y bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
 
 El espejo, el retal de granito y el mesón son de otros proveedores; lavamanos, grifería y equipos se eligen aparte.
 
@@ -153,4 +153,12 @@ La terraza inicial incorpora el baño en x212,z220cm,giro90°, en la pared del s
 
 Se retiran C3-005 y C3-011. Pared estucada a la vista, marco completo C3-025 a C3-030: dos superiores de 830×100 y 1075×100, dos inferiores de las mismas medidas y dos montantes de 2050×100, RH15. Solo flexible de 0,45 mm en el borde largo libre interior de cada tira; el resto son uniones ocultas sin canto. Se mantienen pisos, divisor, amarres del maletero y bastidor de pino. El marco ocupa la franja z=0–15 mm del respaldo anterior y no mueve hojas, rieles ni cajones. Es obligatorio dimensionar y ejecutar uniones y fijaciones al muro posterior resistente y al izquierdo; no basta el estuco ni apoyar en la esquina. Un marco abierto no garantiza por sí solo la resistencia del respaldo completo.
 
-El PDF anterior de Madecentro (98 referencias RH15, 141 piezas) incluye los respaldos retirados y no corresponde a esta revisión. El formato actualizado lleva 102 referencias RH15, 145 piezas, además de 10 fondos RH6 de cocina y baño. El encaje conjunto encontrado mantiene 8 láminas RH15 y 1 RH6; menos superficie no se presupone ahorro de láminas.
+El PDF anterior de Madecentro (98 referencias RH15, 141 piezas) incluye los respaldos retirados y no corresponde a esta revisión. La revisión del 28/10 llevaba 102 referencias RH15, 145 piezas, además de 10 fondos RH6 de cocina y baño. El encaje conjunto encontrado mantiene 8 láminas RH15 y 1 RH6; menos superficie no se presupone ahorro de láminas.
+
+### Revisión de cocina del 29/10/2026
+
+S2 mantiene caja de 450 mm: P045 450×320, fondo P048 596×446 y puerta P049 447×597. Se conserva P047 elevado y faja P071 de retal. Se añaden base P075 570×335 (y1655–1670) y dos apoyos P076 275×70 (y1670–1740), todos RH15 con flexible 0,45 en cuatro bordes. Unir apoyos a costados/P047 y base mediante cuatro escuadras, sin depender sólo del tornillo al canto. Fijar la campana por su plantilla real, con tornillos adecuados al tablero de 15 mm. Se cortan rectángulos, sin mecanizado de fábrica. Los apoyos z6–281 quedan 5 mm detrás de la faja z286–301.
+
+Ficha Haceb Tofu 9002650 rev.00: chasis 84 mm, envolvente con vidrio 94 mm, recirculación, sin anclaje directo a pared. El chasis termina en y1655, bajo P075; su base nominal con vidrio queda en y1561: 649 mm sobre el cristal de la estufa (y912), por encima de los 600 mm mínimos de la ficha. Mantener libres las salidas. No perforar un ducto supuesto. Fuente: https://firplak.com/wp-content/uploads/2024/05/Campana-TOFU-60-V3-NEGRO.pdf . Dos brazos previstos: seleccionar fuerza por altura y peso real (puerta ≈2,7 kg); 60 N y su precio siguen provisionales. B4 superior y S5 limitadas a 90° junto a la pared; prever topes compatibles.
+
+Quedan 76 referencias de cocina, 88 piezas RH15 y nueve fondos. Pedido conjunto: 113 referencias, 147 piezas RH15 y diez fondos RH6. Encaje conjunto encontrado: ocho RH15 más una RH6, con disco de 5 mm; flexible con reserva 186 m. El precio conocido se conserva, sin incluir cotizaciones faltantes de escuadras, fijaciones y cambios de brazos. No se incorporan las alternativas de aligerar la cocina del estudio independiente.

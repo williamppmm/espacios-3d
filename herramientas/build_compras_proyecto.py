@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from build_despiece import page, tabla, fmt
 
 RAIZ = Path(__file__).resolve().parent.parent
-FECHA = "28/10/2026"
+FECHA = "29/10/2026"
 PRECIO = {"RH15": 365872, "RH6": 212534, "rigido": 531600, "flexible": 285600, "bisagra_par": 17750}
 ROLLO = {"rigido": 100, "flexible": 200}
 RESERVA_BORDE, MARGEN = 0.05, 0.10   # m por borde y margen sobre el total de canto
@@ -264,6 +264,10 @@ def main():
     for r in range(7, pend_cl.max_row + 1):
         if pend_cl.cell(r, 4).value == "Todo el corte":
             bloqueos.insert(0, ["Clóset", "Todo", "", pend_cl.cell(r, 2).value] + [""] * 11 + [pend_cl.cell(r, 3).value])
+    pend_co = libro("despiece-cocina.xlsx")["Pendientes"]
+    for r in range(7, pend_co.max_row + 1):
+        if str(pend_co.cell(r, 2).value).startswith("S2 ") and "NO liberar" in str(pend_co.cell(r, 4).value):
+            bloqueos.append(["Cocina", "S2", "", "Soporte de campana y abatible"] + [""] * 11 + [pend_co.cell(r, 3).value])
 
     wb = openpyxl.Workbook()
     # Resumen
