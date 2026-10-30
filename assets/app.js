@@ -91,7 +91,9 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
  for(const z of [1.4,2.4])rejilla(z,.25,.3,.15);}
 function setProposalOpen(){const t=state.room.proposalOpen||0;for(const p of proposal.children)if(p.userData.slideStart!==undefined)p.position.z=p.userData.slideStart*(1-t);}
 function proposalUI(){const k=state.room.proposal;$('proposal-note').hidden=!proposalNotes[k];$('proposal-note').textContent=proposalNotes[k]||'';$('proposal-open-label').hidden=k!=='movil';$('proposal-open').value=state.room.proposalOpen||0;$('proposal-open-value').textContent=Math.round((state.room.proposalOpen||0)*100)+' %';}
-function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});wall(perimeter,'x',-.12,L+.12,-.06,2.5);buildProposal();}
+function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);wall(perimeter,'x',-.12,2,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});
+ // Medianera: baja en la zona del lavadero (hasta el muro del baño, x=2,00) y de 2,50 m desde ahí hasta la entrada.
+ wall(perimeter,'x',2,L+.12,-.06,2.5);buildProposal();}
 wall(architecture,'z',0,2.32,2.06,2.5);wall(architecture,'x',2,3.32,2.26,2.5,.12,[{a:2.6,b:3.3,top:2.05}]);wall(architecture,'z',0,3,3.38,2.5);wall(architecture,'x',3.32,7.5,2.94,2.5,.12,[{a:3.9,b:5.6,sill:.6,top:2.1},{a:5.96,b:6.86,top:2.05}]);wall(architecture,'z',0,3,7.44,2.5);
 // Acabado estucado de la cara de habitación detrás del clóset; no es un tablero.
 const closetWallFinish=new THREE.Mesh(new THREE.PlaneGeometry(3,2.5),new THREE.MeshStandardMaterial({color:0xe6e2d8,roughness:.98,side:THREE.DoubleSide}));closetWallFinish.rotation.y=-Math.PI/2;closetWallFinish.position.set(7.3799,1.25,1.5);architecture.add(closetWallFinish);
@@ -104,6 +106,7 @@ const ceiling={x0:3.38,x1:9.62,z0:-.08,z1:3};
 box(roof,ceiling.x1-ceiling.x0,.04,ceiling.z1-ceiling.z0,(ceiling.x0+ceiling.x1)/2,2.52,(ceiling.z0+ceiling.z1)/2,palette.roof);
 // Medianera derecha de 2,50 m; lado izquierdo abierto sobre pilares cada ~4 m que reciben el techo en arco (flecha 0,50 m).
 {const n=Math.round(L/4);for(let j=0;j<=n;j++)box(floor,.2,2.5,.2,Math.min(L-.1,Math.max(.1,L*j/n)),1.25,W+.06,palette.white);
+box(floor,.2,2.5,.2,.1,1.25,-.06,palette.white);// Pilar de la esquina del fondo sobre la medianera, donde el muro es bajo.
 const z0=-.06,z1=W+.06,c=z1-z0,f=.5,R=(c*c/4+f*f)/(2*f),arc=z=>2.5+Math.sqrt(R*R-(z-(z0+z1)/2)**2)-(R-f),shape=new THREE.Shape(),N=48;
 for(let j=0;j<=N;j++){const z=z0+c*j/N;j?shape.lineTo(z,arc(z)):shape.moveTo(z,arc(z));}for(let j=N;j>=0;j--){const z=z0+c*j/N;shape.lineTo(z,arc(z)+.05);}
 const shell=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:L+.24,bevelEnabled:false}),palette.roof);shell.rotation.y=-Math.PI/2;shell.position.x=L+.12;shell.receiveShadow=true;vault.add(shell);}
