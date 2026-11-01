@@ -72,7 +72,7 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?2150-m.h:100,m.id[0]==='S'?2150:885]}]));
  return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:215},
   setOpen(t){movers.forEach(u=>{u.t=u.target=t;u.apply(t);});},
-  selectModule(code){for(const m of all){const on=!code||m.userData.mod===code;m.material.transparent=!on;m.material.opacity=on?1:.15;m.material.depthWrite=on;}},
+  selectModule(code){for(const m of all){const on=!code||m.userData.mod===code;for(const mt of [].concat(m.material)){mt.transparent=!on;mt.opacity=on?1:.15;mt.depthWrite=on;}}},
   dimensionData:D
  };
 };
