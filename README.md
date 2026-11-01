@@ -176,3 +176,19 @@ Ficha independiente de la propuesta C para cotización: 3D, alzado, detalle en p
 ## Apartado de ventana de cocina
 
 `ventana.html` reúne los estudios con un único acceso desde la navegación de `index.html`: ventanal F-006, fijación con escuadras y alternativa T-237 con placas e insertos propuestos. Cada visor permite volver al apartado y a la terraza. La T-237 conserva la geometría del archivo aportado, 51 lamas con sección ovalada aproximada; no sustituye la propuesta C de la terraza ni altera muebles, despieces o compras.
+
+
+## Pedido RH15 y LED opcional · 31/10/2026
+
+El formato RH15 contiene 100 referencias y 144 piezas con medidas finales con canto incluido. Madecentro debe calcular el tablero según el espesor real suministrado; 2 mm y 0,45 mm son referencias actuales. El control muestra cortes teóricos, que no se usan como medidas finales si cambia el canto. Actualizados control y recepción; retiradas P060/P061/P067.
+
+El LED se previsualiza con un control independiente en cocina y terraza, apagado por defecto. Se propone una línea con difusor bajo P052, eje a 30 mm del borde frontal, con iluminación cálida orientativa. No cambia dimensiones, cantidad de paneles ni servicios del pedido; la ranura opcional se fresa al ensamblar y se dimensiona con el perfil real. Referencia de solución empotrada y difusor: https://www.sensiolighting.com/blogs/news/how-to-choose-an-led-profile .
+
+Disco Diablo aportado: 0,059 pulgadas equivalen a 1,4986 mm (el modelo usa 1,5 mm redondeados). B06 se pide entero; una pasada y dos cantos de 0,45 mm dejan aproximadamente 0,62 mm entre hojas a 75 grados. Definir y probar el ancho de la junta antes del corte final; si se busca 2–3 mm libres, el ancho retirado debe incluir esos cantos.
+
+
+## Documentación de suministro depurada · 31/10/2026
+
+Los seis Excel son la referencia actual: despieces de cocina, clóset y baño; compras-proyecto; formatos Madecentro RH15 y RH6. Sus notas separan el suministro de paneles de los ajustes en armado. Eliminadas decisiones repetidas y referencias históricas que contradecían el soporte S2, los cantos flexibles de la solapa y el encaje del fondo del baño. El LED es opcional; la diagonal B06 se ajusta en armado y no bloquea pedir su panel entero.
+
+Se mantienen los números, fórmulas, cantidades, precios y dimensiones aprobadas. El proveedor trabaja con medidas finales con canto y aplica el descuento según el espesor real. Se conservan verificaciones de herrajes, anclajes, equipos y medidas de obra aún no documentadas como resueltas. Las vistas HTML y las notas de los manifiestos 3D reflejan el texto de los libros finales.

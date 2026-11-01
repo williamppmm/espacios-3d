@@ -69,9 +69,16 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  // Fijaciones gola: 8 extremos + 2 intermedias, posición y compatibilidad por validar.
  const golaFixings=[...([240,400,1020,1672.5,2372.5,2770].map(x=>[x,850])),...([1020,1670].map(x=>[x,640])),...([2390,2770].map(x=>[x,405]))];
  for(const [x,y] of golaFixings){const f=box([x-4,x+4,536,556,y-10,y+10],'inox',x<410?'B1':x<1680?'B3':x<2380?'B5':'B4');f.userData.golaFixing=true;}
+ // LED opcional: esquema de perfil empotrado bajo P052, no un mecanizado de fabricación.
+ // Eje a 30 mm del borde frontal; ancho/profundidad solo se definen con el perfil real.
+ const led=new THREE.Group();led.name='led-opcional-S3-S5';led.visible=false;groups.uppers.add(led);groups.led=led;
+ const trim=new THREE.Mesh(new THREE.BoxGeometry(1.74,.0006,.018),new THREE.MeshStandardMaterial({color:0xaeb8bb,metalness:.7,roughness:.4}));trim.position.set(1.895,1.4496,.296);trim.name='perfil-led-referencia';led.add(trim);
+ const diffuser=new THREE.Mesh(new THREE.BoxGeometry(1.73,.0006,.010),new THREE.MeshStandardMaterial({color:0xfff2d5,emissive:0xffd49c,emissiveIntensity:1.6,roughness:.8}));diffuser.position.set(1.895,1.4491,.296);diffuser.name='difusor-led-calido';led.add(diffuser);
+ for(const x of [1.24,1.67,2.10,2.53]){const light=new THREE.SpotLight(0xffdbad,2.2,1.3,Math.PI/3,.65,1.5);light.position.set(x,1.44,.296);light.target.position.set(x,.9,.40);led.add(light,light.target);}
  const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?2150-m.h:100,m.id[0]==='S'?2150:885]}]));
  return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:215},
   setOpen(t){movers.forEach(u=>{u.t=u.target=t;u.apply(t);});},
+  setLed(on){led.visible=!!on;},
   selectModule(code){for(const m of all){const on=!code||m.userData.mod===code;for(const mt of [].concat(m.material)){mt.transparent=!on;mt.opacity=on?1:.15;mt.depthWrite=on;}}},
   dimensionData:D
  };

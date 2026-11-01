@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from build_despiece import page, tabla, fmt
 
 RAIZ = Path(__file__).resolve().parent.parent
-FECHA = "29/10/2026"
+FECHA = "31/10/2026"
 PRECIO = {"RH15": 365872, "RH6": 212534, "rigido": 531600, "flexible": 285600, "bisagra_par": 17750}
 ROLLO = {"rigido": 100, "flexible": 200}
 RESERVA_BORDE, MARGEN = 0.05, 0.10   # m por borde y margen sobre el total de canto
@@ -43,7 +43,7 @@ def num(v):
 
 # ------------------------------------------------------------ pedido de corte conjunto
 NO_PEDIR = "NO PEDIR"   # piezas que se cortan en el armado, de un sobrante
-EN_ARMADO = ("NO PEDIR", "Rebaje", "recortar", "Pedida", "corte central", "Recorte")
+EN_ARMADO = ("NO PEDIR", "Rebaje", "recortar", "Pedida", "corte central", "Recorte", "routeadora", "Corte diagonal")
 
 
 def pedido():
@@ -273,7 +273,7 @@ def main():
     # Resumen
     ws = wb.active; ws.title = "Resumen"
     titulo(ws, "Compras del proyecto · cocina, clóset y baño",
-           f"Estimación conjunta del {FECHA}, generada desde los Excel de cada mueble (herramientas/build_compras_proyecto.py).")
+           f"Documentación revisada {FECHA}. Precios conservados de las referencias aportadas; no son cotizaciones vigentes nuevas.")
     encabezado(ws, 6, ["Concepto", "Por separado", "Conjunto", "Nota"], [42, 16, 16, 90])
     cocina_sep = libro("despiece-cocina.xlsx")["Compras"]["C2"].value
     closet_sep = libro("despiece-closet.xlsx")["Compras"]["C7"].value
@@ -300,8 +300,8 @@ def main():
     ws = wb.create_sheet("Pedido de corte")
     titulo(ws, "Pedido de corte y canteado · pedido único de los tres muebles",
            "Medidas finales en mm, con canto incluido; largo en sentido de veta. R = rígido 2 mm · F = flexible 0,45 mm · — = sin canto. Un solo tipo de canto por pieza, únicamente en los bordes indicados.")
-    ws["A4"] = ("Supuestos de cada despiece: el proveedor pide medida terminada y descuenta el canto; piezas pequeñas = lado menor < 100 mm "
-                "o mayor < 250 mm. Si la sucursal pide medida de corte, usar la columna «Corte sin canto».")
+    ws["A4"] = ("Medidas finales con canto: criterio confirmado. El proveedor ajusta el tablero al espesor real sin alterar estas cotas. "
+                "Corte sin canto es teórico, con espesores de referencia. Mínimos orientativos de canteadora: lado menor 100 mm y mayor 250 mm, por confirmar en sucursal.")
     encabezado(ws, 6, ["Mueble", "ID", "Módulo", "Pieza", "Material", "Cant.", "Largo a pedir", "Ancho a pedir", "Largo 1", "Largo 2",
                        "Corto 1", "Corto 2", "Canteo", "Medida terminada", "Corte sin canto", "Observaciones"],
                [9, 8, 18, 34, 22, 6, 10, 10, 7, 7, 7, 7, 10, 14, 15, 60])
