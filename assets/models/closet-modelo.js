@@ -25,6 +25,16 @@ window.EspaciosModels.closetOption3=function(T){
  for(const x of [7.5,852.5,1942.5])for(const z of [35,465]){const foot=new T.Mesh(new T.CylinderGeometry(.014,.014,.020,12),dark.clone());foot.position.set(x/1000,.01,z/1000);body.add(foot);all.push(foot);}
  const bars=[];function rod(bay,y,len,removable){const b=data.bays[bay],m=new T.Mesh(new T.CylinderGeometry(.0125,.0125,len/1000,16),metal.clone());m.rotation.z=Math.PI/2;m.position.set((b.x0+b.x1)/2000,y/1000,.2625);hardware.add(m);bars.push(m);for(const x of [b.x0,b.x1-10])box([x,x+10,y-18,y+18,242.5,282.5],metal,hardware);for(let i=0;i<8;i++){const h=new T.Mesh(new T.BoxGeometry(.014,removable?.60:.72,.45),new T.MeshStandardMaterial({color:[0x9aa99c,0x81939e,0xc4b49d][i%3],roughness:1}));h.position.set((b.x0+60+i*(b.w-120)/7)/1000,(y-70-(removable?300:360))/1000,.2625);clothes.add(h);}return m;}
  rod(0,1750,810,false);rod(1,1750,1055,false);rod(1,900,1055,true);
+ // Tapa C3-031 incluida en el despiece y creada por el bucle de piezas.
+ const drawerTop=parts.find(m=>m.userData.piece.id==='C3-031');
+ for(const x of [.020,.840])for(const z of [.080,.440]){const pin=box([x*1000-5,x*1000+5,871,875,z*1000-5,z*1000+5],metal,hardware);pin.userData.sec='B1';pin.userData.hardware='Soporte de tapa fija del cajonero';}
+ const led=new T.Group();led.name='led-opcional-closet';led.visible=false;body.add(led);
+ for(const bay of data.bays){
+  const cx=(bay.x0+bay.x1)/2000,len=(bay.w-30)/1000;
+  const profile=new T.Mesh(new T.BoxGeometry(len,.001,.018),metal.clone());profile.position.set(cx,1.859,.440);profile.name='perfil-led-bajo-maletero';led.add(profile);
+  const diffuser=new T.Mesh(new T.BoxGeometry(len-.01,.0006,.010),new T.MeshStandardMaterial({color:0xfff2d5,emissive:0xffd49c,emissiveIntensity:1.6,roughness:.8}));diffuser.position.set(cx,1.8582,.440);diffuser.name='difusor-led';led.add(diffuser);
+  for(const k of [.25,.75]){const light=new T.SpotLight(0xffdbad,1.65,1.9,Math.PI/4,.7,1.3);light.position.set((bay.x0+bay.w*k)/1000,1.85,.440);light.target.position.set((bay.x0+bay.w*k)/1000,.8,.26);led.add(light,light.target);}
+ }
  let message='';const tell=msg=>{message=msg;window.dispatchEvent(new CustomEvent('espacios-movement-blocked',{detail:msg}));},clear=()=>{if(message){message='';window.dispatchEvent(new Event('espacios-movement-clear'));}};
  const doorX=()=>[15+moving['hoja-1'].position.x*1000,960+moving['hoja-2'].position.x*1000],covers=x=>x<847&&x+975>13;
  function movement(id,kind,apply){let committed=0;const u={id,kind,t:0,target:0,onInteract:clear,apply(t){t=Math.max(0,Math.min(1,t));const result=apply(t);if(result===false){this.t=committed;this.target=committed;}else{this.t=typeof result==='number'?result:t;committed=this.t;if(typeof result==='number')this.target=this.t;}}};moving[id].userData.mover=u;moving[id].userData.motionId=id;movers.push(u);return u;}
@@ -43,5 +53,5 @@ window.EspaciosModels.closetOption3=function(T){
  }
  function setOpen(t){t=Math.max(0,Math.min(1,t));drawerMovers.forEach(u=>{u.apply(0);u.target=0;});doorMovers[1].apply(0);doorMovers[1].target=0;doorMovers[0].apply(Math.min(1,t/.65));doorMovers[0].target=doorMovers[0].t;drawerMovers.forEach(u=>{u.apply(Math.max(0,(t-.65)/.35));u.target=u.t;});clear();}
  function tick(){movers.forEach(u=>{if(Math.abs(u.target-u.t)>.0001)u.apply(Math.abs(u.target-u.t)<.004?u.target:u.t+(u.target-u.t)*.18);});}
- return {root,all,parts,extras,groups:{body,fronts,clothes,hardware},parameters:P,data,dimensions:data.dimensions,motion:{movers,tick},moving,handles,stop,guide,setOpen,access,get message(){return message;}};
+ return {root,all,parts,extras,groups:{body,fronts,clothes,hardware,led,drawerTop},parameters:P,data,dimensions:data.dimensions,motion:{movers,tick},moving,handles,stop,guide,setOpen,access,setLed:on=>{led.visible=!!on;},get message(){return message;}};
 };

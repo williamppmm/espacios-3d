@@ -41,7 +41,7 @@ Mesón 260 × 62 cm. Módulos bajos 18 + 60 + 67 + 70 + 40 cm:
 
 ## Clóset principal (`closet.html`)
 
-Cuerpo 195 × 56 × 238 cm (58,5 cm hasta las manijas), dos hojas corredizas colgantes de 2175 × 975 mm con riel PERALMA50B sobre un listón de pino 4 × 4 cm encajonado en los laterales, guía inferior sin carga y tope que conserva 50 mm de desfase. Cuerpo izquierdo de 83 cm útiles con tres cajones (rieles HRE320-45) y colgado corto; cuerpo derecho de 107,5 cm con doble colgado. Solapa frontal de 12 cm que tapa el riel. 48 piezas RH15, 15,501170 m² netos; previsión individual de 4 láminas. Sin panel posterior: marco perimetral completo con amarres superiores e inferiores y montantes de extremo C3-025 a C3-030. El divisor central existente une los dos cuerpos. Flexible de 0,45 mm solo en cada borde libre del cuadro interior. Uniones y anclajes al muro posterior resistente y al izquierdo por dimensionar.
+Cuerpo 195 × 56 × 238 cm (58,5 cm hasta las manijas), dos hojas corredizas colgantes de 2175 × 975 mm con riel PERALMA50B sobre un listón de pino 4 × 4 cm encajonado en los laterales, guía inferior sin carga y tope que conserva 50 mm de desfase. Cuerpo izquierdo de 83 cm útiles con tres cajones (rieles HRE320-45) y colgado corto; cuerpo derecho de 107,5 cm con doble colgado. Solapa frontal de 12 cm que tapa el riel. 49 piezas RH15, 15,895420 m² netos; previsión individual de 4 láminas. Sin panel posterior: marco perimetral completo con amarres superiores e inferiores y montantes de extremo C3-025 a C3-030. El divisor central existente une los dos cuerpos. Flexible de 0,45 mm solo en cada borde libre del cuadro interior. Uniones y anclajes al muro posterior resistente y al izquierdo por dimensionar.
 
 Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 195 cm supone el eje a 288 cm del muro izquierdo y debe confirmarse en obra.
 
@@ -180,7 +180,7 @@ Ficha independiente de la propuesta C para cotización: 3D, alzado, detalle en p
 
 ## Pedido RH15 y LED opcional · 31/10/2026
 
-El formato RH15 contiene 100 referencias y 144 piezas con medidas finales con canto incluido. Madecentro debe calcular el tablero según el espesor real suministrado; 2 mm y 0,45 mm son referencias actuales. El control muestra cortes teóricos, que no se usan como medidas finales si cambia el canto. Actualizados control y recepción; retiradas P060/P061/P067.
+El formato RH15 contiene 101 referencias y 145 piezas con medidas finales con canto incluido. Madecentro debe calcular el tablero según el espesor real suministrado; 2 mm y 0,45 mm son referencias actuales. El control muestra cortes teóricos, que no se usan como medidas finales si cambia el canto. Actualizados control y recepción; retiradas P060/P061/P067.
 
 El LED se previsualiza con un control independiente en cocina y terraza, apagado por defecto. Se propone una línea con difusor bajo P052, eje a 30 mm del borde frontal, con iluminación cálida orientativa. No cambia dimensiones, cantidad de paneles ni servicios del pedido; la ranura opcional se fresa al ensamblar y se dimensiona con el perfil real. Referencia de solución empotrada y difusor: https://www.sensiolighting.com/blogs/news/how-to-choose-an-led-profile .
 
@@ -192,3 +192,10 @@ Disco Diablo aportado: 0,059 pulgadas equivalen a 1,4986 mm (el modelo usa 1,5 m
 Los seis Excel son la referencia actual: despieces de cocina, clóset y baño; compras-proyecto; formatos Madecentro RH15 y RH6. Sus notas separan el suministro de paneles de los ajustes en armado. Eliminadas decisiones repetidas y referencias históricas que contradecían el soporte S2, los cantos flexibles de la solapa y el encaje del fondo del baño. El LED es opcional; la diagonal B06 se ajusta en armado y no bloquea pedir su panel entero.
 
 Se mantienen los números, fórmulas, cantidades, precios y dimensiones aprobadas. El proveedor trabaja con medidas finales con canto y aplica el descuento según el espesor real. Se conservan verificaciones de herrajes, anclajes, equipos y medidas de obra aún no documentadas como resueltas. Las vistas HTML y las notas de los manifiestos 3D reflejan el texto de los libros finales.
+
+
+## Tapa fija del cajonero y LED opcional del clóset · 31/10/2026
+
+La tapa C3-031 forma parte del modelo, el despiece y el pedido RH15: 830 × 475 × 15 mm, con canto flexible frontal. Su cara inferior está a 875 mm y deja 30 mm sobre el frente superior del cajón. Se fija a los laterales mediante cuatro soportes, incluidos en el lote de uniones pendiente de cotizar. No se añaden separadores entre los tres cajones.
+
+El LED permanece opcional, apagado por defecto: dos tramos con difusor bajo los pisos del maletero, detrás de los refuerzos frontales. Perfil, fijación y fuente por elegir. El control se guarda en el navegador y se traslada al visor detallado. La tapa fija no tiene control de ocultación.
