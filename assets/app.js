@@ -1,9 +1,9 @@
 /* Espacios 3D — proyecto local, sin servicios ni cargas de archivos al servidor. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
-const PROPOSALS=['ventana','acrilico','lamas','movil'];
-const proposalNotes={ventana:'A · Ventana de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',acrilico:'B · Panel translúcido de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',lamas:'C · Tres módulos fijos de 14 lamas (42 total), a 45°. Marco T-244 de 38,1 × 76,2 mm y enchape F-006 de 96,7 × 4,2 mm; largo provisional 1220 mm. Fijaciones y rigidez por validar en taller.',movil:'D · Tres hojas de lamas de 1 m que cubren los 3 m y se apilan hacia el extremo de la nevera en tres guías. Recogidas ocupan aproximadamente 1 m de ancho. Recorrido y anclajes por definir en obra.'};
-const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'lamas',proposalOpen:0,kitchenLed:false,closetLed:false},items:[
+const PROPOSALS=['ventana','acrilico','lamas','rh'];
+const proposalNotes={ventana:'A · Ventana de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',acrilico:'B · Panel translúcido de extremo a extremo sobre el antepecho, incluido el tramo sobre la nevera.',lamas:'C · Tres módulos fijos de 14 lamas (42 total), a 45°. Marco T-244 de 38,1 × 76,2 mm y enchape F-006 de 96,7 × 4,2 mm; largo provisional 1220 mm. Fijaciones y rigidez por validar en taller.',rh:'D · Cortasol de tablillas RH orientables, gris humo, mostrado a 45°: 30 tablillas de 105 × 15 mm en un marco doble de 30 mm. Tres paneles, cada uno con una barra de RH en el riel inferior y una perilla del lado cocina; giran de 37° a 143°. Color de referencia; despiece y compras aparte (despiece-cortasol-rh).'};
+const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'rh',kitchenLed:false,closetLed:false},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
  {id:'bathroom-1',type:'bathroom',variant:'final',name:'Baño · lavamanos y espejo',w:55,d:47,h:150,x:212,z:220,rotation:90,visible:true,open:0}
@@ -28,7 +28,7 @@ function validate(v){
  });
  if(v.room?.bathroomDesigned!==true&&items.length<30&&!items.some(i=>i.type==='bathroom'))items.push(initial().items.find(i=>i.type==='bathroom'));
  if(!v.room||!finite(v.room.wallHeight,.9,2.5)||['roof','architecture','furnishings','labels'].some(k=>typeof v.room[k]!=='boolean'))throw Error('Opciones de terraza inválidas.');
- return {schema:'espacios-3d',version:1,name:v.name==='Terraza Cartagena'?'Terraza Cali':v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:PROPOSALS.includes(v.room.proposal)?v.room.proposal:'',proposalOpen:finite(v.room.proposalOpen,0,1)?v.room.proposalOpen:0,kitchenLed:v.room.kitchenLed===true,closetLed:v.room.closetLed===true},items};
+ return {schema:'espacios-3d',version:1,name:v.name==='Terraza Cartagena'?'Terraza Cali':v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:PROPOSALS.includes(v.room.proposal)?v.room.proposal:'',kitchenLed:v.room.kitchenLed===true,closetLed:v.room.closetLed===true},items};
 }
 let state=initial(),storageNotice='';try{const raw=localStorage.getItem(KEY);if(raw)state=validate(JSON.parse(raw));}catch(e){storageNotice='No se pudo recuperar el guardado anterior. Puedes abrir un proyecto descargado.';}
 let renderer,scene,camera,controls,room,models=new Map(),solo,stageFloor,selectionBox;
@@ -45,7 +45,7 @@ try{renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true}
 // Los colores se escriben en sRGB; se pasan a lineal para que el render con salida sRGB no los aclare.
 const srgb=hex=>new THREE.Color(hex).convertSRGBToLinear();
 function mat(color){return new THREE.MeshStandardMaterial({color:srgb(color),roughness:.85});}
-const palette={fence:new THREE.MeshStandardMaterial({color:0xffffff,metalness:.65,roughness:.35}),slab:mat(0xbcbab0),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:srgb(0xa6c8c2),transparent:true,opacity:.35,roughness:.3}),acrylic:new THREE.MeshStandardMaterial({color:srgb(0xf7f6f0),transparent:true,opacity:.88,roughness:.6}),roof:new THREE.MeshStandardMaterial({color:srgb(0xb7c3b3),transparent:true,opacity:.45,side:THREE.DoubleSide}),pit:new THREE.MeshStandardMaterial({color:srgb(0x2a2d30),roughness:1,side:THREE.BackSide})};
+const palette={fence:new THREE.MeshStandardMaterial({color:0xffffff,metalness:.65,roughness:.35}),slab:mat(0xbcbab0),brick:mat(0xbc7658),wood:mat(0xb38c65),white:mat(0xefeee5),bed:mat(0xd7d7c6),dark:mat(0x4f6056),water:mat(0xacc8c6),door:mat(0x8b5a35),sage:mat(0x6f8a62),leaf:mat(0x55764a),jute:mat(0xc9b08a),glass:new THREE.MeshStandardMaterial({color:srgb(0xa6c8c2),transparent:true,opacity:.35,roughness:.3}),acrylic:new THREE.MeshStandardMaterial({color:srgb(0xf7f6f0),transparent:true,opacity:.88,roughness:.6}),roof:new THREE.MeshStandardMaterial({color:srgb(0xb7c3b3),transparent:true,opacity:.45,side:THREE.DoubleSide}),pit:new THREE.MeshStandardMaterial({color:srgb(0x2a2d30),roughness:1,side:THREE.BackSide}),rhGris:mat(0x9a9c98)};
 // Farol en aparejo trabado (bloque 30 × 20 cm), generado localmente: tono terracota con variación por pieza y perforaciones.
 const bc=document.createElement('canvas');bc.width=512;bc.height=342;const bg=bc.getContext('2d');bg.fillStyle='#c9bfae';bg.fillRect(0,0,512,342);{let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};for(let r=0;r<2;r++)for(let c=-1;c<3;c++){const x=c*256+r*128+4,y=r*171+4,v=(rnd()-.5)*30;bg.fillStyle=`rgb(${178+v|0},${86+v*.6|0},${52+v*.4|0})`;bg.fillRect(x,y,248,163);bg.fillStyle='rgba(60,25,10,.18)';bg.fillRect(x+84,y+51,20,68);bg.fillRect(x+154,y+51,20,68);bg.fillStyle='rgba(255,255,255,.06)';bg.fillRect(x,y,248,6);}}
 function brick(len,h){const tex=new THREE.CanvasTexture(bc);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(len/.6,h/.4);tex.encoding=THREE.sRGBEncoding;return new THREE.MeshStandardMaterial({map:tex,roughness:1});}
@@ -81,7 +81,6 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
  const x=9.56,t=.12,y0=1.2,y1=2.5,a=0,b=3,len=b-a,mid=(a+b)/2;
  wall(proposal,'z',2.3,b,x,y0);
  const rejilla=(z,y,w,h)=>{box(proposal,t+.02,h,w,x,y,z,palette.dark);for(let s=y-h/2+.02;s<y+h/2-.01;s+=.03)box(proposal,t+.04,.008,w-.02,x,s,z,palette.white);};
- const louverPanel=(parent,xx,z0,width)=>{const height=y1-y0,g=group(parent);g.position.set(xx,y0,z0);for(const z of [.025,width-.025])box(g,.045,height,.05,0,height/2,z,palette.white);for(const y of [.025,height-.025])box(g,.045,.05,width,0,y,width/2,palette.white);const n=Math.max(1,Math.round((width-.1)/.105)),step=(width-.1)/n;for(let i=0;i<n;i++){const blade=box(g,.025,height-.1,.13,0,height/2,.05+step*(i+.5),palette.white);blade.rotation.y=Math.PI/4;}return g;};
  if(k==='lamas'){
   const p=window.VENTANA_PERFILES,width=len/p.modules,height=y1-y0,projection=(p.bladeWidth+p.bladeDepth)/Math.sqrt(2),margin=projection/2+p.edgeClearance,step=(width-2*p.face-2*margin)/(p.bladesPerModule-1);
   for(let j=0;j<p.modules;j++){
@@ -91,14 +90,19 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
    for(let i=0;i<p.bladesPerModule;i++){const blade=box(g,p.bladeDepth,p.bladeHeight,p.bladeWidth,0,height/2,p.face+margin+i*step,palette.white);blade.rotation.y=Math.PI/4;blade.name='alutech-blade';}
   }
  }
- else if(k==='movil'){const width=len/3;for(const y of [y0+.025,y1-.025])box(proposal,.36,.035,b,x+.21,y,b/2,palette.dark);for(let i=0;i<3;i++){const start=a+i*width,panel=louverPanel(proposal,x+.09+i*.12,start,width);panel.userData.slideStart=start;}setProposalOpen();}
+ // D · Tablillas RH con marco doble: medidas de assets/models/cortasol-rh-data.js, el mismo archivo del visor propuesta-3-tablillas-rh.html.
+ else if(k==='rh'){
+  const D=window.CortasolRHData,mm=v=>v/1000,A=mm(D.lama.A),t=mm(D.lama.t),n=D.lama.n,ft=mm(D.marco.t),fa=mm(D.marco.A),g=mm(D.lama.holgura),sl=mm(D.parts.find(p=>p.id==='T01').L),pitch=(len-2*ft)/n,yt=y0+ft+2*g+sl;
+  for(const y of [y0+ft/2,yt+ft/2]){const r=box(proposal,fa,ft,len,x,y,mid,palette.rhGris);r.name='rh-riel';}
+  for(const z of [a+ft/2,b-ft/2]){const s=box(proposal,fa,yt-y0-ft,ft,x,(y0+ft+yt)/2,z,palette.rhGris);s.name='rh-lateral';}
+  for(let i=0;i<n;i++){const s=box(proposal,t,sl,A,x,y0+ft+g+sl/2,a+ft+pitch*(i+.5),palette.rhGris);s.rotation.y=D.angulo.inicial*Math.PI/180;s.name='rh-tablilla';}
+ }
  else{const top=k==='ventana'?2.1:2.3;box(proposal,.02,top-y0,len,x,(y0+top)/2,mid,k==='ventana'?palette.glass:palette.acrylic);
   for(let i=0;i<=3;i++)box(proposal,.06,top-y0,.04,x,(y0+top)/2,Math.min(b-.02,Math.max(a+.02,a+len*i/3)),palette.dark);
   for(const y of [y0+.02,top-.02])box(proposal,.06,.04,len,x,y,mid,palette.dark);
   box(proposal,t,y1-top,len,x,(top+y1)/2,mid,brick(len,y1-top));for(const z of [a+len/6,mid,b-len/6])rejilla(z,(top+y1)/2,.4,Math.min(.2,y1-top-.06));}
  for(const z of [1.4,2.4])rejilla(z,.25,.3,.15);}
-function setProposalOpen(){const t=state.room.proposalOpen||0;for(const p of proposal.children)if(p.userData.slideStart!==undefined)p.position.z=p.userData.slideStart*(1-t);}
-function proposalUI(){const k=state.room.proposal;$('proposal-note').hidden=!proposalNotes[k];$('proposal-note').textContent=proposalNotes[k]||'';$('proposal-open-label').hidden=k!=='movil';$('proposal-open').value=state.room.proposalOpen||0;$('proposal-open-value').textContent=Math.round((state.room.proposalOpen||0)*100)+' %';}
+function proposalUI(){const k=state.room.proposal;$('proposal-note').hidden=!proposalNotes[k];$('proposal-note').textContent=proposalNotes[k]||'';}
 function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);wall(perimeter,'x',-.12,2,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});
  // Medianera: baja en la zona del lavadero (hasta el muro del baño, x=2,00) y de 2,50 m desde ahí hasta la entrada.
  wall(perimeter,'x',2,L+.12,-.06,2.5);buildProposal();}
@@ -211,7 +215,7 @@ function addItem(type,variant){if(state.items.length>=30){$('save-state').textCo
 $('doors').oninput=()=>{state.room.doors=Number($('doors').value);setDoors(state.room.doors);warn();save();};$('wall-height').oninput=()=>{state.room.wallHeight=Number($('wall-height').value);buildPerimeter();$('wall-height-value').textContent=state.room.wallHeight.toFixed(2).replace('.',',')+' m';save();};for(const k of ['roof','vault','architecture','furnishings','labels'])$(k).onchange=()=>{state.room[k]=$(k).checked;transform();save();};$('proposal').onchange=()=>{state.room.proposal=$('proposal').value;buildProposal();proposalUI();warn();save();if(state.room.proposal&&state.mode==='room')view('proposal');};
 $('closet-led').onchange=()=>{state.room.closetLed=$('closet-led').checked;transform();renderUI();save();};
 $('kitchen-led').onchange=()=>{state.room.kitchenLed=$('kitchen-led').checked;transform();renderUI();save();};
-$('proposal-open').oninput=()=>{state.room.proposalOpen=Number($('proposal-open').value);setProposalOpen();proposalUI();save();};
+
 $('export').onclick=()=>download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),'espacios-3d-proyecto.json');$('import').onclick=()=>$('project-file').click();$('project-file').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1000000)throw Error('El archivo de proyecto es demasiado grande (máximo 1 MB).');const next=validate(JSON.parse(await f.text()));state=next;rebuildAll();buildPerimeter();transform();renderUI();view('general');save();}catch(e){$('save-state').textContent='No se abrió el archivo: '+e.message;}finally{$('project-file').value='';}};
 $('reset').onclick=()=>{if(!confirm('¿Restaurar la distribución inicial? Descarga antes tu proyecto si quieres conservarlo.'))return;state=initial();rebuildAll();buildPerimeter();transform();renderUI();view('general');save();};
 $('snapshot').onclick=()=>{renderer.render(scene,camera);renderer.domElement.toBlob(blob=>{if(blob)download(blob,'espacios-3d-vista.png');},'image/png');};
