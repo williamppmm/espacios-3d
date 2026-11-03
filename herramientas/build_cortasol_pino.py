@@ -72,7 +72,7 @@ def main():
     sanas, refil = encaje(lista, 0), encaje(lista, 5)
     sets = math.ceil(n * (1 if 2 * largo > WPC["largo"] else 2) / WPC["piezas"])
     an_k = M["anclajes"]
-    anclajes = F["paneles"] * (an_k["rielInferior"] + an_k["rielSuperior"]) + 2 * an_k["lateral"]
+    O = D["obra"]
     aire = lambda a: (paso * math.sin(math.radians(a)) - lama["t"]) / paso
     R = M["manivela"]
     corre = R * (math.cos(math.radians(an["min"])) - math.cos(math.radians(an["max"])))
@@ -92,7 +92,7 @@ def main():
          f"Un solo lote para marco y tablillas. {len(refil)} tableros refilando 5 mm por punta; {len(sanas)} si las puntas vienen sanas. "
          "Confirmar formato y precio: con listones o tableros más largos sobra menos."],
         ["Pino", "Corte en taller (sierra fina)", 1, "servicio", "cotizar", f"{sum(p['qty'] for p in pino)} piezas de pino. Veta siempre a lo largo de cada pieza."],
-        ["Marco", "Pegante para madera tipo Colbón", 1, "kg", "cotizar", "Para las dos capas de rieles y laterales y los tacos de tope."],
+        ["Marco", "Pegante para madera tipo Colbón", 1, "kg", "cotizar", "Para las dos capas de rieles y laterales, las esquinas y los tacos de tope."],
         ["Marco", "Tornillo para madera 4 × 30", 100, "u", "cotizar", "Prensar las capas mientras seca el pegante, cada 15 cm, desde la cara oculta. También sirven prensas."],
         ["Acabado", "Montó Laca para Metal y Madera Interior/Exterior Pur+Cat · Incoloro Mate · 4 L (Homecenter 256080)", 1, "u", LACA["4L"],
          f"Tono miel. Sirve de sellador y de acabado: primera mano rebajada con su diluyente, luego dos manos normales. "
@@ -104,19 +104,20 @@ def main():
         ["Acabado", "Mascarilla con filtro para vapores orgánicos y guantes de nitrilo", 1, "juego", "cotizar", "La laca catalizada huele fuerte y es inflamable: aplicar ventilado."],
         ["Mecanismo", f"Pines {PN['modelo']} · paquete de 80", 1, "paquete", "cotizar",
          f"Amazon. {2*n} pines, uno en cada punta, + {80-2*n} de repuesto. Medir cuerpo, punta y pestaña antes de perforar."],
-        ["Mecanismo", "Platina de aluminio 1 × 1/8 pulg (25,4 × 3,2 mm) · barra de 6 m", 1, "barra", "cotizar",
-         f"Una sola pieza de {B['L']} mm con {n} agujeros de {B['agujero']} mm a paso {fmt(round(paso,1))}. Alutech la publica como P18."],
+        ["Mecanismo", "Platina de aluminio 3/4 × 1/8 pulg (19,05 × 3,2 mm) · barra de 6 m", 1, "barra", "cotizar",
+         f"Una sola pieza de {B['L']} mm con {n} agujeros de {B['agujero']} mm a paso {fmt(round(paso,1))}. Distribuidor de aluminio."],
         ["Mecanismo", "Varilla lisa de acero inoxidable 304 de 1/4 pulg · 1 m", 1, "u", 15000,
          f"{n} pasadores de {PS['L']} mm: {PS['dentro']} pegados en la tablilla y {PS['L']-PS['dentro']} por fuera. Referencia Merkatronix."],
         ["Mecanismo", "Arandela plana de nylon de 1/4 pulg", n + 10, "u", "cotizar", "Una en cada pasador: la barra se apoya en ellas y no roza la madera."],
         ["Mecanismo", "Epóxico", 1, "u", "cotizar", "Pasadores en las tablillas."],
-        ["Fijación", M["anclaje"].capitalize(), anclajes + 4, "u", "cotizar",
-         f"{an_k['rielInferior']} por riel inferior, {an_k['rielSuperior']} por riel superior y {an_k['lateral']} por lateral, + 4. "
-         "Abajo, del lado patio y fuera del barrido; arriba, solo a viga o losa. Tapar las cabezas con tarugos de pino."],
-        ["Fijación", "Calzas plásticas de nivelación", 1, "paquete", "cotizar", "Para la holgura de 4 mm y el desnivel del antepecho."],
-        ["LED (opcional)", "Perfil de aluminio 16 × 8 mm con difusor", 3, "m", "cotizar", "En el rebaje de 17 × 18 que deja la tira cocina del riel superior."],
-        ["LED (opcional)", "Cinta LED 24 V 3000 K ≈ 10 W/m", 5, "m (rollo)", "cotizar", "Se usan 3 m en tres tramos."],
-        ["LED (opcional)", "Fuente 24 V 60 W, interruptor y cable", 1, "juego", "cotizar", "Instalación por electricista; punto no previsto en la cocina."],
+        ["Fijación a la obra", an_k["antepecho"]["tornillo"].capitalize() + " · al antepecho", an_k["antepecho"]["n"] + 2, "u", "cotizar", an_k["antepecho"]["nota"]],
+        ["Fijación a la obra", an_k["cielo"]["tornillo"].capitalize() + " · al riel del cielo raso", an_k["cielo"]["n"] + 2, "u", "cotizar", an_k["cielo"]["nota"]],
+        ["Fijación a la obra", an_k["medianera"]["tornillo"].capitalize() + " · a la medianera", an_k["medianera"]["n"] + 1, "u", "cotizar", an_k["medianera"]["nota"]],
+        ["Fijación a la obra", "Sellador elastomérico o silicona neutra", 1, "tubo", "cotizar", "Cordón entre el riel inferior y el ladrillo, y en la junta con la medianera."],
+        ["Marco", "Tarugo de madera de 10 × 40 mm", 8 + 4, "u", "cotizar", "Dos por esquina, pegados: las esquinas sostienen el extremo libre."],
+        ["Marco", "Tornillo para madera 4,5 × 70", 8 + 4, "u", "cotizar", "Dos por esquina, desde el riel hacia el lateral."],
+        ["Marco", "Tapones de pino de 10 mm", an_k["antepecho"]["n"] + an_k["cielo"]["n"] + an_k["medianera"]["n"] + 8 + 6, "u", "cotizar", "Tapan las cabezas de todos los tornillos a la vista; se lijan al ras y se barnizan."],
+        ["Fijación a la obra", "Calzas plásticas de nivelación", 1, "paquete", "cotizar", "Para la holgura de 4 mm y el desnivel del antepecho."],
     ]
     wpc = [
         ["Para la altura actual", f"{n} piezas ({n} tablillas, una por pieza) = {sets} sets", f"{n} tablillas de pino cortadas del mismo lote del marco"],
@@ -129,7 +130,9 @@ def main():
     ]
     resumen = [
         ["Tablillas", n, f"{lama['A']} × {lama['t']} × {largo} mm de pino alistonado, paso {fmt(round(paso,1))} mm, orientables de {an['min']}° a {an['max']}°"],
-        ["Marco doble de pino", F["t"], f"mm: dos capas de {F['capa']} mm pegadas, {F['A']} de fondo, juntas trabadas (1000 + 1000 + 1000 sobre 500 + 1000 + 1000 + 500)"],
+        ["Marco doble de pino", F["t"], f"mm: dos capas de {F['capa']} mm pegadas, {F['A']} de fondo ({O['antepecho']['t']} del ladrillo + {F['pestana']['t']} por cara), juntas trabadas (1000 + 1000 + 1000 sobre 500 + 1000 + 1000 + 500)"],
+        ["Pestañas del antepecho", F["pestana"]["h"], f"mm que bajan por las dos caras del ladrillo, de {F['pestana']['t']} mm de grueso, con remate en el extremo libre (forma de U)"],
+        ["Fijación a la obra", an_k["antepecho"]["n"] + an_k["cielo"]["n"] + an_k["medianera"]["n"], f"tornillos: {an_k['antepecho']['n']} al antepecho (carga todo el peso), {an_k['cielo']['n']} al riel del cielo raso (solo lo sostiene de lado), {an_k['medianera']['n']} a la medianera; extremo derecho libre"],
         ["Peso de cada tablilla", round(peso_t, 2), f"kg, con pino de {lama['densidad']} kg/m³; lo carga la pestaña del pin de abajo"],
         ["Peso del pino en total", round(peso_total), "kg aproximados, marco y tablillas"],
         ["Mecanismo", 1, f"platina de aluminio de {B['L']} mm arriba, para las {n} tablillas; sin perillas"],
@@ -147,12 +150,13 @@ def main():
         ["Vano real", f"Medir alto y ancho en tres puntos. Tablilla = alto mínimo − {2*F['t']} de marco − {2*lama['holgura']} de holgura − {lama['tolerancia']} de calce.", "Antes de cortar"],
         ["Laca en la tienda", "Preguntar en Homecenter: si el catalizador viene incluido y en qué proporción se mezcla, cuánto dura la mezcla, qué diluyente usar y si la primera mano rebajada sirve de sellador. No poner sellador de nitrocelulosa debajo.", "Antes de comprar"],
         ["Tono", "Probar la laca en un retazo del mismo lote: una mano rebajada y dos normales, para ver el tono miel real.", "Antes de barnizar"],
-        ["Anclaje superior", "Confirmar viga o losa sobre el vano; no fijar a la placa del cielo raso.", "Antes de instalar"],
+        ["Extremo libre", "El lateral derecho no toca muro: armar las esquinas con tarugos, pegante y tornillos, y revisar que el marco quede firme antes de montar las tablillas.", "Al armar"],
         ["Ventilación", f"El gasista valida que el {aire(an['min'])*100:.0f} % de paso de aire en la posición más cerrada basta para estufa y campana.", "Antes de instalar"],
         ["Prueba", "Probar 3 o 4 tablillas en un trozo de riel: giro, roce y clic de los pines en la ranura de entrada.", "Antes de cortar todo"],
         ["Topes", "Cortar la platina unos milímetros más larga y limar las puntas hasta que tope a 40° y 140°.", "Al montar"],
         ["Rectitud", "Revisar las piezas antes de perforar: una tablilla torcida roza al girar.", "Al recibir"],
-        ["LED", "Punto eléctrico, ubicación de la fuente e interruptor con el electricista.", "Opcional"],
+        ["Riel del cielo raso", "Con el instalador del panel yeso: dejar un riel metálico justo sobre la línea de la ventana, bien amarrado a la estructura, y acordar la altura final del cielo raso.", "Antes del cielo raso"],
+        ["Antepecho", "Revisar que el borde superior del ladrillo esté nivelado y sano; corregir con mortero si hace falta antes de anclar.", "Antes de instalar"],
     ]
 
     wb = openpyxl.Workbook()
