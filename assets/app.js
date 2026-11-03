@@ -2,7 +2,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['rh','pino'];
-const proposalNotes={rh:'A · Cortasol de tablillas RH orientables, gris humo, mostrado a 45°: 30 tablillas de 105 × 15 mm en un marco doble de 30 mm. Tres paneles, cada uno con una barra de RH en el riel inferior y una perilla del lado cocina; giran de 37° a 143°. Despiece y compras aparte (despiece-cortasol-rh).',pino:'B · Cortasol de tablillas de pino orientables, mostrado a 45°: 30 tablillas de 105 × 18 mm en un marco doble de RH de 30 mm. Pines con resorte en las dos puntas y una sola platina de aluminio escondida en el riel superior: se mueven todas con la mano, sin perillas, de 40° a 140°. Colores de referencia; despiece y compras aparte (despiece-cortasol-pino).'};
+const proposalNotes={rh:'A · Cortasol de tablillas RH orientables, gris humo, mostrado a 45°: 30 tablillas de 105 × 15 mm en un marco doble de 30 mm. Tres paneles, cada uno con una barra de RH en el riel inferior y una perilla del lado cocina; giran de 37° a 143°. Despiece y compras aparte (despiece-cortasol-rh).',pino:'B · Cortasol todo en pino, mostrado a 45°: 30 tablillas de 105 × 18 mm en un marco doble de pino de 36 mm, con el mismo acabado. Pines con resorte en las dos puntas y una sola platina de aluminio escondida en el riel superior: se mueven todas con la mano, sin perillas, de 40° a 140°. Colores de referencia; despiece y compras aparte (despiece-cortasol-pino).'};
 const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'rh',kitchenLed:false,closetLed:false},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
@@ -83,7 +83,7 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
  const rejilla=(z,y,w,h)=>{box(proposal,t+.02,h,w,x,y,z,palette.dark);for(let s=y-h/2+.02;s<y+h/2-.01;s+=.03)box(proposal,t+.04,.008,w-.02,x,s,z,palette.white);};
  // A · Tablillas RH y B · tablillas de pino, ambas con marco doble. Medidas de assets/models/cortasol-rh-data.js y cortasol-pino-data.js,
  // los mismos archivos de los visores propuesta-3-tablillas-rh.html y propuesta-4-tablillas-pino.html.
- const D=k==='rh'?window.CortasolRHData:window.CortasolPinoData,marco=k==='rh'?palette.rhGris:palette.rhMarco,lamina=k==='rh'?palette.rhGris:palette.pino;
+ const D=k==='rh'?window.CortasolRHData:window.CortasolPinoData,marco=k==='rh'?palette.rhGris:palette.pino,lamina=k==='rh'?palette.rhGris:palette.pino;
  const mm=v=>v/1000,A=mm(D.lama.A),lt=mm(D.lama.t),n=D.lama.n,ft=mm(D.marco.t),fa=mm(D.marco.A),g=mm(D.lama.holgura),sl=mm(D.parts.find(p=>p.id==='T01').L),pitch=(len-2*ft)/n,yt=y0+ft+2*g+sl;
  for(const y of [y0+ft/2,yt+ft/2]){const r=box(proposal,fa,ft,len,x,y,mid,marco);r.name='cortasol-riel';}
  for(const z of [a+ft/2,b-ft/2]){const s=box(proposal,fa,yt-y0-ft,ft,x,(y0+ft+yt)/2,z,marco);s.name='cortasol-lateral';}
