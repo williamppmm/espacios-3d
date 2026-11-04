@@ -130,7 +130,8 @@ def main():
     ]
     resumen = [
         ["Tablillas", n, f"{lama['A']} × {lama['t']} × {largo} mm de pino alistonado, paso {fmt(round(paso,1))} mm, orientables de {an['min']}° a {an['max']}°"],
-        ["Marco doble de pino", F["t"], f"mm: dos capas de {F['capa']} mm pegadas, {F['A']} de fondo ({O['antepecho']['t']} del ladrillo + {F['pestana']['t']} por cara), juntas trabadas (1000 + 1000 + 1000 sobre 500 + 1000 + 1000 + 500)"],
+        ["Marco doble de pino", F["t"], f"mm: dos capas de {F['capa']} mm pegadas, {F['A']} de fondo en rieles y laterales ({O['antepecho']['t']} del ladrillo + {F['pestana']['t']} de pestaña y {(F['A'] - O['antepecho']['t']) // 2 - F['pestana']['t']} de vuelo por cara), juntas trabadas y esquinas traslapadas por capas"],
+        ["Esquinas", 4, F["esquina"]["nota"]],
         ["Pestañas del antepecho", F["pestana"]["h"], f"mm que bajan por las dos caras del ladrillo, de {F['pestana']['t']} mm de grueso, con remate en el extremo libre (forma de U)"],
         ["Fijación a la obra", an_k["antepecho"]["n"] + an_k["cielo"]["n"] + an_k["medianera"]["n"], f"tornillos: {an_k['antepecho']['n']} al antepecho (carga todo el peso), {an_k['cielo']['n']} al riel del cielo raso (solo lo sostiene de lado), {an_k['medianera']['n']} a la medianera; extremo derecho libre"],
         ["Peso de cada tablilla", round(peso_t, 2), f"kg, con pino de {lama['densidad']} kg/m³; lo carga la pestaña del pin de abajo"],

@@ -1,9 +1,9 @@
 /* Espacios 3D — proyecto local, sin servicios ni cargas de archivos al servidor. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
-const PROPOSALS=['rh','pino'];
-const proposalNotes={rh:'A · Cortasol de tablillas RH orientables, gris humo, mostrado a 45°: 30 tablillas de 105 × 15 mm en un marco doble de 30 mm. Tres paneles, cada uno con una barra de RH en el riel inferior y una perilla del lado cocina; giran de 37° a 143°. Despiece y compras aparte (despiece-cortasol-rh).',pino:'B · Cortasol todo en pino, mostrado a 45°: 30 tablillas de 105 × 18 mm en un marco doble de pino de 36 × 156 mm con pestañas sobre el antepecho de ladrillo, atornillado al riel del cielo raso y a la medianera; extremo libre. Pines con resorte en las dos puntas y una sola platina de aluminio escondida en el riel superior: se mueven todas con la mano, sin perillas, de 40° a 140°. Colores de referencia; despiece y compras aparte (despiece-cortasol-pino).'};
-const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'rh',kitchenLed:false,closetLed:false},items:[
+const PROPOSALS=['rh','pino'],WINDOW_DESIGN='pino-20261104';
+const proposalNotes={rh:'A · Cortasol de tablillas RH orientables, gris humo, mostrado a 45°: 30 tablillas de 105 × 15 mm en un marco doble de 30 mm. Tres paneles, cada uno con una barra de RH en el riel inferior y una perilla del lado cocina; giran de 37° a 143°. Despiece y compras aparte (despiece-cortasol-rh).',pino:'B · Cortasol todo en pino, mostrado a 45°: 30 tablillas de 100 × 18 mm en un marco doble de pino de 36 × 140 mm con pestañas sobre el antepecho de ladrillo, atornillado al riel del cielo raso y a la medianera; extremo libre. Pines con resorte en las dos puntas y una sola platina de aluminio escondida en el riel superior: se mueven todas con la mano, sin perillas, de 40° a 140°. Colores de referencia; despiece y compras aparte (despiece-cortasol-pino).'};
+const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'pino',windowDesign:WINDOW_DESIGN,kitchenLed:false,closetLed:false},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
  {id:'bathroom-1',type:'bathroom',variant:'final',name:'Baño · lavamanos y espejo',w:55,d:47,h:150,x:212,z:220,rotation:90,visible:true,open:0}
@@ -28,7 +28,7 @@ function validate(v){
  });
  if(v.room?.bathroomDesigned!==true&&items.length<30&&!items.some(i=>i.type==='bathroom'))items.push(initial().items.find(i=>i.type==='bathroom'));
  if(!v.room||!finite(v.room.wallHeight,.9,2.5)||['roof','architecture','furnishings','labels'].some(k=>typeof v.room[k]!=='boolean'))throw Error('Opciones de terraza inválidas.');
- return {schema:'espacios-3d',version:1,name:v.name==='Terraza Cartagena'?'Terraza Cali':v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:PROPOSALS.includes(v.room.proposal)?v.room.proposal:'',kitchenLed:v.room.kitchenLed===true,closetLed:v.room.closetLed===true},items};
+ return {schema:'espacios-3d',version:1,name:v.name==='Terraza Cartagena'?'Terraza Cali':v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:v.room.windowDesign===WINDOW_DESIGN?(PROPOSALS.includes(v.room.proposal)?v.room.proposal:''):'pino',windowDesign:WINDOW_DESIGN,kitchenLed:v.room.kitchenLed===true,closetLed:v.room.closetLed===true},items};
 }
 let state=initial(),storageNotice='';try{const raw=localStorage.getItem(KEY);if(raw)state=validate(JSON.parse(raw));}catch(e){storageNotice='No se pudo recuperar el guardado anterior. Puedes abrir un proyecto descargado.';}
 let renderer,scene,camera,controls,room,models=new Map(),solo,stageFloor,selectionBox;
@@ -62,7 +62,7 @@ const pits=[{x1:9.5,x2:12.2,z1:0,z2:2.3},{x1:0,x2:2.6,z1:3.85,z2:5.75}];
 [[0,2.6,0,3.85],[2.6,9.5,0,W],[9.5,12.2,2.3,W],[12.2,L,0,W]].forEach(([a,b,c,d])=>box(floor,b-a,.1,d-c,(a+b)/2,-.05,(c+d)/2,palette.slab));
 for(const p of pits){const m=new THREE.Mesh(new THREE.BoxGeometry(p.x2-p.x1,.1,p.z2-p.z1),palette.pit);m.position.set((p.x1+p.x2)/2,-.05,(p.z1+p.z2)/2);m.receiveShadow=true;floor.add(m);}
 // P1 (central) a 1,20 m, como el muro exterior; P2 (trasero) a 0,60 m.
-wall(floor,'z',0,2.3,9.56,1.2);wall(floor,'x',9.62,12.08,2.24,1.2);wall(floor,'z',0,2.3,12.14,1.2);wall(floor,'x',0,2.6,3.91,.6);wall(floor,'z',3.97,W,2.54,.6);
+wall(floor,'z',0,2.3,9.56,1.2,window.CortasolPinoData.obra.antepecho.t/1000);wall(floor,'x',9.62,12.08,2.24,1.2);wall(floor,'z',0,2.3,12.14,1.2);wall(floor,'x',0,2.6,3.91,.6);wall(floor,'z',3.97,W,2.54,.6);
 // Frente de entrada: reja metálica blanca fija de 1,20 m, conservando los accesos.
 function frontGrille(){
  const g=group(perimeter);g.name='front-grille';
@@ -78,17 +78,34 @@ function frontGrille(){
 // Prolonga el antepecho del patio (x=9,56) hasta la línea del muro de la habitación (z=3,00) y cierra de 1,20 a 2,50 m;
 // las dos opciones (tablillas RH o de pino) cubren los 3 m completos, incluido el tramo sobre la nevera.
 function buildProposal(){while(proposal.children.length)dispose(proposal.children[0]);const k=state.room.proposal;if(!PROPOSALS.includes(k))return;
- const x=9.56,t=.12,y0=1.2,y1=2.5,a=0,b=3,len=b-a,mid=(a+b)/2;
- wall(proposal,'z',2.3,b,x,y0);
+ const x=9.56,t=window.CortasolPinoData.obra.antepecho.t/1000,y0=1.2,y1=2.5,a=0,b=3,len=b-a,mid=(a+b)/2;
+ wall(proposal,'z',2.3,b,x,y0,.10);   // antepecho de ladrillo de 10 cm
  const rejilla=(z,y,w,h)=>{box(proposal,t+.02,h,w,x,y,z,palette.dark);for(let s=y-h/2+.02;s<y+h/2-.01;s+=.03)box(proposal,t+.04,.008,w-.02,x,s,z,palette.white);};
  // A · Tablillas RH y B · tablillas de pino, ambas con marco doble. Medidas de assets/models/cortasol-rh-data.js y cortasol-pino-data.js,
  // los mismos archivos de los visores propuesta-3-tablillas-rh.html y propuesta-4-tablillas-pino.html.
  const D=k==='rh'?window.CortasolRHData:window.CortasolPinoData,marco=k==='rh'?palette.rhGris:palette.pino,lamina=k==='rh'?palette.rhGris:palette.pino;
  const mm=v=>v/1000,A=mm(D.lama.A),lt=mm(D.lama.t),n=D.lama.n,ft=mm(D.marco.t),fa=mm(D.marco.A),g=mm(D.lama.holgura),sl=mm(D.parts.find(p=>p.id==='T01').L),pitch=(len-2*ft)/n,yt=y0+ft+2*g+sl;
- for(const y of [y0+ft/2,yt+ft/2]){const r=box(proposal,fa,ft,len,x,y,mid,marco);r.name='cortasol-riel';}
- for(const z of [a+ft/2,b-ft/2]){const s=box(proposal,fa,yt-y0-ft,ft,x,(y0+ft+yt)/2,z,marco);s.name='cortasol-lateral';}
- const PE=D.marco.pestana;if(PE){const pt=mm(PE.t),ph=mm(PE.h);for(const sd of[-1,1])box(proposal,pt,ph,len,x+sd*(t/2+pt/2),y0-ph/2,mid,marco).name='cortasol-pestana';if(PE.remate)box(proposal,fa,ph,pt,x,y0-ph/2,b+pt/2,marco).name='cortasol-pestana';}   // pestañas sobre el antepecho y remate del extremo libre (z = 3)
- for(let i=0;i<n;i++){const s=box(proposal,lt,sl,A,x,y0+ft+g+sl/2,a+ft+pitch*(i+.5),lamina);s.rotation.y=D.angulo.inicial*Math.PI/180;s.name='cortasol-tablilla';}
+ if(k==='pino'){
+  // Replicar el despiece por capas del visor individual. Coordenadas locales: x a la derecha, z hacia cocina.
+  const C=D.marco.capa,F=D.marco,M=D.mecanismo,ES=F.esquina.escalon,W=D.vano.L-2*F.t,YT=F.t+2*D.lama.holgura+D.parts.find(p=>p.id==='T01').L;
+  const local=(w,h,d,lx,ly,lz,material,name)=>{const o=box(proposal,mm(d),mm(h),mm(w),x-mm(lz),y0+mm(ly),mid+mm(lx),material);o.name=name;return o;};
+  const segs=list=>{let a=-D.vano.L/2;return list.map(l=>{const b=a+l,v=[a,b];a=b;return v;});},E=segs(F.juntas.entera),Tr=segs(F.juntas.trabada),trim=sg=>sg.map(([a,b],i)=>[i?a:a+ES,i<sg.length-1?b:b-ES]);
+  const layer=(sg,y,d,z,name)=>{for(const [a,b]of sg)local(b-a-1,C,d,(a+b)/2,y,z,marco,name);};
+  layer(Tr,C/2,F.A,0,'pino-base-inferior');layer(trim(E),1.5*C,F.A,0,'pino-tapa-inferior');
+  layer(trim(E),YT+C/2,M.canal.z0+F.A/2,(M.canal.z0-F.A/2)/2,'pino-tira-patio');
+  layer(trim(E),YT+C/2,F.A/2-M.canal.z1,(M.canal.z1+F.A/2)/2,'pino-tira-cocina');layer(Tr,YT+1.5*C,F.A,0,'pino-base-superior');
+  for(const sd of[-1,1])for(const k of[0,1])local(C,YT-F.t+(k?0:2*ES),F.A,sd*(D.vano.L/2-C*(k+.5)),F.t+(YT-F.t)/2,0,marco,'pino-lateral');
+  const PE=F.pestana;for(const sd of[-1,1])for(const [a,b]of E)local(b-a-1,PE.h,PE.t,(a+b)/2,-PE.h/2,sd*(D.obra.antepecho.t/2+PE.t/2),marco,'pino-pestana');
+  if(PE.remate)local(PE.t,PE.h,D.obra.antepecho.t+2*PE.t,D.vano.L/2+PE.t/2,-PE.h/2,0,marco,'pino-remate');
+  const phi=D.angulo.inicial*Math.PI/180,SL=D.parts.find(p=>p.id==='T01').L;
+  for(let i=0;i<D.lama.n;i++){const o=local(D.lama.A,SL,D.lama.t,-W/2+W/D.lama.n*(i+.5),F.t+D.lama.holgura+SL/2,0,lamina,'cortasol-tablilla');o.rotation.y=-phi;}
+  local(M.barra.L,M.barra.e,M.barra.A,-M.manivela*Math.cos(phi),F.t+D.lama.holgura+SL+1+M.barra.e/2,-M.manivela*Math.sin(phi),palette.fence,'pino-barra');
+  for(const sd of[-1,1])local(M.tope.L,C,M.canal.z1-M.canal.z0,sd*(W/2+M.tope.L/2),YT+C/2,(M.canal.z0+M.canal.z1)/2,marco,'pino-tope');
+ }else{
+  for(const y of [y0+ft/2,yt+ft/2]){const r=box(proposal,fa,ft,len,x,y,mid,marco);r.name='cortasol-riel';}
+  for(const z of [a+ft/2,b-ft/2]){const s=box(proposal,fa,yt-y0-ft,ft,x,(y0+ft+yt)/2,z,marco);s.name='cortasol-lateral';}
+  for(let i=0;i<n;i++){const s=box(proposal,lt,sl,A,x,y0+ft+g+sl/2,a+ft+pitch*(i+.5),lamina);s.rotation.y=D.angulo.inicial*Math.PI/180;s.name='cortasol-tablilla';}
+ }
  for(const z of [1.4,2.4])rejilla(z,.25,.3,.15);}
 function proposalUI(){const k=state.room.proposal;$('proposal-note').hidden=!proposalNotes[k];$('proposal-note').textContent=proposalNotes[k]||'';}
 function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);wall(perimeter,'x',-.12,2,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});
@@ -101,8 +118,8 @@ box(architecture,1.7,1.5,.02,4.75,1.35,2.94,palette.glass);// Hojas de baño (70
 const buildingDoors=[[3.3,2.2,.7],[6.86,2.88,.9]].map(([x,z,w])=>{const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);pivot.position.set(x,0,z);box(pivot,w,2.03,.035,-w/2,1.025,.0175,palette.door);box(pivot,.12,.025,.1,.08-w,1,.0175,palette.dark);return pivot;});
 const setDoors=t=>setMovers(buildingDoors,t);// Cielo raso sobre la franja construida; el paso exterior frente al baño queda sin cielo raso.
 box(roof,1.48,.04,2.34,2.64,2.52,1.09,palette.roof);
-// Filo exterior de la habitación: z=3.00; encuentro con la cara exterior de C: x=9.62.
-const ceiling={x0:3.38,x1:9.62,z0:-.08,z1:3};
+// Cielo raso al filo de la habitación y de la cara patio del marco adoptado.
+const ceiling={x0:3.38,x1:9.56+window.CortasolPinoData.marco.A/2000,z0:-.08,z1:3};
 box(roof,ceiling.x1-ceiling.x0,.04,ceiling.z1-ceiling.z0,(ceiling.x0+ceiling.x1)/2,2.52,(ceiling.z0+ceiling.z1)/2,palette.roof);
 // Medianera derecha de 2,50 m; lado izquierdo abierto sobre pilares cada ~4 m que reciben el techo en arco (flecha 0,50 m).
 {const n=Math.round(L/4);for(let j=0;j<=n;j++)box(floor,.2,2.5,.2,Math.min(L-.1,Math.max(.1,L*j/n)),1.25,W+.06,palette.white);
