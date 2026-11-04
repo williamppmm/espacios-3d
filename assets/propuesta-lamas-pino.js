@@ -41,7 +41,7 @@ function label(text,x,y,z,s=1){const cv=document.createElement('canvas');cv.widt
 function stats(){const f=phi*deg,ext=LA.A/2*Math.abs(Math.cos(f))+LA.t/2*Math.sin(f);
  return {phi,air:(P*Math.sin(f)-LA.t)/P,front:Math.max(0,P-2*ext),side:P/2-ext,barX:-R*Math.cos(f),barZ:-R*Math.sin(f)};}
 
-// Tramos de cada capa a partir de las juntas del marco: una capa entera (3 × 1000) y otra trabada (500 + 1000 + 1000 + 500).
+// Tramos de cada capa a partir de las juntas del marco: dos tramos por capa, la interior en 2000 + 1000 y la exterior en 1000 + 2000, con las juntas cruzadas.
 const segs=list=>{let a=-V.L/2;return list.map(l=>{const r=[a,a+l];a+=l;return r;});};
 const ES=F.esquina.escalon,trim=sg=>sg.map(([a,b],i)=>[i?a:a+ES,i<sg.length-1?b:b-ES]);   // escalón de la esquina
 function layer(sg,y,w,z,m,g,lines=true){for(const [a,b] of sg)box(b-a-1,C,w,m,(a+b)/2,y,z,g,lines);}

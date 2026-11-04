@@ -35,27 +35,25 @@ window.CortasolPinoData={
   "capa": 18,
   "t": 36,
   "A": 140,
-  "tramo": 1000,
+  "tramo": 2000,
   "paneles": 3,
   "material": "Pino alistonado de 18 mm, el mismo de las tablillas",
   "juntas": {
    "entera": [
-    1000,
-    1000,
+    2000,
     1000
    ],
    "trabada": [
-    500,
     1000,
-    1000,
-    500
-   ]
+    2000
+   ],
+   "nota": "Dos tramos por capa y por riel, con las juntas cruzadas a 1 m: la capa interior en 2000 + 1000 (junta a 2 m de la medianera) y la exterior en 1000 + 2000 (junta a 1 m). Así cada riel trabaja como una sola pieza con solo dos juntas a tope, y el tramo de 2000 sale de un tablero de 2440."
   },
-  "nota": "Marco en dos capas de pino de 18 mm pegadas y prensadas, de 140 mm de fondo en todo el perímetro (rieles y laterales iguales): 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña, que hacen de gotero y absorben las diferencias del muro. En cada riel, la capa exterior va en 500 + 1000 + 1000 + 500 y la interior en 982 + 1000 + 982, con las juntas trabadas.",
+  "nota": "Marco en dos capas de pino de 18 mm pegadas y prensadas, de 140 mm de fondo en todo el perímetro (rieles y laterales iguales): 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña, que hacen de gotero y absorben las diferencias del muro. En cada riel, dos tramos por capa: la exterior en 1000 + 2000 y la interior en 1982 + 982 (2000 + 1000 menos el escalón de cada esquina), con las juntas cruzadas a 1 m.",
   "pestana": {
    "t": 18,
    "h": 60,
-   "tramo": 1000,
+   "tramo": 2000,
    "remate": true,
    "nota": "Pestañas de pino de 18 × 60 mm a lo largo de las dos caras del antepecho, pegadas y atornilladas por debajo de la base del riel inferior (los tornillos quedan ocultos bajo la tapa). El riel vuela 2 mm sobre cada pestaña. En el extremo libre, una pestaña de remate de 136 mm tapa la punta del muro y cierra la U. Ajustar los 60 mm para que el borde quede justo encima de una junta de mortero."
   },
@@ -135,93 +133,93 @@ window.CortasolPinoData={
   },
   {
    "id": "R01",
-   "name": "Base del riel inferior · tramo",
-   "qty": 2,
+   "name": "Base del riel inferior · tramo corto",
+   "qty": 1,
    "L": 1000,
    "A": 140,
    "t": 18,
-   "note": "Capa de abajo, trabada: 500 + 1000 + 1000 + 500, sobre el ladrillo con un cordón de sellador."
+   "note": "Capa de abajo, en 1000 + 2000, sobre el ladrillo con un cordón de sellador. Tramo de 1000 del lado de la medianera."
   },
   {
-   "id": "R01P",
-   "name": "Base del riel inferior · punta",
-   "qty": 2,
-   "L": 500,
+   "id": "R01L",
+   "name": "Base del riel inferior · tramo largo",
+   "qty": 1,
+   "L": 2000,
    "A": 140,
    "t": 18,
-   "note": "Las dos puntas de la capa trabada."
+   "note": "Tramo de 2000 hacia el extremo libre. Su junta con el tramo corto queda a 1 m de la medianera, cruzada con la de la capa interior."
   },
   {
    "id": "R02",
-   "name": "Tapa del riel inferior · tramo central",
+   "name": "Tapa del riel inferior · tramo largo",
    "qty": 1,
-   "L": 1000,
+   "L": 1982,
    "A": 140,
    "t": 18,
-   "note": "Capa interior, en 982 + 1000 + 982, sin canal. Lleva los huecos de las puntas de los pines a paso 97,6, cada uno con su ranura de entrada de 25 × 2 mm hacia la cocina, y los tornillos al antepecho entre tablillas."
+   "note": "Capa interior, en 1982 + 982, sin canal. Lleva los huecos de las puntas de los pines a paso 97,6, cada uno con su ranura de entrada de 25 × 2 mm hacia la cocina, y los tornillos al antepecho entre tablillas. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
   },
   {
    "id": "R02E",
-   "name": "Tapa del riel inferior · extremo",
-   "qty": 2,
+   "name": "Tapa del riel inferior · tramo corto",
+   "qty": 1,
    "L": 982,
    "A": 140,
    "t": 18,
-   "note": "Termina 18 mm antes de la punta del riel: ese escalón recibe la capa exterior del lateral."
+   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
   },
   {
    "id": "R05",
-   "name": "Base del riel superior · tramo",
-   "qty": 2,
+   "name": "Base del riel superior · tramo corto",
+   "qty": 1,
    "L": 1000,
    "A": 140,
    "t": 18,
-   "note": "Capa de arriba, trabada, contra el panel yeso del cielo raso; los tornillos atraviesan hasta el riel metálico. Es el techo del canal de la barra."
+   "note": "Capa de arriba, en 1000 + 2000, contra el panel yeso del cielo raso; los tornillos atraviesan hasta el riel metálico. Es el techo del canal de la barra. Tramo de 1000 del lado de la medianera."
   },
   {
-   "id": "R05P",
-   "name": "Base del riel superior · punta",
-   "qty": 2,
-   "L": 500,
+   "id": "R05L",
+   "name": "Base del riel superior · tramo largo",
+   "qty": 1,
+   "L": 2000,
    "A": 140,
    "t": 18,
-   "note": "Las dos puntas de la capa trabada."
+   "note": "Tramo de 2000 hacia el extremo libre. Su junta con el tramo corto queda a 1 m de la medianera, cruzada con la de la capa interior."
   },
   {
    "id": "R06",
-   "name": "Tira cocina del riel superior · tramo central",
+   "name": "Tira cocina del riel superior · tramo largo",
    "qty": 1,
-   "L": 1000,
+   "L": 1982,
    "A": 79,
    "t": 18,
-   "note": "Capa interior, de z −9 a z 70, del lado cocina. Un borde forma el canal. Lleva los huecos de las puntas de los pines de arriba, alineados con los de abajo."
+   "note": "Capa interior, de z −9 a z 70, del lado cocina. Un borde forma el canal. Lleva los huecos de las puntas de los pines de arriba, alineados con los de abajo. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
   },
   {
    "id": "R06E",
-   "name": "Tira cocina del riel superior · extremo",
-   "qty": 2,
+   "name": "Tira cocina del riel superior · tramo corto",
+   "qty": 1,
    "L": 982,
    "A": 79,
    "t": 18,
-   "note": "Termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
+   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
   },
   {
    "id": "R08",
-   "name": "Tira patio del riel superior · tramo central",
+   "name": "Tira patio del riel superior · tramo largo",
    "qty": 1,
-   "L": 1000,
+   "L": 1982,
    "A": 18,
    "t": 18,
-   "note": "Capa interior, de z −70 a z −52: cierra el canal del lado patio. Tira cuadrada de 18 × 18."
+   "note": "Capa interior, de z −70 a z −52: cierra el canal del lado patio. Tira cuadrada de 18 × 18. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
   },
   {
    "id": "R08E",
-   "name": "Tira patio del riel superior · extremo",
-   "qty": 2,
+   "name": "Tira patio del riel superior · tramo corto",
+   "qty": 1,
    "L": 982,
    "A": 18,
    "t": 18,
-   "note": "Termina 18 mm antes de la punta, como la tira cocina."
+   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
   },
   {
    "id": "R09",
@@ -252,12 +250,21 @@ window.CortasolPinoData={
   },
   {
    "id": "R10",
-   "name": "Pestaña del antepecho",
-   "qty": 6,
+   "name": "Pestaña del antepecho · tramo largo",
+   "qty": 2,
+   "L": 2000,
+   "A": 60,
+   "t": 18,
+   "note": "Dos por riel, una por cara (cocina y patio), en 2000 + 1000, con la junta alineada con la de la tapa del riel. Pegada y atornillada por debajo de la base del riel inferior, contra la cara del ladrillo. Sellar la junta con el muro."
+  },
+  {
+   "id": "R10C",
+   "name": "Pestaña del antepecho · tramo corto",
+   "qty": 2,
    "L": 1000,
    "A": 60,
    "t": 18,
-   "note": "Tres por cara (cocina y patio), con las juntas alineadas con las de la tapa del riel. Pegada y atornillada por debajo de la base del riel inferior, contra la cara del ladrillo. Sellar la junta con el muro."
+   "note": "Tramo de 1000 hacia el extremo libre, uno por cara."
   },
   {
    "id": "R11",
