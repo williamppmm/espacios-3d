@@ -2,16 +2,17 @@
 
 Uso, desde la raíz del repositorio:
 
-    python herramientas/build_cortasol_rh.py
+    python alternativas/ventanas/herramientas/build_cortasol_rh.py
 
 Fuente: assets/models/cortasol-rh-data.js (la misma que usa el visor propuesta-3-tablillas-rh.html).
 Es un libro independiente: no entra en compras-proyecto.xlsx ni en los despieces de los muebles,
 porque el color todavía no está definido y puede no ser el Cartagena de la cocina.
 """
-import html, json, math
+import html, json, math, sys
 from pathlib import Path
 import openpyxl
 from openpyxl.styles import Alignment, Font, PatternFill
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'herramientas'))
 from build_despiece import page, tabla, fmt
 from build_compras_proyecto import mejor_encaje, ocupacion, K, BW, BH, RESERVA_BORDE, MARGEN
 

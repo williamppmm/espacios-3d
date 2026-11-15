@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Puerta plegable de pino · Terraza Cali</title>
+<link rel="stylesheet" href="assets/ventana-estudio.css">
+<style>
+header{padding-bottom:24px}
+.viewer{display:grid;grid-template-columns:minmax(0,2fr) minmax(235px,1fr);gap:20px}
+#stage{position:relative;height:clamp(350px,62vh,630px);background:#e6ece6;border-radius:12px;overflow:hidden}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.controls{display:grid;align-content:start;gap:12px;padding:18px}
+.controls label{display:grid;gap:6px}
+.controls input{width:100%;accent-color:var(--accent)}
+.controls button{background:#fffef8;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 11px;font:inherit;cursor:pointer}
+.controls dt{font-size:13px;color:var(--muted)}
+.controls dl,.controls dd{margin:0}
+.controls dd{margin-bottom:12px;font-weight:600}
+.table{overflow:auto}
+table{border-collapse:collapse;width:100%;min-width:450px;background:#fffef8}
+td,th{text-align:left;border-bottom:1px solid var(--line);padding:8px 12px}
+th{font-size:13px}
+section{margin-bottom:24px}
+@media(max-width:720px){.viewer{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<nav><a href="index.html">← Terraza</a><a href="ventana.html">Ventanal de pino</a></nav>
+<header>
+<p class="eyebrow">Cocina · Patio 1</p>
+<h1>Puerta plegable de pino</h1>
+<p>Cuatro hojas con tablillas que se recogen hacia la ventana. El parante ocupa el extremo libre del ventanal y el conjunto se abre hacia la cocina.</p>
+<div class="dimensions" id="dimensions"></div>
+</header>
+<section class="viewer" aria-label="Visor y apertura">
+<div id="stage" aria-label="Modelo 3D de la puerta"></div>
+<div class="card controls">
+<label for="opening">Apertura <output id="percent" for="opening"></output><input id="opening" type="range" min="0" max="100" value="100"></label>
+<div><button type="button" id="closed">Cerrar</button> <button type="button" id="opened">Abrir</button></div>
+<div><button type="button" id="perspective">Perspectiva</button> <button type="button" id="plan">Planta</button></div>
+<dl><dt>Paso libre estimado</dt><dd id="passage"></dd><dt>Saliente hacia la cocina</dt><dd id="projection"></dd></dl>
+</div>
+</section>
+<section>
+<h2>Medidas y despiece preliminar</h2>
+<p id="sizing"></p>
+<div class="table"><table><thead><tr><th>Pieza de pino de 18 mm</th><th>Cantidad</th><th>Largo × ancho (mm)</th></tr></thead><tbody id="cut-list"></tbody></table></div>
+<p id="material"></p>
+<p>El encaje de referencia da tres tableros de 2.440 × 1.220 × 18 mm para la puerta y su marco. Se mantiene la veta en el sentido del largo, con disco de 5 mm y 10 mm de refilado por borde. Cotizar tras medir el vano y elegir herrajes.</p>
+</section>
+<section>
+<h2>Herrajes y montaje</h2>
+<ul>
+<li>Un sistema plegable para cuatro hojas, con pivotes, carros, bisagras y topes compatibles con hojas de 36 mm. El perfil se corta a la medida indicada por su plantilla. El vano entre jambas sirve como referencia.</li>
+<li>Una cerradura de gancho y una manija de bajo perfil. Verificar que la manija quede libre durante el plegado y que la cerradura conserve madera suficiente alrededor del embutido.</li>
+<li>Tomar ancho, altura y nivel del piso en tres puntos. El instalador debe comprobar la capacidad del dintel y las fijaciones a la estructura y al piso. El panel del cielo raso queda como acabado.</li>
+<li>La referencia FSCPCM73 corresponde a una hoja corrediza. El kit plegable KITPLEGABLE73-4 publica 18 mm de espesor, 60 kg de carga y 60 mm de descuento de altura. Para este diseño de 36 mm falta seleccionar un sistema compatible y ajustar las cotas del despiece a su plantilla.</li>
+<li>Confirmar con el gasista la ventilación permanente de la cocina. El área geométrica de las tablillas solo describe esta puerta.</li>
+</ul>
+<p><a href="https://madecentro.com/collections/perfiles-para-divisiones-de-espacio/products/kit-de-rodamientos-para-4-puertas-plegables-en-divisiones-de-espacios-interiores">Ficha del kit plegable Bonuit</a></p>
+</section>
+</main>
+<script src="assets/vendor/three-r128.min.js"></script>
+<script src="assets/vendor/OrbitControls-r128.js"></script>
+<script src="assets/models/cortasol-pino-data.js?v=20261104-dostramos-1"></script>
+<script src="assets/models/puerta-plegable-data.js?v=1"></script>
+<script src="assets/models/puerta-plegable-modelo.js?v=1"></script>
+<script src="assets/puerta-plegable.js?v=1"></script>
+<script src="assets/fullscreen.js"></script>
+</body></html>
