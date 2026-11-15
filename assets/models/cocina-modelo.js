@@ -63,6 +63,22 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  // Escurridor sobre mesón: referencia de 375 × 400, sin modelo comercial seleccionado.
  box([2392.5,2767.5,100,500,901,906],'grey','B4',E);for(let j=0;j<10;j++)box([2410+j*35,2413+j*35,120,480,920,925],'inox','B4',E);
  for(let j=0;j<4;j++){const plate=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.007,24),mats.plate);plate.rotation.z=Math.PI/2;plate.position.set(2.48+j*.045,1.005,.3);E.add(plate);}
+ // Salpicadero: fichas 1200 × 600 horizontales, de 901 a 1500; tras las alacenas queda oculto.
+ // Arranca entero en la esquina; retorno de 620 sobre el muro lateral. Juntas de 2 mm; ilustrativo, sin plan de corte.
+ const marble=(()=>{const c=document.createElement('canvas');c.width=2048;c.height=1024;const g=c.getContext('2d');let seed=29;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  g.fillStyle='#eee6d8';g.fillRect(0,0,2048,1024);
+  for(let i=0;i<900;i++){const x=rnd()*2048,y=rnd()*1024,r=8+rnd()*70,grad=g.createRadialGradient(x,y,0,x,y,r);grad.addColorStop(0,rnd()<.65?'rgba(250,246,238,.6)':'rgba(214,199,174,.2)');grad.addColorStop(1,'rgba(230,220,203,0)');g.fillStyle=grad;g.fillRect(x-r,y-r,2*r,2*r);}
+  for(let i=0;i<14;i++){let x=rnd()*2048,y=rnd()*1024;const a=-.55+rnd()*.3,len=300+rnd()*900;g.strokeStyle=`rgba(${150+rnd()*30|0},${125+rnd()*25|0},${95+rnd()*20|0},${.18+rnd()*.3})`;g.lineWidth=.6+rnd()*1.4;g.beginPath();g.moveTo(x,y);for(let s=0;s<len;s+=24){x+=Math.cos(a)*24+(rnd()-.5)*14;y+=Math.sin(a)*24*-1+(rnd()-.5)*14;g.lineTo(x,y);}g.stroke();}
+  return c;})();
+ const grout=new THREE.MeshStandardMaterial({color:0xd9d0c0,roughness:.9});
+ function tile(x0,x1,z0,z1,u,v,face,y0=901,y1=1500){const w=Math.max(x1-x0,z1-z0),map=new THREE.CanvasTexture(marble);map.encoding=THREE.sRGBEncoding;map.wrapS=map.wrapT=THREE.RepeatWrapping;map.repeat.set(w/2400,(y1-y0)/1200);map.offset.set(u,v);
+  const front=new THREE.MeshStandardMaterial({map,roughness:.28}),edge=new THREE.MeshStandardMaterial({color:0xeee6d8,roughness:.5}),mats=[edge,edge,edge,edge,edge,edge];mats[face]=front;
+  const m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)/1000,(y1-y0)/1000,(z1-z0)/1000),mats);m.position.set((x0+x1)/2000,(y0+y1)/2000,(z0+z1)/2000);m.receiveShadow=true;m.userData.mod=null;m.name='salpicadero-ficha';C.add(m);all.push(m);}
+ const corner=2800,inner=corner-9;
+ tile(1589,inner-2,1,9,0,0,4);tile(387,1587,1,9,.5,.5,4);tile(200,385,1,9,.08,.5,4);tile(inner,corner-1,11,620,.62,0,1);
+ // Sobre la estufa la ficha sube hasta S2 (1700), detrás de la campana: recorte 600 × 198.
+ tile(410,1010,1,9,.3,.2,4,1502,1700);
+ for(const a of [[200,inner,.5,7.5,901,1500],[410,1010,.5,7.5,1500,1700],[inner+1.5,corner-.5,1,620,901,1500]]){const [x0,x1,z0,z1,y0,y1]=a,m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)/1000,(y1-y0)/1000,(z1-z0)/1000),grout);m.position.set((x0+x1)/2000,(y0+y1)/2000,(z0+z1)/2000);m.name='salpicadero-junta';C.add(m);}
  // Perfiles gola por separado de las piezas de melamina.
  for(const [a,b] of [[230,410],[1010,2780]])box([a,b,556,586,810,885],'gola',null);
  box([1010,1680,556,586,615,665],'gola',null);box([2380,2780,556,586,380,430],'gola',null);
