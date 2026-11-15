@@ -150,18 +150,19 @@ const dispose=root=>{const gs=new Set(),ms=new Set(),ts=new Set();root.traverse(
 const terraceTileSize=.51;
 const terraceTileJoint=.003;
 const terraceTileRepeat=2*(terraceTileSize+terraceTileJoint);
-function terraceCeramicMaterial(){
+const bathroomFloor={x0:2.12,x1:3.32,z0:0,z1:2.2,level:.05};
+function floorCeramicMaterial(bases,jointColor,stone=false){
  const canvas=document.createElement('canvas');
  canvas.width=canvas.height=512;
  const ctx=canvas.getContext('2d');
  const inset=256*terraceTileJoint/(terraceTileSize+terraceTileJoint)/2;
  let seed=621;
  const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
- ctx.fillStyle='#90908d';
+ ctx.fillStyle=jointColor;
  ctx.fillRect(0,0,512,512);
  for(let row=0;row<2;row++)for(let col=0;col<2;col++){
   const x=col*256+inset,y=row*256+inset,span=256-2*inset;
-  const base=[181,178,176,180][row*2+col];
+  const base=bases[row*2+col];
   ctx.save();
   ctx.beginPath();
   ctx.rect(x,y,span,span);
@@ -173,7 +174,7 @@ function terraceCeramicMaterial(){
    noise.width=noise.height=size;
    const nc=noise.getContext('2d'),pixels=nc.createImageData(size,size);
    for(let i=0;i<pixels.data.length;i+=4){
-    const shade=128+Math.round(random()*100);
+    const shade=(stone?base-50:128)+Math.round(random()*100);
     pixels.data[i]=shade;
     pixels.data[i+1]=shade-1;
     pixels.data[i+2]=shade-3;
@@ -184,7 +185,18 @@ function terraceCeramicMaterial(){
    ctx.drawImage(noise,x,y,span,span);
   }
   ctx.globalAlpha=1;
-  ctx.fillStyle='rgba(255,255,253,.6)';
+  if(stone){
+   for(let vein=0;vein<6;vein++){
+    const start=x+random()*span;
+    ctx.strokeStyle=vein%2?'rgba(208,201,190,.18)':'rgba(202,195,185,.33)';
+    ctx.lineWidth=.4+random()*1.35;
+    ctx.beginPath();
+    ctx.moveTo(start,y-6);
+    for(let dy=0;dy<=span+10;dy+=8)ctx.lineTo(start+dy*.48+Math.sin(dy/22+vein)*16+random()*7,y+dy);
+    ctx.stroke();
+   }
+  }
+  ctx.fillStyle=stone?'rgba(223,216,207,.18)':'rgba(255,255,253,.6)';
   ctx.fillRect(x,y,span,1);
   ctx.fillRect(x,y,1,span);
   ctx.restore();
@@ -195,23 +207,38 @@ function terraceCeramicMaterial(){
  texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
  return new THREE.MeshStandardMaterial({map:texture,roughness:.82});
 }
-const terraceCeramic=terraceCeramicMaterial();
-function terraceSlab(parent,x0,x1,z0,z1){
- const slab=palette.slab;
+const terraceCeramic=floorCeramicMaterial([181,178,176,180],'#90908d');
+const bathroomCeramic=floorCeramicMaterial([108,115,104,111],'#686660',true);
+const bathroomRiser=mat(0x77746e);
+function tiledSlab(parent,x0,x1,z0,z1,bathroom=false){
+ const side=bathroom?bathroomRiser:palette.slab;
+ const tile=bathroom?bathroomCeramic:terraceCeramic;
+ const repeat=bathroom?1.2:terraceTileRepeat;
+ const top=bathroom?bathroomFloor.level:0;
+ const thickness=.1+top;
  // BoxGeometry orders faces as +X, -X, +Y, -Y, +Z, -Z.
- const mesh=box(parent,x1-x0,.1,z1-z0,(x0+x1)/2,-.05,(z0+z1)/2,[slab,slab,terraceCeramic,slab,slab,slab]);
+ const mesh=box(parent,x1-x0,thickness,z1-z0,(x0+x1)/2,top-thickness/2,(z0+z1)/2,[side,side,tile,side,side,side]);
  const {position,normal,uv}=mesh.geometry.attributes;
  for(let i=0;i<uv.count;i++){
   if(normal.getY(i)>.5){
-   uv.setXY(i,(mesh.position.x+position.getX(i))/terraceTileRepeat,(mesh.position.z+position.getZ(i))/terraceTileRepeat);
+   uv.setXY(i,(mesh.position.x+position.getX(i))/repeat,(mesh.position.z+position.getZ(i))/repeat);
   }
  }
- mesh.name='terrace-ceramic-floor';
+ mesh.name=bathroom?'bathroom-ceramic-floor':'terrace-ceramic-floor';
 }
 room=group(scene);const floor=group(room),perimeter=group(room),architecture=group(room),roof=group(room),vault=group(room),furnishings=group(room),labels=group(room),proposal=group(room);
 // Patios P1 y P2: se dejan vacíos, como en la maqueta recibida, con antepechos de ladrillo de 12 cm por dentro del borde.
 const pits=[{x1:9.5,x2:12.2,z1:0,z2:2.3},{x1:0,x2:2.6,z1:3.85,z2:5.75}];
-for(const rect of [[0,2.6,0,3.85],[2.6,9.5,0,W],[9.5,12.2,2.3,W],[12.2,L,0,W]])terraceSlab(floor,...rect);
+const bathOpening={x0:2.6,x1:3.3,z1:2.32};
+for(const rect of [
+ [0,bathroomFloor.x0,0,3.85],
+ [bathroomFloor.x0,bathOpening.x0,bathroomFloor.z1,3.85],
+ [bathOpening.x0,bathOpening.x1,bathOpening.z1,W],
+ [bathOpening.x1,bathroomFloor.x1,bathroomFloor.z1,W],
+ [bathroomFloor.x1,9.5,0,W],[9.5,12.2,2.3,W],[12.2,L,0,W]
+])tiledSlab(floor,...rect);
+tiledSlab(floor,bathroomFloor.x0,bathroomFloor.x1,bathroomFloor.z0,bathroomFloor.z1,true);
+tiledSlab(floor,bathOpening.x0,bathOpening.x1,bathroomFloor.z1,bathOpening.z1,true);
 for(const p of pits){const m=new THREE.Mesh(new THREE.BoxGeometry(p.x2-p.x1,.1,p.z2-p.z1),palette.pit);m.position.set((p.x1+p.x2)/2,-.05,(p.z1+p.z2)/2);m.receiveShadow=true;floor.add(m);}
 // P1 (central) a 1,20 m, como el muro exterior; P2 (trasero) a 0,60 m.
 wall(floor,'z',0,2.3,9.56,1.2,window.CortasolPinoData.obra.antepecho.t/1000);wall(floor,'x',9.62,12.08,2.24,1.2);wall(floor,'z',0,2.3,12.14,1.2);wall(floor,'x',0,2.6,3.91,.6);wall(floor,'z',3.97,W,2.54,.6);
@@ -334,7 +361,14 @@ microcementFace(architecture,3.94,2.5,5.41,1.25,.001,0,3.44,0);
 microcementFace(architecture,.68,2.5,3.319,1.25,2.66,-Math.PI/2,2.32,0);
 // Acabado estucado de la cara de habitación detrás del clóset; no es un tablero.
 box(architecture,1.7,1.5,.02,4.75,1.35,2.94,palette.glass);// Hojas de baño (70 cm) y habitación (90 cm): bisagra del lado de la habitación/clóset, abren hacia adentro.
-const buildingDoors=[[3.3,2.2,.7],[6.86,2.88,.9]].map(([x,z,w])=>{const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);pivot.position.set(x,0,z);box(pivot,w,2.03,.035,-w/2,1.025,.0175,palette.door);box(pivot,.12,.025,.1,.08-w,1,.0175,palette.dark);return pivot;});
+const buildingDoors=[[3.3,2.2,.7,bathroomFloor.level],[6.86,2.88,.9,0]].map(([x,z,w,level])=>{
+ const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);
+ pivot.position.set(x,0,z);
+ const bottom=level+.01,top=2.04;
+ box(pivot,w,top-bottom,.035,-w/2,(top+bottom)/2,.0175,palette.door);
+ box(pivot,.12,.025,.1,.08-w,1+level,.0175,palette.dark);
+ return pivot;
+});
 const foldingDoor=window.crearPuertaPlegable(THREE);
 foldingDoor.root.position.set(window.PuertaPlegableData.wallEnd/1000,0,3);
 architecture.add(foldingDoor.root);
@@ -350,7 +384,15 @@ const z0=-.06,z1=W+.06,c=z1-z0,f=.5,R=(c*c/4+f*f)/(2*f),arc=z=>2.5+Math.sqrt(R*R
 for(let j=0;j<=N;j++){const z=z0+c*j/N;j?shape.lineTo(z,arc(z)):shape.moveTo(z,arc(z));}for(let j=N;j>=0;j--){const z=z0+c*j/N;shape.lineTo(z,arc(z)+.05);}
 const shell=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:L+.24,bevelEnabled:false}),palette.roof);shell.rotation.y=-Math.PI/2;shell.position.x=L+.12;shell.receiveShadow=true;vault.add(shell);}
 // Aparatos y cama: referencias esquemáticas del modelo de terraza, no diseños de fabricación.
-[[.6,.9,.8,1.7,.45,.4,'white'],[.42,.18,.6,1.7,.82,.4,'water'],[.67,.97,.652,1.665,.485,1.33,'white'],[.01,.3,.3,1.325,.55,1.33,'dark'],[1.2,.04,.9,2.72,.02,.45,'water'],[.6,1.9,.02,2.42,.97,.9,'glass'],[.6,1.9,.02,3.02,.97,.87,'glass'],[1.2,.03,.05,2.72,1.935,.885,'dark'],[.556,.4,.368,2.578,.2,1.26,'white'],[.18,.634,.368,2.21,.317,1.26,'white'],[2,.45,1.6,4.52,.23,1.44,'bed'],[.08,.95,1.6,3.48,.48,1.44,'wood'],[.45,.12,.65,3.8,.52,1.04,'white'],[.45,.12,.65,3.8,.52,1.84,'white'],[.556,1.685,.67,9.21,.8425,.34,'white']].forEach(a=>box(furnishings,...a.slice(0,6),palette[a[6]]));
+[[.6,.9,.8,1.7,.45,.4,'white'],[.42,.18,.6,1.7,.82,.4,'water'],[.67,.97,.652,1.665,.485,1.33,'white'],[.01,.3,.3,1.325,.55,1.33,'dark'],[2,.45,1.6,4.52,.23,1.44,'bed'],[.08,.95,1.6,3.48,.48,1.44,'wood'],[.45,.12,.65,3.8,.52,1.04,'white'],[.45,.12,.65,3.8,.52,1.84,'white'],[.556,1.685,.67,9.21,.8425,.34,'white']].forEach(a=>box(furnishings,...a.slice(0,6),palette[a[6]]));
+// El vidrio y el sanitario se referencian al piso elevado del baño.
+const bathroomFixtures=group(furnishings);
+bathroomFixtures.position.y=bathroomFloor.level;
+for(const [w,h,d,x,y,z,material] of [
+ [.6,1.9,.02,2.42,.95,.9,'glass'],[.6,1.9,.02,3.02,.95,.87,'glass'],
+ [1.2,.03,.05,2.72,1.915,.885,'dark'],
+ [.556,.4,.368,2.578,.2,1.26,'white'],[.18,.634,.368,2.21,.317,1.26,'white']
+])box(bathroomFixtures,w,h,d,x,y,z,palette[material]);
 // Sala exterior: accesorios de ambientación según la imagen de referencia, sin diseño de fabricación.
 function piece(x,z,rot,parts){const g=group(furnishings);g.position.set(x,0,z);g.rotation.y=rot;parts.forEach(a=>box(g,...a.slice(0,6),palette[a[6]]));return g;}
 function disc(parent,r,h,x,y,z,m){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,32),m);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -374,7 +416,7 @@ function build(i){const m=i.type==='kitchen'?window.EspaciosModels.kitchenPropos
 function rebuildAll(){setDoors(state.room.doors);foldingDoor.setOpen(state.room.foldingDoor);models.forEach(m=>dispose(m.outer));models.clear();for(const i of state.items)build(i);}
 function item(){return state.items.find(i=>i.id===state.selected);}
 function transform(){
- for(const i of state.items){const m=models.get(i.id),active=state.mode==='item'&&i.id===state.selected;(active?solo:room).add(m.outer);m.outer.visible=active?true:state.mode==='room'&&i.visible;if(i.type==='kitchen')m.setLed?.(state.room.kitchenLed);if(i.type==='closet'){m.setLed?.(state.room.closetLed);}m.outer.position.set(active?0:i.x/100,0,active?0:i.z/100);m.outer.rotation.y=active?0:i.rotation*Math.PI/180;}
+ for(const i of state.items){const m=models.get(i.id),active=state.mode==='item'&&i.id===state.selected;(active?solo:room).add(m.outer);m.outer.visible=active?true:state.mode==='room'&&i.visible;if(i.type==='kitchen')m.setLed?.(state.room.kitchenLed);if(i.type==='closet'){m.setLed?.(state.room.closetLed);}const x=i.x/100,z=i.z/100;const raised=!active&&i.type==='bathroom'&&x>=bathroomFloor.x0&&x<=bathroomFloor.x1&&z>=bathroomFloor.z0&&z<=bathroomFloor.z1;m.outer.position.set(active?0:x,raised?bathroomFloor.level:0,active?0:z);m.outer.rotation.y=active?0:i.rotation*Math.PI/180;}
  room.visible=state.mode==='room';solo.visible=state.mode==='item';stageFloor.visible=state.mode==='item';
  architecture.visible=state.room.architecture;roof.visible=state.room.roof;vault.visible=state.room.vault;furnishings.visible=state.room.furnishings;labels.visible=state.room.labels;
  if(selectionBox){scene.remove(selectionBox);selectionBox.geometry.dispose();selectionBox.material.dispose();selectionBox=null;}
