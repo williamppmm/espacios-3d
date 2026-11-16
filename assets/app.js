@@ -31,7 +31,10 @@ function validate(v){
  if(!v.room||!finite(v.room.wallHeight,.9,2.5)||['roof','architecture','furnishings','labels'].some(k=>typeof v.room[k]!=='boolean'))throw Error('Opciones de terraza inválidas.');
  return {schema:'espacios-3d',version:1,name:v.name==='Terraza Cartagena'?'Terraza Cali':v.name,mode:v.mode,selected:ids.has(v.selected)?v.selected:items[0]?.id||null,room:{wallHeight:v.room.wallHeight,doors:finite(v.room.doors,0,1)?v.room.doors:1,foldingDoor:finite(v.room.foldingDoor,0,1)?v.room.foldingDoor:1,roof:v.room.roof,vault:typeof v.room.vault==='boolean'?v.room.vault:false,architecture:v.room.architecture,furnishings:v.room.furnishings,labels:v.room.labels,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:v.room.windowDesign===WINDOW_DESIGN?(PROPOSALS.includes(v.room.proposal)?v.room.proposal:''):'pino',windowDesign:WINDOW_DESIGN,kitchenLed:v.room.kitchenLed===true,closetLed:v.room.closetLed===true},items};
 }
-let state=initial(),storageNotice='';try{const raw=localStorage.getItem(KEY);if(raw)state=validate(JSON.parse(raw));}catch(e){storageNotice='No se pudo recuperar el guardado anterior. Puedes abrir un proyecto descargado.';}
+const quick=document.documentElement.dataset.vista==='rapida';
+let state=initial(),storageNotice='';
+if(quick){state.mode='item';}
+else{try{const raw=localStorage.getItem(KEY);if(raw)state=validate(JSON.parse(raw));}catch(e){storageNotice='No se pudo recuperar el guardado anterior. Puedes abrir un proyecto descargado.';}}
 let renderer,scene,camera,controls,room,models=new Map(),solo,stageFloor,selectionBox;
 const stage=$('stage'),THREE=window.THREE;
 window.addEventListener('espacios-movement-blocked',e=>{$('warnings').textContent=e.detail;});
@@ -426,14 +429,40 @@ function transform(){
  room.visible=state.mode==='room';solo.visible=state.mode==='item';stageFloor.visible=state.mode==='item';
  architecture.visible=state.room.architecture;roof.visible=state.room.roof;vault.visible=state.room.vault;furnishings.visible=state.room.furnishings;labels.visible=state.room.labels;
  if(selectionBox){scene.remove(selectionBox);selectionBox.geometry.dispose();selectionBox.material.dispose();selectionBox=null;}
- const current=item();if(current&&(state.mode==='item'||current.visible)){selectionBox=new THREE.BoxHelper(models.get(current.id).outer,0x698158);selectionBox.material.transparent=true;selectionBox.material.opacity=.5;scene.add(selectionBox);}
+ const current=item();if(!quick&&current&&(state.mode==='item'||current.visible)){selectionBox=new THREE.BoxHelper(models.get(current.id).outer,0x698158);selectionBox.material.transparent=true;selectionBox.material.opacity=.5;scene.add(selectionBox);}
  warn();
 }
 function footprint(i){const r=i.rotation*Math.PI/180,w=i.w/100,d=i.d/100;return [[0,0],[w,0],[w,d],[0,d]].map(([x,z])=>[i.x/100+x*Math.cos(r)+z*Math.sin(r),i.z/100-x*Math.sin(r)+z*Math.cos(r)]);}
-function warn(){if(state.mode!=='room'){$('warnings').textContent='';return;}const notes=['Ubicación propuesta: la cocina de 260 cm ocupa el muro transversal de 3 m; reemplaza el mesón esquemático de 210 cm del plano.'];if(state.room.proposal)notes.push('Confirmar con el gasista la ventilación permanente de la cocina con el ventanal y la puerta plegable instalados.');for(const i of state.items.filter(i=>i.visible)){const p=footprint(i),xs=p.map(p=>p[0]),zs=p.map(p=>p[1]),b={minX:Math.min(...xs),maxX:Math.max(...xs),minZ:Math.min(...zs),maxZ:Math.max(...zs)};if(p.some(([x,z])=>x<-.005||x>L+.005||z<-.005||z>W+.005))notes.push(i.name+': sale del perímetro de la terraza.');for(const pit of pits)if(b.maxX>pit.x1+.005&&b.minX<pit.x2-.005&&b.maxZ>pit.z1+.005&&b.minZ<pit.z2-.005)notes.push(i.name+': revisa su ubicación sobre el vacío de un patio.');} scene.updateMatrixWorld(true);const doorBoxes=[];buildingDoors[1].traverse(o=>{if(o.isMesh)doorBoxes.push(new THREE.Box3().setFromObject(o));});for(const i of state.items.filter(i=>i.visible&&i.type==='closet')){const closetBox=new THREE.Box3().setFromObject(models.get(i.id).outer);if(doorBoxes.some(db=>{const overlap=closetBox.clone().intersect(db);if(overlap.isEmpty())return false;const size=overlap.getSize(new THREE.Vector3());return Math.min(size.x,size.y,size.z)>.005;}))notes.push(i.name+': el lado derecho se utiliza con la puerta de habitación cerrada, según el usuario. El giro dibujado cruza el clóset: comprobar el ángulo y tope reales para distinguir acceso tapado de contacto físico.');} $('warnings').textContent=notes.join(' ');}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('save-state').textContent='Guardado en este navegador · '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});}catch(e){$('save-state').textContent='No se pudo guardar aquí. Usa Descargar proyecto para conservar tus cambios.';}}
+function warn(){if(quick||state.mode!=='room'){$('warnings').textContent='';return;}const notes=['Ubicación propuesta: la cocina de 260 cm ocupa el muro transversal de 3 m; reemplaza el mesón esquemático de 210 cm del plano.'];if(state.room.proposal)notes.push('Confirmar con el gasista la ventilación permanente de la cocina con el ventanal y la puerta plegable instalados.');for(const i of state.items.filter(i=>i.visible)){const p=footprint(i),xs=p.map(p=>p[0]),zs=p.map(p=>p[1]),b={minX:Math.min(...xs),maxX:Math.max(...xs),minZ:Math.min(...zs),maxZ:Math.max(...zs)};if(p.some(([x,z])=>x<-.005||x>L+.005||z<-.005||z>W+.005))notes.push(i.name+': sale del perímetro de la terraza.');for(const pit of pits)if(b.maxX>pit.x1+.005&&b.minX<pit.x2-.005&&b.maxZ>pit.z1+.005&&b.minZ<pit.z2-.005)notes.push(i.name+': revisa su ubicación sobre el vacío de un patio.');} scene.updateMatrixWorld(true);const doorBoxes=[];buildingDoors[1].traverse(o=>{if(o.isMesh)doorBoxes.push(new THREE.Box3().setFromObject(o));});for(const i of state.items.filter(i=>i.visible&&i.type==='closet')){const closetBox=new THREE.Box3().setFromObject(models.get(i.id).outer);if(doorBoxes.some(db=>{const overlap=closetBox.clone().intersect(db);if(overlap.isEmpty())return false;const size=overlap.getSize(new THREE.Vector3());return Math.min(size.x,size.y,size.z)>.005;}))notes.push(i.name+': el lado derecho se utiliza con la puerta de habitación cerrada, según el usuario. El giro dibujado cruza el clóset: comprobar el ángulo y tope reales para distinguir acceso tapado de contacto físico.');} $('warnings').textContent=notes.join(' ');}
+function save(){if(quick)return;try{localStorage.setItem(KEY,JSON.stringify(state));$('save-state').textContent='Guardado en este navegador · '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});}catch(e){$('save-state').textContent='No se pudo guardar aquí. Usa Descargar proyecto para conservar tus cambios.';}}
 // En el muro transversal (giro 90°), el origen coincide con el extremo izquierdo del mesón.
 function detailURL(i,v){const q=new URLSearchParams();if(i.type==='kitchen'){if(((i.rotation%360)+360)%360===90)q.set('medianera',i.z);if(state.room.kitchenLed)q.set('led','1');}if(i.type==='closet'){if(state.room.closetLed)q.set('led','1');}return v.viewer+(q.toString()?'?'+q:'');}
+const cm=new Intl.NumberFormat('es-CO',{maximumFractionDigits:1});
+function renderQuick(i){
+ const inRoom=state.mode==='room';
+ for(const button of $('quick-items').querySelectorAll('button')){
+  button.setAttribute('aria-pressed',String(button.dataset.quick===(inRoom?'room':i?.type)));
+ }
+ const panel=$('quick-dimensions');
+ panel.hidden=inRoom||!i;
+ if(panel.hidden)return;
+ const link=$('quick-model-link');
+ link.href=detailURL(i,variantOf(i));
+ const dimensions=(...values)=>values.map(mm=>cm.format(mm/10)).join(' × ')+' cm';
+ let rows;
+ if(i.type==='kitchen'){
+  rows=window.CocinaPropuestaData.modules.map(m=>[m.id+' · '+m.name.replace(/ [0-9,.]+$/,''),dimensions(m.w,m.d,m.h)]);
+ }else if(i.type==='closet'){
+  rows=window.ClosetCompactData.bays.map((bay,index)=>[index?'Cuerpo derecho':'Cuerpo izquierdo',dimensions(bay.w)+' de ancho útil']);
+ }else{
+  const b=window.BanoData.installation;
+  rows=[['Mueble inferior',dimensions(b.bodyW,b.bodyD,b.bodyH)],['Gabinete con espejo',dimensions(b.mirrorW,b.mirrorD,b.mirrorH)]];
+ }
+ $('quick-modules').replaceChildren(...rows.map(([name,size])=>{
+  const block=document.createElement('div'),label=document.createElement('dt'),value=document.createElement('dd');
+  label.textContent=name;value.textContent=size;block.append(label,value);return block;
+ }));
+}
 function renderUI(){
  $('project-name').value=state.name;$('items').replaceChildren();for(const i of state.items){const b=document.createElement('button');b.className='item';b.setAttribute('aria-pressed',String(i.id===state.selected));const dot=document.createElement('span');dot.className='dot';const text=document.createElement('span');text.textContent=i.name;const sm=document.createElement('small');sm.textContent=`${i.w} × ${i.d} × ${i.h} cm${i.visible?'':' · oculto'}`;text.append(sm);b.append(dot,text);b.onclick=()=>{state.selected=i.id;transform();renderUI();if(state.mode==='item')view('general');save();};$('items').append(b);}
  const i=item();$('selected-title').textContent=i?.name||'Sin mueble seleccionado';for(const k of ['item-name','w','d','h','x','z','rotation','visible','openness','remove'])$(k).disabled=!i;
@@ -442,7 +471,12 @@ function renderUI(){
  const detailVariant=i&&variantOf(i);$('despiece-link').hidden=!detailVariant?.despiece;$('detail-links').hidden=!detailVariant?.viewer;if(detailVariant?.viewer){$('viewer-link').href=detailURL(i,detailVariant);if(detailVariant.despiece)$('despiece-link').href=detailVariant.despiece;$('viewer-link').textContent='Abrir visor detallado · '+i.w+' cm ↗';}
  $('placement').hidden=state.mode!=='room';$('zone-bar').hidden=state.mode!=='room';renderCatalog();$('room-options').hidden=state.mode!=='room';$('open-label').hidden=!i||i.type==='shelf';
  $('mode-room').setAttribute('aria-pressed',state.mode==='room');$('mode-item').setAttribute('aria-pressed',state.mode==='item');$('wall-height').value=state.room.wallHeight;$('doors').value=state.room.doors;$('folding-door').value=state.room.foldingDoor;$('wall-height-value').textContent=state.room.wallHeight.toFixed(2).replace('.',',')+' m';for(const k of ['roof','vault','architecture','furnishings','labels'])$(k).checked=state.room[k];$('kitchen-led').checked=state.room.kitchenLed===true;$('closet-led').checked=state.room.closetLed===true;$('proposal').value=state.room.proposal||'';proposalUI();
- $('canvas-label').replaceChildren();$('canvas-label').append(document.createTextNode(state.mode==='room'?state.name.toUpperCase():i?.name.toUpperCase()||'SIN MUEBLES'));const sp=document.createElement('span');sp.textContent=state.mode==='room'?'5,75 × 20,30 m':i?`${i.w} × ${i.d} × ${i.h} cm`:'Añade un diseño para empezar';$('canvas-label').append(sp);$('scene-status').textContent=state.mode==='room'?'Terraza del plano compartido':i?.type==='kitchen'?'Cocina del despiece actual':i?.type==='closet'?'Clóset · medidas de empotramiento por comprobar':i?.type==='bathroom'?'Baño · lavamanos y espejo':'Referencia visual editable';
+ $('canvas-label').replaceChildren();$('canvas-label').append(document.createTextNode(state.mode==='room'?state.name.toUpperCase():i?.name.toUpperCase()||'SIN MUEBLES'));const sp=document.createElement('span');sp.textContent=state.mode==='room'?'5,75 × 20,30 m':i?`${i.w} × ${i.d} × ${i.h} cm`:'Añade un diseño para empezar';$('canvas-label').append(sp);if(quick){sp.textContent=quickDimensionsText(i);renderQuick(i);}$('scene-status').textContent=state.mode==='room'?'Terraza del plano compartido':i?.type==='kitchen'?'Cocina del despiece actual':i?.type==='closet'?'Clóset · medidas de empotramiento por comprobar':i?.type==='bathroom'?'Baño · lavamanos y espejo':'Referencia visual editable';
+}
+function quickDimensionsText(i){
+ if(state.mode==='room')return '5,75 × 20,30 m';
+ if(i?.type==='closet'){ const {w,d,h}=window.ClosetCompactData.bodyDimensions;return `${cm.format(w)} × ${cm.format(d)} × ${cm.format(h)} cm · cuerpo`; }
+ return i?`${cm.format(i.w)} × ${cm.format(i.d)} × ${cm.format(i.h)} cm · ancho × fondo × alto`:'';
 }
 // Accesos a cada espacio: [objetivo, cámara], mirando por encima del muro del frente.
 const zones={foldingDoor:[[8.5,1.2,3],[10.7,2.8,6.5]],bath:[[2.72,1,1.1],[2.94,4.5,3.55]],bedroom:[[5.41,.6,1.44],[5.7,5.4,5.6]],kitchen:[[8.5,.8,1.4],[9.6,3.4,5.2]],proposal:[[9.3,1.4,1.5],[13.4,2.8,5.4]],laundry:[[1.2,.6,1.3],[1.6,3.6,4.9]],lounge:[[15,.4,3.1],[15.2,7.5,11.5]]};
@@ -452,12 +486,24 @@ let viewName='general';function view(name){viewName=name;flight=null;
  if(zones[name])viewName=name='general';const single=state.mode==='item',i=item(),w=(i?.w||260)/100,h=(i?.h||kitchenHeight)/100,d=(i?.d||62)/100;const target=single?new THREE.Vector3(w/2,h*.45,d/2):new THREE.Vector3(9.6,.4,2.7);let p;
  if(single){const dist=Math.max(w,h,d)*1.8;p=name==='top'?[w/2,dist*1.4,d/2+.001]:name==='front'?[w/2,h*.5,dist]:[w/2+dist*.65,h*.65+dist*.45,d/2+dist*.85];controls.minDistance=.5;}else{p=name==='top'?[L/2,29,W/2+.001]:name==='entrance'?[19.6,1.65,4.6]:name==='front'?[10.15,9,18]:[23,16,19];if(name==='entrance')target.set(5,1.2,1.6);controls.minDistance=1;}
  if(single&&i?.type==='bathroom'){target.y+=.26;p[1]+=.26;}
+ if(quick&&single&&i){
+  const center=new THREE.Box3().setFromObject(models.get(i.id).outer).getCenter(new THREE.Vector3());
+  const shift=center.clone().sub(target);
+  target.copy(center);p=p.map((v,k)=>v+shift.getComponent(k));
+ }
  controls.target.copy(target);camera.position.set(...p);controls.update();
  // Ajusta el encuadre al aspecto real del lienzo, también en iPad vertical.
  if(name!=='entrance'){
   const bounds=single&&i?new THREE.Box3().setFromObject(models.get(i.id).outer):new THREE.Box3(new THREE.Vector3(-.12,0,-.12),new THREE.Vector3(L+.12,2.65,W+.12));
   const corners=[];for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z])corners.push(new THREE.Vector3(x,y,z));
-  for(let n=0;n<8;n++){camera.updateMatrixWorld();const extent=Math.max(...corners.map(c=>{const q=c.clone().project(camera);return Math.max(Math.abs(q.x),Math.abs(q.y));}));if(extent<.88)break;camera.position.sub(target).multiplyScalar(extent/.84).add(target);controls.update();}
+  for(let n=0;n<8;n++){camera.updateMatrixWorld();const extent=Math.max(...corners.map(c=>{const q=c.clone().project(camera);return Math.max(Math.abs(q.x),Math.abs(q.y));}));if(quick&&single&&i){
+   if(Math.abs(extent-.76)<.025)break;
+   camera.position.sub(target).multiplyScalar(Math.max(.65,Math.min(1.5,extent/.76))).add(target);
+  }else{
+   if(extent<.88)break;
+   camera.position.sub(target).multiplyScalar(extent/.84).add(target);
+  }
+  controls.update();}
  }
  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));
 }
@@ -467,6 +513,25 @@ function renderFullscreenBar(){const bar=$('fs-bar');if(!bar)return;bar.replaceC
  const chips=[['Terraza completa',state.mode==='room',()=>focusOn('room',null,'general')],...state.items.map(i=>[i.type==='kitchen'?'Cocina':i.type==='bathroom'?'Baño':i.type==='closet'&&closets===1?'Clóset':i.name,state.mode==='item'&&i.id===state.selected,()=>focusOn('item',i.id,'general')])];
  for(const [txt,on,fn] of chips){const b=document.createElement('button');b.type='button';b.textContent=txt;b.setAttribute('aria-pressed',String(on));b.onclick=fn;bar.append(b);}}
 window.addEventListener('espacios-fullscreen',renderFullscreenBar);
+if(quick){
+ for(const button of $('quick-items').querySelectorAll('button')){
+  button.onclick=()=>{
+   const type=button.dataset.quick;
+   const furniture=state.items.find(i=>i.type===type);
+   if(type==='room')focusOn('room',null,'general');
+   else if(furniture)focusOn('item',furniture.id,'general');
+  };
+ }
+ function zoom(factor){
+  flight=null;
+  const offset=camera.position.clone().sub(controls.target);
+  const distance=THREE.MathUtils.clamp(offset.length()*factor,controls.minDistance,controls.maxDistance);
+  camera.position.copy(controls.target).add(offset.setLength(distance));
+  controls.update();
+ }
+ $('quick-zoom-in').onclick=()=>zoom(.8);
+ $('quick-zoom-out').onclick=()=>zoom(1.25);
+}
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},60000);}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset.view));$('fit').onclick=()=>view(viewName);
 for(const mode of ['room','item'])$('mode-'+mode).onclick=()=>{state.mode=mode;transform();renderUI();view('general');save();};

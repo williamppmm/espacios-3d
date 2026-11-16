@@ -26,3 +26,49 @@
 .viewer #detail-links #viewer-link{order:-1;background:var(--ink);border-color:var(--ink);color:white}
 .viewer #detail-links .detail-link:hover{text-decoration:underline}
 #stage.fs-on #canvas-label{top:max(80px,calc(env(safe-area-inset-top) + 66px))}
+
+/* Vista de presentación. La vista detallada conserva la distribución del editor. */
+[data-vista=detallada] .quick-only,
+[data-vista=rapida] .detailed-only,
+[data-vista=rapida] :is(.intro,.library,.inspector,.top nav,.brand small,.viewer-bottom,.drawing-note,#warnings,#detail-links,#zone-bar,main>footer,[data-view=entrance]){display:none}
+.view-switch{display:inline-flex;align-items:center;white-space:nowrap;min-height:44px;padding:10px 15px;border-radius:8px;background:var(--ink);color:#fff;font-size:13px}
+[data-vista=detallada] .top{gap:16px;flex-wrap:wrap}
+[data-vista=detallada] .top nav{flex-wrap:wrap}
+[data-vista=rapida] .top{padding:11px clamp(14px,3vw,44px)}
+[data-vista=rapida] .brand .mark{font-size:23px;padding:3px 5px}
+[data-vista=rapida] main{padding:15px clamp(12px,3vw,44px) 20px}
+[data-vista=rapida] .workspace{display:block}
+.quick-project{display:flex;align-items:center;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;margin-bottom:10px}
+.quick-project h1{font-size:clamp(25px,3vw,38px);letter-spacing:-.65px}
+.quick-project nav{display:flex;gap:4px;flex-wrap:wrap}
+.quick-project button{min-height:44px;font-size:13px}
+[data-vista=rapida] .view-toolbar{padding-bottom:6px}
+[data-vista=rapida] .view-toolbar button{min-height:42px;font-size:12px}
+[data-vista=rapida] #stage{height:calc(100vh - 225px);height:calc(100svh - 225px);min-height:385px;max-height:none;background:#e7ece8}
+[data-vista=rapida] #canvas-label{top:12px;left:12px;right:120px;text-wrap:balance;font-weight:bold;letter-spacing:.06em;font-size:11px}
+[data-vista=rapida] #canvas-label span{font-weight:normal;font-size:12px;line-height:1.35;margin-top:4px}
+[data-vista=rapida] #stage.fs-on #canvas-label{top:max(80px,calc(env(safe-area-inset-top) + 66px))}
+[data-vista=rapida] .gesture{display:none}
+.quick-zoom{position:absolute;right:14px;bottom:14px;z-index:4;display:flex;gap:5px}
+.quick-zoom button{width:46px;min-height:46px;padding:0;line-height:1;font-size:24px;background:#fffefaee;box-shadow:0 1px 5px #253b351a}
+#stage.fs-on .quick-zoom{right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom))}
+.quick-dimensions{padding:10px 0 0}
+.quick-dimensions-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.quick-dimensions h2{font-size:13px;margin:0}
+.quick-dimensions-top a{font-size:12px;text-decoration:underline}
+#quick-modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:5px;margin:0}
+#quick-modules div{border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--white)}
+#quick-modules dt{font-size:11px;color:var(--muted)}
+#quick-modules dd{font-size:12px;font-weight:bold;margin:4px 0 0;font-variant-numeric:tabular-nums}
+@media(max-width:650px){
+ [data-vista=rapida] .top{padding-block:8px}
+ [data-vista=rapida] main{padding-top:10px}
+ [data-vista=rapida] #stage{min-height:330px;height:calc(100svh - 235px)}
+ [data-vista=rapida] .quick-project{display:block}
+ .quick-project nav{margin-top:8px}
+ .quick-project button{flex:1;padding-inline:6px}
+ [data-vista=rapida] .fs-open{width:44px;padding:0;justify-content:center;font-size:0}
+ [data-vista=rapida] .fs-open b{font-size:21px}
+ [data-vista=rapida] #canvas-label{right:65px}
+ #quick-modules{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
