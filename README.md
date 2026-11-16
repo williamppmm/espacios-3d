@@ -34,7 +34,7 @@ Mesón 260 × 62 cm. Módulos bajos 18 + 60 + 67 + 70 + 40 cm:
 - **B3 (67 cm):** cajón cubiertero (riel HRE550-55N) y dos puertas con entrepaño.
 - **B5 (70 cm):** lavaplatos Socoda AS350 de submontar; entrepaño desmontable con recorte de sifón en obra.
 - **B4 (40 cm):** puerta superior y basurero extraíble HSO688-00 sobre bastidor provisional (P072–P074) con riel HRE126-55.
-- **S2 sobre la campana (45 cm de alto):** deja 15 cm libres para la campana Tofu 60 (84 mm de chasis y 94 mm con vidrio según ficha; soporte al mueble por definir). Puerta abatible de 447 × 597 hacia arriba con dos brazos HEC060-03 y faja de agarre fija P071, cortada de un retal. Las demás puertas altas sobresalen 2 cm por debajo como agarre.
+- **S2 sobre la campana (45 cm de alto):** deja 15 cm libres para la campana Tofu 60 (84 mm de chasis y 94 mm con vidrio según ficha; soporte al mueble por definir). Puerta abatible de 447 × 597 hacia arriba con dos brazos HEC060-03 y faja de agarre fija P071, pedida a 70 mm y rebajada a 60 en el armado. Las demás puertas altas sobresalen 2 cm por debajo como agarre.
 - **Golas:** superior y media; los rebajes en laterales y travesaños se hacen en el armado, cuando se defina el borde del granito.
 
 88 piezas RH15 y 9 fondos de 6 mm; caben en 4 láminas RH15 y 1 de fondo (prueba de factibilidad; el plano de corte lo define el proveedor).
@@ -57,7 +57,7 @@ Puerta de habitación de 90 cm con eje a 52 cm del muro posterior; el ancho de 1
 | Cantos | Metros netos por mueble y compra conjunta revisada: 61 m rígidos y 186 m flexibles con reservas; caben en 1 rollo rígido de 100 m y 1 flexible de 200 m |
 | Compras | Lista consolidada; las bisagras HBM897-01 de cocina y baño se compran juntas |
 | Bloqueos | Lo que impide cortar: hoy solo confirmar en obra el eje de la puerta de la habitación (ancho del clóset) |
-| En el armado | Piezas que no se piden (faja P071 de la campana y bastidor del basurero P072–P074, de un sobrante), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
+| En el armado | Piezas que no se piden (bastidor provisional del basurero P072–P074, de un sobrante), piezas de menos de 70 mm con canto pedidas a 70, el mínimo del optimizador de Madecentro, para que vengan canteadas de fábrica, y rebajadas en el armado (faja P071 a 60, refuerzos C3-019 a 40; sin canto saldrían de un retal), recortes de sobremedida, rebajes de gola, corte diagonal de B06 y recortes en obra |
 
 El espejo, el retal de granito y el mesón son de otros proveedores; lavamanos, grifería y equipos se eligen aparte.
 
