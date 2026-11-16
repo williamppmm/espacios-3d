@@ -31,6 +31,9 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  }
  for(const x of [465,955])box([x-15,x+15,295,326,D.upperTop-22,D.upperTop-15],'inox','S2',groups.uppers);
  const E=groups.equip,C=groups.counter;
+ const upperFloor=D.parts.find(p=>p.id==='P052').placements[0][4];
+ const hoodBaseTop=D.parts.find(p=>p.id==='P075').placements[0][5];
+ const raised=upperFloor-1450;
  // Mesón: abertura ilustrativa de lavaplatos 490 × 370; el corte final requiere plantilla.
  for(const a of [[200,1785,0,620,885,900],[2275,2800,0,620,885,900],[1785,2275,0,125,885,900],[1785,2275,495,620,885,900]])box(a,'stone',null,C);
  // Cubeta de 165 mm y pestaña exterior 550 × 430 situada bajo la placa.
@@ -44,7 +47,7 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  // Fijación superior a P075, apoyada por P076; se marca con la campana real.
  for(const a of D.hoodMount.hoodBounds)box(a,'black','S2',E);
  // Cuatro escuadras entre base y apoyos, sólo referencia visual; seleccionar fijaciones reales.
- for(const x of [440,965])for(const z of [35,245]){box([x,x+15,z,z+20,1670,1673],'inox','S2',groups.uppers);const v=x===440?x:x+12;box([v,v+3,z,z+20,1670,1690],'inox','S2',groups.uppers);}
+ for(const x of [440,965])for(const z of [35,245]){box([x,x+15,z,z+20,hoodBaseTop,hoodBaseTop+3],'inox','S2',groups.uppers);const v=x===440?x:x+12;box([v,v+3,z,z+20,hoodBaseTop,hoodBaseTop+20],'inox','S2',groups.uppers);}
  // Cubiertero removible.
  box([1053.5,1413.5,56,536,690,740],'dark','B3',moving['B3-cajon']);
  // Condimentero: cestas 100 × 446 × 470 y rieles laterales izquierdos; conjunto de 135 mm (medido por el usuario) dentro de 150 mm libres.
@@ -58,8 +61,8 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  // Desagüe esquemático en rebaje del entrepaño; no son cotas para instalaciones.
  box([2020,2040,116,136,330,680],'grey','B5',E);box([2020,2040,116,320,670,690],'grey','B5',E);
  // Platero existente conservado.
- box([1682.5,2362.5,40,285,1700,1712],'inox','S4',groups.uppers);box([1682.5,2362.5,40,285,1480,1495],'dark','S4',groups.uppers);
- for(let i=0;i<8;i++){const plate=new THREE.Mesh(new THREE.CylinderGeometry(.115,.115,.012,28),mats.plate);plate.rotation.z=Math.PI/2;plate.position.set(1.74+i*.045,1.83,.17);groups.uppers.add(plate);}
+ box([1682.5,2362.5,40,285,1700+raised,1712+raised],'inox','S4',groups.uppers);box([1682.5,2362.5,40,285,1480+raised,1495+raised],'dark','S4',groups.uppers);
+ for(let i=0;i<8;i++){const plate=new THREE.Mesh(new THREE.CylinderGeometry(.115,.115,.012,28),mats.plate);plate.rotation.z=Math.PI/2;plate.position.set(1.74+i*.045,(1830+raised)/1000,.17);groups.uppers.add(plate);}
  // Escurridor sobre mesón: referencia de 375 × 400, sin modelo comercial seleccionado.
  box([2392.5,2767.5,100,500,901,906],'grey','B4',E);for(let j=0;j<10;j++)box([2410+j*35,2413+j*35,120,480,920,925],'inox','B4',E);
  for(let j=0;j<4;j++){const plate=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.007,24),mats.plate);plate.rotation.z=Math.PI/2;plate.position.set(2.48+j*.045,1.005,.3);E.add(plate);}
@@ -89,9 +92,9 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  // LED opcional: esquema de perfil empotrado bajo P052, no un mecanizado de fabricación.
  // Eje a 30 mm del borde frontal; ancho/profundidad solo se definen con el perfil real.
  const led=new THREE.Group();led.name='led-opcional-S3-S5';led.visible=false;groups.uppers.add(led);groups.led=led;
- const trim=new THREE.Mesh(new THREE.BoxGeometry(1.74,.0006,.018),new THREE.MeshStandardMaterial({color:0xaeb8bb,metalness:.7,roughness:.4}));trim.position.set(1.895,1.4496,.296);trim.name='perfil-led-referencia';led.add(trim);
- const diffuser=new THREE.Mesh(new THREE.BoxGeometry(1.73,.0006,.010),new THREE.MeshStandardMaterial({color:0xfff2d5,emissive:0xffd49c,emissiveIntensity:1.6,roughness:.8}));diffuser.position.set(1.895,1.4491,.296);diffuser.name='difusor-led-calido';led.add(diffuser);
- for(const x of [1.24,1.67,2.10,2.53]){const light=new THREE.SpotLight(0xffdbad,2.2,1.3,Math.PI/3,.65,1.5);light.position.set(x,1.44,.296);light.target.position.set(x,.9,.40);led.add(light,light.target);}
+ const trim=new THREE.Mesh(new THREE.BoxGeometry(1.74,.0006,.018),new THREE.MeshStandardMaterial({color:0xaeb8bb,metalness:.7,roughness:.4}));trim.position.set(1.895,(upperFloor-.4)/1000,.296);trim.name='perfil-led-referencia';led.add(trim);
+ const diffuser=new THREE.Mesh(new THREE.BoxGeometry(1.73,.0006,.010),new THREE.MeshStandardMaterial({color:0xfff2d5,emissive:0xffd49c,emissiveIntensity:1.6,roughness:.8}));diffuser.position.set(1.895,(upperFloor-.9)/1000,.296);diffuser.name='difusor-led-calido';led.add(diffuser);
+ for(const x of [1.24,1.67,2.10,2.53]){const light=new THREE.SpotLight(0xffdbad,2.2,1.3,Math.PI/3,.65,1.5);light.position.set(x,(upperFloor-10)/1000,.296);light.target.position.set(x,.9,.40);led.add(light,light.target);}
  const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?D.upperTop-m.h:100,m.id[0]==='S'?D.upperTop:885]}]));
  return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:D.upperTop/10},
   setOpen(t){movers.forEach(u=>{u.t=u.target=t;u.apply(t);});},

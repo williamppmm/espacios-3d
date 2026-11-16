@@ -13,13 +13,13 @@ const back=new T.Mesh(new T.PlaneGeometry(3,2.5),wall(3,2.5));back.position.set(
 const fmt=n=>n.toLocaleString('es-CO',{maximumFractionDigits:1});
 function label(txt,x,y,z,h=.105){const c=document.createElement('canvas');c.width=768;c.height=128;const g=c.getContext('2d');g.font='500 56px Arial';const w=Math.min(750,g.measureText(txt).width+30);g.fillStyle='rgba(255,253,245,.95)';g.fillRect((768-w)/2,20,w,88);g.strokeStyle='#897755';g.lineWidth=2;g.strokeRect((768-w)/2,20,w,88);g.fillStyle='#252e27';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,384,67);const map=new T.CanvasTexture(c);map.encoding=T.sRGBEncoding;const sprite=new T.Sprite(new T.SpriteMaterial({map,depthTest:false,depthWrite:false}));sprite.position.set(x,y,z);sprite.scale.set(h*6,h,1);sprite.renderOrder=10;sprite.userData.text=txt;labels.add(sprite);}
 for(const m of D.modules)label(fmt(m.w/10),(m.x+m.w/2)/1000-.2,m.id[0]==='S'?(D.upperTop+80)/1000:.04,m.id[0]==='S'?.36:.73,.1);
-const s2=D.modules.find(m=>m.id==='S2'),s2Bottom=(D.upperTop-s2.h)/1000;
-const hoodBottom=s2Bottom-D.hoodMount.cabinetOffset/1000;
-const x=s2.x/1000-.2-.035,z=.47,tick=.025;
-const points=[[x,hoodBottom,z],[x,s2Bottom,z],[x-tick,hoodBottom,z],[x+tick,hoodBottom,z],[x-tick,s2Bottom,z],[x+tick,s2Bottom,z]];
+const upperFloor=D.parts.find(p=>p.id==='P052').placements[0][4]/1000;
+const hoodBase=D.parts.find(p=>p.id==='P075').placements[0][4]/1000;
+const x=.185,z=.47,tick=.025;
+const points=[[x,upperFloor,z],[x,hoodBase,z],[x-tick,upperFloor,z],[x+tick,upperFloor,z],[x-tick,hoodBase,z],[x+tick,hoodBase,z]];
 const measure=new T.LineSegments(new T.BufferGeometry().setFromPoints(points.map(a=>new T.Vector3(...a))),new T.LineBasicMaterial({color:0x3b4941,depthTest:false}));
 measure.renderOrder=9;labels.add(measure);
-label(fmt(D.hoodMount.cabinetOffset/10)+' cm',x-.085,(hoodBottom+s2Bottom)/2,z,.073);
+label(fmt((hoodBase-upperFloor)*100)+' cm',x-.085,(upperFloor+hoodBase)/2,z,.073);
 label('260 cm mesón',1.3,.98,.71,.12);label('muro 3,00 m',corner-1.5,2.42,.04,.12);label('90 cm',-.19,.9,.64,.11);label(fmt((3-corner)*100)+' cm libres',(corner-3)/2,.45,.7,.085);label(fmt(placement-260)+' cm a la esquina',(2.6+corner)/2,.98,.7,.085);label('40 cm · escurridor',2.38,1.18,.51,.1);
 const placementNote=document.createElement('p');placementNote.id='placement-note';placementNote.textContent='Ubicación: '+fmt(placement)+' cm desde medianera · '+fmt(placement-260)+' cm del mesón a la esquina · '+fmt(300-placement)+' cm al extremo opuesto.';stage.after(placementNote);
 window.kitchenPlacement={medianera:placement,corner,wallStart:corner-3,counterStart:0,counterEnd:2.6};
