@@ -9,7 +9,7 @@ window.EspaciosModels.closetOption3=function(T){
  for(const p of data.parts)for(const pose of p.placements){const mesh=box(pose.bounds,wood,pose.move?moving[pose.move]:body);mesh.userData={sec:p.group,role:pose.role,piece:{id:p.id,name:p.name,bounds:pose.bounds,material:'RH15',sec:p.group,move:pose.move}};parts.push(mesh);}
  // Bastidor de pino: el riel cuelga de este listón (encajonado y atornillado a los laterales), no de la tapa.
  const pine=new T.MeshStandardMaterial({color:0xcfa36a,roughness:.85}),extras=[];
- for(const e of (data.extras||[])){const m=box(e.bounds,pine,body);m.userData={sec:e.group,role:'',piece:{id:e.id,name:e.name,bounds:e.bounds,material:e.material,sec:e.group,move:null}};extras.push(m);}
+ for(const e of (data.extras||[])){const m=box(e.bounds,e.material==='Pino'?pine:wood,body);m.userData={sec:e.group,role:'',piece:{id:e.id,name:e.name,bounds:e.bounds,material:e.material,sec:e.group,move:null}};extras.push(m);}
  // Suspensión superior: posiciones de referencia del clóset real. No hay riel de apoyo abajo.
  for(const z of [P.rearLeaf,P.frontLeaf])box([15,1935,P.railY0,P.railY1,z,z+15],metal,hardware);
  const guide=box([965,985,115,120,496,554],dark,hardware);guide.userData.hardware='Guía inferior lateral, sin carga';
