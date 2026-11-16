@@ -20,16 +20,16 @@ window.EspaciosModels.kitchenProposal=function(THREE){
   for(const a of poses){const m=box(a,p.material.includes('6')?'back':'wood',p.module,parent,p.role);if(p.move&&D.moves[p.move].type!=='slide')m.position.sub(parent.position);m.userData.piece=p.id;}
  }
  // S2: dos brazos grises y bisagras en el techo. Posiciones visuales, NO plantilla de taladros.
- const flap=moving['S2-Puerta'],upAxis=new THREE.Vector3(0,1,0),axisX=new THREE.Vector3(1,0,0);
+ const flap=moving['S2-Puerta'],s2=D.modules.find(m=>m.id==='S2'),s2Bottom=D.upperTop-s2.h,upAxis=new THREE.Vector3(0,1,0),axisX=new THREE.Vector3(1,0,0);
  function segmentMesh(radius,kind){const m=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1,12),mats[kind].clone());groups.uppers.add(m);m.userData.mod='S2';all.push(m);return m;}
  function placeSegment(m,a,b){const delta=b.clone().sub(a);m.position.copy(a).add(b).multiplyScalar(.5);m.scale.y=delta.length();m.quaternion.setFromUnitVectors(upAxis,delta.normalize());}
  for(const x of [437,983]){
-  const fixed=new THREE.Vector3(x/1000,1.96,.2),housing=segmentMesh(.007,'grey'),rod=segmentMesh(.0035,'inox');
-  box([x-9,x+9,190,205,1947,1973],'grey','S2',groups.uppers);
+  const fixed=new THREE.Vector3(x/1000,(D.upperTop-190)/1000,.2),housing=segmentMesh(.007,'grey'),rod=segmentMesh(.0035,'inox');
+  box([x-9,x+9,190,205,D.upperTop-203,D.upperTop-177],'grey','S2',groups.uppers);
   const update=()=>{const attachment=new THREE.Vector3(x/1000,-.08,-.012).applyAxisAngle(axisX,flap.rotation.x).add(flap.position);const dir=attachment.clone().sub(fixed).normalize(),join=fixed.clone().addScaledVector(dir,.145);placeSegment(housing,fixed,join);placeSegment(rod,join,attachment);};
   armUpdates.push(update);update();
  }
- for(const x of [465,955])box([x-15,x+15,295,326,2128,2135],'inox','S2',groups.uppers);
+ for(const x of [465,955])box([x-15,x+15,295,326,D.upperTop-22,D.upperTop-15],'inox','S2',groups.uppers);
  const E=groups.equip,C=groups.counter;
  // Mesón: abertura ilustrativa de lavaplatos 490 × 370; el corte final requiere plantilla.
  for(const a of [[200,1785,0,620,885,900],[2275,2800,0,620,885,900],[1785,2275,0,125,885,900],[1785,2275,495,620,885,900]])box(a,'stone',null,C);
@@ -76,14 +76,15 @@ window.EspaciosModels.kitchenProposal=function(THREE){
   const m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)/1000,(y1-y0)/1000,(z1-z0)/1000),mats);m.position.set((x0+x1)/2000,(y0+y1)/2000,(z0+z1)/2000);m.receiveShadow=true;m.userData.mod=null;m.name='salpicadero-ficha';C.add(m);all.push(m);}
  const corner=2800,inner=corner-9;
  tile(1589,inner-2,1,9,0,0,4);tile(387,1587,1,9,.5,.5,4);tile(200,385,1,9,.08,.5,4);tile(inner,corner-1,11,620,.62,0,1);
- // Sobre la estufa la ficha sube hasta S2 (1700), detrás de la campana: recorte 600 × 198.
- tile(410,1010,1,9,.3,.2,4,1502,1700);
- for(const a of [[200,inner,.5,7.5,901,1500],[410,1010,.5,7.5,1500,1700],[inner+1.5,corner-.5,1,620,901,1500]]){const [x0,x1,z0,z1,y0,y1]=a,m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)/1000,(y1-y0)/1000,(z1-z0)/1000),grout);m.position.set((x0+x1)/2000,(y0+y1)/2000,(z0+z1)/2000);m.name='salpicadero-junta';C.add(m);}
+ // Sobre la estufa la ficha sube hasta el canto inferior de S2, detrás de la campana.
+ tile(410,1010,1,9,.3,.2,4,1502,s2Bottom);
+ for(const a of [[200,inner,.5,7.5,901,1500],[410,1010,.5,7.5,1500,s2Bottom],[inner+1.5,corner-.5,1,620,901,1500]]){const [x0,x1,z0,z1,y0,y1]=a,m=new THREE.Mesh(new THREE.BoxGeometry((x1-x0)/1000,(y1-y0)/1000,(z1-z0)/1000),grout);m.position.set((x0+x1)/2000,(y0+y1)/2000,(z0+z1)/2000);m.name='salpicadero-junta';C.add(m);}
  // Perfiles gola por separado de las piezas de melamina.
  for(const [a,b] of [[230,410],[1010,2780]])box([a,b,556,586,810,885],'gola',null);
- box([1010,1680,556,586,615,665],'gola',null);box([2380,2780,556,586,380,430],'gola',null);
+ const mediaBottom=615,mediaTop=665;
+ for(const [a,b] of [[1010,1680],[2380,2780]])box([a,b,556,586,mediaBottom,mediaTop],'gola',null);
  // Fijaciones gola: 8 extremos + 2 intermedias, posición y compatibilidad por validar.
- const golaFixings=[...([240,400,1020,1672.5,2372.5,2770].map(x=>[x,850])),...([1020,1670].map(x=>[x,640])),...([2390,2770].map(x=>[x,405]))];
+ const golaFixings=[...([240,400,1020,1672.5,2372.5,2770].map(x=>[x,850])),...([1020,1670,2390,2770].map(x=>[x,(mediaBottom+mediaTop)/2]))];
  for(const [x,y] of golaFixings){const f=box([x-4,x+4,536,556,y-10,y+10],'inox',x<410?'B1':x<1680?'B3':x<2380?'B5':'B4');f.userData.golaFixing=true;}
  // LED opcional: esquema de perfil empotrado bajo P052, no un mecanizado de fabricación.
  // Eje a 30 mm del borde frontal; ancho/profundidad solo se definen con el perfil real.
@@ -91,8 +92,8 @@ window.EspaciosModels.kitchenProposal=function(THREE){
  const trim=new THREE.Mesh(new THREE.BoxGeometry(1.74,.0006,.018),new THREE.MeshStandardMaterial({color:0xaeb8bb,metalness:.7,roughness:.4}));trim.position.set(1.895,1.4496,.296);trim.name='perfil-led-referencia';led.add(trim);
  const diffuser=new THREE.Mesh(new THREE.BoxGeometry(1.73,.0006,.010),new THREE.MeshStandardMaterial({color:0xfff2d5,emissive:0xffd49c,emissiveIntensity:1.6,roughness:.8}));diffuser.position.set(1.895,1.4491,.296);diffuser.name='difusor-led-calido';led.add(diffuser);
  for(const x of [1.24,1.67,2.10,2.53]){const light=new THREE.SpotLight(0xffdbad,2.2,1.3,Math.PI/3,.65,1.5);light.position.set(x,1.44,.296);light.target.position.set(x,.9,.40);led.add(light,light.target);}
- const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?2150-m.h:100,m.id[0]==='S'?2150:885]}]));
- return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:215},
+ const modules=Object.fromEntries(D.modules.map(m=>[m.id,{n:m.name,d:m.note,x:[m.x,m.x+m.w],h:[m.id[0]==='S'?D.upperTop-m.h:100,m.id[0]==='S'?D.upperTop:885]}]));
+ return {root,groups,all,modules,info:{knownBudget:D.summary.knownBudget,slabThickness:15},dimensions:{w:260,d:62,h:D.upperTop/10},
   setOpen(t){movers.forEach(u=>{u.t=u.target=t;u.apply(t);});},
   setLed(on){led.visible=!!on;},
   selectModule(code){for(const m of all){const on=!code||m.userData.mod===code;for(const mt of [].concat(m.material)){mt.transparent=!on;mt.opacity=on?1:.15;mt.depthWrite=on;}}},

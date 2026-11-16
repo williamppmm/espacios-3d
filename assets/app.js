@@ -3,13 +3,14 @@
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['pino'],WINDOW_DESIGN='pino-definitiva-20261104';
 const proposalNotes={pino:'Ventana definitiva · Todo en pino, mostrado a 45°: 30 tablillas de 100 × 18 mm en un marco doble de pino de 36 × 140 mm con pestañas sobre el antepecho de ladrillo, atornillado al riel del cielo raso y a la medianera; extremo libre. Pines con resorte en las dos puntas y una sola platina de aluminio escondida en el riel superior: se mueven todas con la mano, sin perillas, de 40° a 140°. Colores de referencia; despiece y compras aparte (despiece-cortasol-pino).'};
+const kitchenHeight=window.CocinaPropuestaData.upperTop/10;
 const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,foldingDoor:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'pino',windowDesign:WINDOW_DESIGN,kitchenLed:false,closetLed:false},items:[
- {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:215,x:750,z:260,rotation:90,visible:true,open:0},
+ {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:kitchenHeight,x:750,z:260,rotation:90,visible:true,open:0},
  {id:'closet-1',type:'closet',variant:'final',name:'Clóset principal · compacto 195',w:195,d:58.5,h:238,x:738,z:1,rotation:-90,visible:true,open:0},
  {id:'bathroom-1',type:'bathroom',variant:'final',name:'Baño · lavamanos y espejo',w:55,d:47,h:150,x:212,z:220,rotation:90,visible:true,open:0}
 ]});
 // Diseños por tipo de mueble: la cocina final y el clóset principal. Las alternativas descartadas quedan en el historial de Git.
-const VARIANTS={kitchen:[{id:'final',label:'Cocina final · condimentero, puertas y basurero',w:260,note:'18 + 60 + 67 + 70 + 40 cm. Un cajón cubiertero, puertas con entrepaño y basurero de 12 L.',despiece:'despiece-cocina.html',viewer:'cocina.html'}],closet:[{id:'final',label:'Clóset principal · compacto 195 · corredizas',w:195,d:58.5,h:238,note:'Mismo RH15 y acabado de cocina. Cuerpo56cm, hojas hasta55 y manijas hasta58,5cm. Interior útil48,5cm; cuerpos83 y107,5cm. Cajonero5cm más estrecho para tolerancias de instalación. Tres cajones a la izquierda. Colgado superior, guía inferior sin carga y tope que conserva5cm de desfase. 1cm del muro izquierdo; 2cm respecto al giro. Propuesta sin perfiles verticales, basada en el clóset real del usuario; validación del herraje pendiente.',placement:{x:738,z:1,rotation:-90},despiece:'despiece-closet.html',viewer:'closet.html'}]};
+const VARIANTS={kitchen:[{id:'final',label:'Cocina final · condimentero, puertas y basurero',w:260,h:kitchenHeight,note:'18 + 60 + 67 + 70 + 40 cm. Un cajón cubiertero, puertas con entrepaño y basurero de 12 L.',despiece:'despiece-cocina.html',viewer:'cocina.html'}],closet:[{id:'final',label:'Clóset principal · compacto 195 · corredizas',w:195,d:58.5,h:238,note:'Mismo RH15 y acabado de cocina. Cuerpo56cm, hojas hasta55 y manijas hasta58,5cm. Interior útil48,5cm; cuerpos83 y107,5cm. Cajonero5cm más estrecho para tolerancias de instalación. Tres cajones a la izquierda. Colgado superior, guía inferior sin carga y tope que conserva5cm de desfase. 1cm del muro izquierdo; 2cm respecto al giro. Propuesta sin perfiles verticales, basada en el clóset real del usuario; validación del herraje pendiente.',placement:{x:738,z:1,rotation:-90},despiece:'despiece-closet.html',viewer:'closet.html'}]};
 VARIANTS.bathroom=[{id:'final',label:'Baño · lavamanos flotante y espejo',w:55,d:47,h:150,note:'Cuerpo inferior52 ×47 ×45cm, base a26cm y cierre46,5cm. Gabinete45 ×50 ×13cm con espejo32 ×50. Granito55 ×47 ×2cm provisional; el conjunto ocupa desde26 hasta176cm del suelo. Dos puertas inferiores con separación diagonal provisional 75°, obtenidas del panel común B06. Ubicado en la pared del sanitario, junto a la esquina. Despiece independiente y equipos por confirmar.',placement:{x:212,z:220,rotation:90},despiece:'despiece-bano.html',viewer:'bano.html'}];
 const closetName=()=>'Clóset principal · compacto 195';
 const FAMILIES=[['kitchen','▤','Cocina'],['closet','▥','Clóset'],['bathroom','▣','Baño']];
@@ -24,7 +25,7 @@ function validate(v){
   ids.add(i.id);
   for(const [k,min,max] of [['w',30,500],['d',20,120],['h',30,300],['x',-3000,3000],['z',-3000,3000],['rotation',-360,360],['open',0,1]])if(!finite(i[k],min,max))throw Error('Medidas inválidas en '+i.name+'.');
   if(typeof i.visible!=='boolean')throw Error('Visibilidad inválida.');
-  const variant=variantOf(i),moved=variant&&((i.variant!==variant.id)||(i.type==='bathroom'&&v.room?.bathroomWallCorrected!==true))&&variant.placement;return {id:i.id,type:i.type,...variant&&{variant:variant.id},name:i.type==='closet'&&i.variant!==variant?.id?closetName():i.name,w:fixedVariant({...i,variant:variant?.id})?variant.w:i.w,d:fixedVariant({...i,variant:variant?.id})?(variant.d||62):i.d,h:fixedVariant({...i,variant:variant?.id})?(variant.h||215):i.h,x:moved?moved.x:i.x,z:moved?moved.z:i.type==='kitchen'&&v.room?.kitchenCorner!==true&&i.x===750&&i.z===280&&i.rotation===90?260:i.z,rotation:moved?moved.rotation:i.rotation,visible:i.visible,open:i.open};
+  const variant=variantOf(i),moved=variant&&((i.variant!==variant.id)||(i.type==='bathroom'&&v.room?.bathroomWallCorrected!==true))&&variant.placement;return {id:i.id,type:i.type,...variant&&{variant:variant.id},name:i.type==='closet'&&i.variant!==variant?.id?closetName():i.name,w:fixedVariant({...i,variant:variant?.id})?variant.w:i.w,d:fixedVariant({...i,variant:variant?.id})?(variant.d||62):i.d,h:fixedVariant({...i,variant:variant?.id})?variant.h:i.h,x:moved?moved.x:i.x,z:moved?moved.z:i.type==='kitchen'&&v.room?.kitchenCorner!==true&&i.x===750&&i.z===280&&i.rotation===90?260:i.z,rotation:moved?moved.rotation:i.rotation,visible:i.visible,open:i.open};
  });
  if(v.room?.bathroomDesigned!==true&&items.length<30&&!items.some(i=>i.type==='bathroom'))items.push(initial().items.find(i=>i.type==='bathroom'));
  if(!v.room||!finite(v.room.wallHeight,.9,2.5)||['roof','architecture','furnishings','labels'].some(k=>typeof v.room[k]!=='boolean'))throw Error('Opciones de terraza inválidas.');
@@ -54,7 +55,7 @@ function box(parent,w,h,d,x,y,z,m){const mesh=new THREE.Mesh(new THREE.BoxGeomet
 function mover(g,apply){g.userData.mover={t:0,target:0,apply};return g;}
 function setMovers(gs,t){for(const g of gs){const u=g.userData.mover;u.t=u.target=t;u.apply(t);}}
 function group(parent){const g=new THREE.Group();parent.add(g);return g;}
-function wall(parent,axis,s1,s2,c,h,t=.12,ops=[],finishSides=[]){
+function wall(parent,axis,s1,s2,c,h,t=.12,ops=[],microcementSides=[],stuccoSide=0){
  let cur=s1;
  function segment(a,b,y0,y1){
   if(b-a<.001||y1-y0<.001)return;
@@ -62,16 +63,18 @@ function wall(parent,axis,s1,s2,c,h,t=.12,ops=[],finishSides=[]){
   const alongX=axis==='x';
   const brickMaterial=brick(len,height);
   let materials=brickMaterial;
-  if(finishSides.length){
+  if(microcementSides.length||stuccoSide){
+   const sideIndex=side=>alongX?(side===1?4:5):(side===1?0:1);
    // Finish the visible returns and top on any plastered wall; an unfinished face stays brick.
    // The faces under each finish plane are microcement too, so no brick shows through at a distance.
    materials=alongX
     ?[microcement,microcement,microcement,brickMaterial,brickMaterial,brickMaterial]
     :[brickMaterial,brickMaterial,microcement,brickMaterial,microcement,microcement];
-   for(const side of finishSides)materials[alongX?(side===1?4:5):(side===1?0:1)]=microcement;
+   for(const side of microcementSides)materials[sideIndex(side)]=microcement;
+   if(stuccoSide)materials[sideIndex(stuccoSide)]=bedroomStucco;
   }
   box(parent,alongX?len:t,height,alongX?t:len,alongX?mid:c,y,alongX?c:mid,materials);
-  for(const side of finishSides){
+  for(const side of microcementSides){
    const face=c+side*(t/2+.001);
    const rotation=alongX?(side===1?0:Math.PI):side*Math.PI/2;
    const textureStart=alongX===(side===1)?a:-b;
@@ -128,6 +131,8 @@ function makeMicrocement(){
  return new THREE.MeshStandardMaterial({map:texture,roughness:.94});
 }
 const microcement=makeMicrocement();
+const bedroomStucco=new THREE.MeshStandardMaterial({color:srgb(0xf8f8f6),roughness:1});
+bedroomStucco.name='estuco-blanco-mate';
 // Finish planes sit 1 mm off the wall; the depth offset keeps them in front at any camera distance.
 const microcementSurface=microcement.clone();
 Object.assign(microcementSurface,{polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-4});
@@ -352,14 +357,15 @@ bathroomWallFinish('entry-side',bathBeige,.48,2.5,2.36,1.25,2.199,Math.PI,.72);
 bathroomWallFinish('entry-right',bathBeige,.02,2.05,3.31,1.025,2.199,Math.PI);
 bathroomWallFinish('entry-header',bathBeige,.72,.45,2.96,2.275,2.199,Math.PI,0,2.05);
 wall(architecture,'x',2,3.32,2.26,2.5,.12,[{a:2.6,b:3.3,top:2.05}],[1]);
-wall(architecture,'z',0,3,3.38,2.5,.12,[],[1]);
-wall(architecture,'x',3.32,7.5,2.94,2.5,.12,[{a:3.9,b:5.6,sill:.6,top:2.1},{a:5.96,b:6.86,top:2.05}],[-1,1]);
-wall(architecture,'z',0,3,7.44,2.5,.12,[],[-1,1]);
-// Acabado interior de la habitacion sobre el tramo de medianera.
-microcementFace(architecture,3.94,2.5,5.41,1.25,.001,0,3.44,0);
+wall(architecture,'z',0,3,3.38,2.5,.12,[],[],1);
+wall(architecture,'x',3.32,7.5,2.94,2.5,.12,[{a:3.9,b:5.6,sill:.6,top:2.1},{a:5.96,b:6.86,top:2.05}],[1],-1);
+wall(architecture,'z',0,3,7.44,2.5,.12,[],[1],-1);
+// Estuco blanco mate sobre la cara de la medianera dentro de la habitación.
+const bedroomMedianera=new THREE.Mesh(new THREE.PlaneGeometry(3.94,2.5),bedroomStucco);
+bedroomMedianera.name='estuco-medianera-habitacion';
+bedroomMedianera.position.set(5.41,1.25,.001);bedroomMedianera.receiveShadow=true;architecture.add(bedroomMedianera);
 // Cara del muro del cabecero hacia el paso frente al baño; dentro del baño la cubre el enchape.
 microcementFace(architecture,.68,2.5,3.319,1.25,2.66,-Math.PI/2,2.32,0);
-// Acabado estucado de la cara de habitación detrás del clóset; no es un tablero.
 box(architecture,1.7,1.5,.02,4.75,1.35,2.94,palette.glass);// Hojas de baño (70 cm) y habitación (90 cm): bisagra del lado de la habitación/clóset, abren hacia adentro.
 const buildingDoors=[[3.3,2.2,.7,bathroomFloor.level],[6.86,2.88,.9,0]].map(([x,z,w,level])=>{
  const pivot=mover(group(architecture),t=>pivot.rotation.y=-Math.PI/2*t);
@@ -443,7 +449,7 @@ const zones={foldingDoor:[[8.5,1.2,3],[10.7,2.8,6.5]],bath:[[2.72,1,1.1],[2.94,4
 let flight=null;function flyTo(target,pos){flight={t0:performance.now(),a:[controls.target.clone(),camera.position.clone()],b:[new THREE.Vector3(...target),new THREE.Vector3(...pos)]};}
 let viewName='general';function view(name){viewName=name;flight=null;
  if(zones[name]&&state.mode==='room'){controls.minDistance=.5;flyTo(...zones[name]);document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));return;}
- if(zones[name])viewName=name='general';const single=state.mode==='item',i=item(),w=(i?.w||260)/100,h=(i?.h||215)/100,d=(i?.d||62)/100;const target=single?new THREE.Vector3(w/2,h*.45,d/2):new THREE.Vector3(9.6,.4,2.7);let p;
+ if(zones[name])viewName=name='general';const single=state.mode==='item',i=item(),w=(i?.w||260)/100,h=(i?.h||kitchenHeight)/100,d=(i?.d||62)/100;const target=single?new THREE.Vector3(w/2,h*.45,d/2):new THREE.Vector3(9.6,.4,2.7);let p;
  if(single){const dist=Math.max(w,h,d)*1.8;p=name==='top'?[w/2,dist*1.4,d/2+.001]:name==='front'?[w/2,h*.5,dist]:[w/2+dist*.65,h*.65+dist*.45,d/2+dist*.85];controls.minDistance=.5;}else{p=name==='top'?[L/2,29,W/2+.001]:name==='entrance'?[19.6,1.65,4.6]:name==='front'?[10.15,9,18]:[23,16,19];if(name==='entrance')target.set(5,1.2,1.6);controls.minDistance=1;}
  if(single&&i?.type==='bathroom'){target.y+=.26;p[1]+=.26;}
  controls.target.copy(target);camera.position.set(...p);controls.update();
@@ -480,7 +486,7 @@ function renderCatalog(){const cat=$('catalog'),open=new Set([...cat.querySelect
   if(type==='closet'){const b=document.createElement('button');b.className='version add';b.textContent='+ Añadir otro clóset';b.onclick=()=>addItem('closet');d.append(b);}
   cat.append(d);}
  const b=document.createElement('button');b.className='family-free';b.innerHTML='<span>▦</span><b>Mueble libre</b><small>Estantería editable</small>';b.onclick=()=>addItem('shelf');cat.append(b);}
-function addItem(type,variant){if(state.items.length>=30){$('save-state').textContent='Este proyecto admite hasta 30 muebles.';return;}const id=type+'-'+Date.now(),i={id,type,...VARIANTS[type]&&{variant:variant||VARIANTS[type][0].id},name:type==='kitchen'?'Cocina Cartagena':type==='closet'?'Clóset · referencia':type==='bathroom'?'Baño · lavamanos y espejo':'Mueble libre',w:type==='kitchen'?VARIANTS.kitchen.find(v=>v.id===(variant||VARIANTS.kitchen[0].id)).w:type==='closet'?160:100,d:type==='kitchen'?62:type==='closet'?60:40,h:type==='kitchen'?215:type==='closet'?210:180,x:1300,z:300,rotation:0,visible:true,open:0};const cv=VARIANTS[type]?.find(v=>v.id===i.variant);if(cv?.d)i.d=cv.d;if(cv?.h)i.h=cv.h;if(cv?.w)i.w=cv.w;if(type==='closet')i.name=closetName(cv?.id);if(cv?.placement)Object.assign(i,cv.placement);state.items.push(i);state.selected=id;build(i);transform();renderUI();view('general');save();}
+function addItem(type,variant){if(state.items.length>=30){$('save-state').textContent='Este proyecto admite hasta 30 muebles.';return;}const id=type+'-'+Date.now(),i={id,type,...VARIANTS[type]&&{variant:variant||VARIANTS[type][0].id},name:type==='kitchen'?'Cocina Cartagena':type==='closet'?'Clóset · referencia':type==='bathroom'?'Baño · lavamanos y espejo':'Mueble libre',w:type==='kitchen'?VARIANTS.kitchen.find(v=>v.id===(variant||VARIANTS.kitchen[0].id)).w:type==='closet'?160:100,d:type==='kitchen'?62:type==='closet'?60:40,h:type==='kitchen'?kitchenHeight:type==='closet'?210:180,x:1300,z:300,rotation:0,visible:true,open:0};const cv=VARIANTS[type]?.find(v=>v.id===i.variant);if(cv?.d)i.d=cv.d;if(cv?.h)i.h=cv.h;if(cv?.w)i.w=cv.w;if(type==='closet')i.name=closetName(cv?.id);if(cv?.placement)Object.assign(i,cv.placement);state.items.push(i);state.selected=id;build(i);transform();renderUI();view('general');save();}
 $('folding-door').oninput=()=>{
  const opening=Number($('folding-door').value);
  state.room.foldingDoor=opening;
