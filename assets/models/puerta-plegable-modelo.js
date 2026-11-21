@@ -1,4 +1,5 @@
-/* Modelo de la puerta en metros, con x sobre el vano y z hacia afuera. */
+/* Modelo de la puerta en metros, con x sobre el vano (0 = muro de la habitación) y −z hacia la cocina.
+   Paral contra el muro y poste de esquina, iguales, de piso a cielo; dintel a la altura de la puerta metálica y sobreluz de tablillas fijas hasta el cielo raso. */
 window.crearPuertaPlegable = function (T) {
   const d = window.PuertaPlegableData, mm = n => n / 1000;
   const root = new T.Group();
@@ -16,11 +17,19 @@ window.crearPuertaPlegable = function (T) {
     parent.add(mesh);
     return mesh;
   }
-  const {pine,end,rail,hardware}=materials;
-  box(root,d.post,d.head,d.post,d.span-d.post/2,d.head/2,0,end);
-  box(root,d.jamb,d.head,70,d.jamb/2,d.head/2,0,end);
-  box(root,d.span,d.header,d.post,d.span/2,d.head+d.header/2,0,pine);
-  box(root,d.railDepth,24,30,d.jamb+d.railDepth/2,d.head-12,-d.thickness/2,rail);
+  const {pine,end,rail,hardware}=materials, S=d.transom;
+  box(root,d.post,d.ceiling,d.depth,d.span-d.post/2,d.ceiling/2,0,end);                       // poste de esquina, dos piezas de 40 × 100
+  box(root,d.jamb,d.ceiling,d.depth,d.jamb/2,d.ceiling/2,0,end);                              // paral contra el muro, dos piezas de 40 × 100
+  box(root,d.opening,d.header,40,d.jamb+d.opening/2,d.head+d.header/2,0,pine);                // dintel de canto entre los dos parales
+  box(root,d.railDepth,24,30,d.jamb+d.railDepth/2,d.head-12,-d.thickness/2,rail);              // riel del plegable
+  // Sobreluz: listón sobre el dintel, listón bajo la vigueta del borde y tablillas verticales entre ellos.
+  const L=S.liston, yb=d.head+d.header, yt=d.ceiling;
+  box(root,d.opening,L.t,L.A,d.jamb+d.opening/2,yb+L.t/2,0,pine);
+  box(root,d.opening,L.t,L.A,d.jamb+d.opening/2,yt-L.t/2,0,pine);
+  for(let j=0;j<S.tablilla.n;j++){
+    const x=d.jamb+S.luz*(j+1)+S.tablilla.A*(j+.5);
+    box(root,S.tablilla.A,S.tablilla.L,S.tablilla.t,x,yb+L.t+S.tablilla.L/2,0,pine);
+  }
   const leaves=Array.from({length:d.leaves}, (_,i)=>{
     const g=new T.Group();
     g.name='hoja-'+(i+1);
@@ -37,7 +46,7 @@ window.crearPuertaPlegable = function (T) {
     if(i===d.leaves-1) for(const z of [-18,18]) box(g,16,145,1,d.width/2-38,1000,z,hardware);
     return g;
   });
-  const joints=Array.from({length:3},()=>[250,1170,2100].map(y=>box(root,10,72,10,0,y,0,hardware)));
+  const joints=Array.from({length:3},()=>[250,1050,1850].map(y=>box(root,10,72,10,0,y,0,hardware)));
   const carts=[0,1].map(()=>box(root,30,35,18,0,d.head-38,-d.thickness/2,rail));
   function setOpen(open) {
     const poses=d.pose(open);

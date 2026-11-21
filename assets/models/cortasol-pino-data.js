@@ -1,19 +1,18 @@
-/* Cortasol de tablillas orientables, todo en pino, ajustado a la obra real: antepecho de ladrillo de 10 cm, marco de 140 mm de fondo
-   en todo el perímetro con esquinas traslapadas por capas y pestañas que bajan por las dos caras del muro; tablillas de 100 mm por
-   dentro del marco. Apoyado en el antepecho, arriba atornillado al riel metálico del cielo raso de panel yeso (que no carga); el lateral
-   izquierdo atornillado a la medianera y el derecho libre. Fuente única para el visor (assets/propuesta-lamas-pino.js), la terraza
-   (assets/app.js) y herramientas/build_cortasol_pino.py. Medidas terminadas en mm. Ángulo: 90° = tablilla perpendicular al muro;
-   40° y 140° = topes de la barra. z > 0 = lado cocina, z < 0 = lado patio; x > 0 = derecha vista desde la cocina. */
+/* Cierre de la cocina en pino, medido en obra el 21/11/2026: ventanal de dos cuerpos con tablillas orientables, puerta plegable
+   de 213 cm con sobreluz de tablillas y estructura del cielo raso de machimbre. Marco y estructura en pino macizo de 40 mm; tablillas,
+   pestañas y hojas en pino alistonado de 18 mm. Fuente única para el visor del ventanal (assets/propuesta-lamas-pino.js), la puerta
+   (assets/models/puerta-plegable-*.js), la terraza (assets/app.js) y herramientas/build_pino_cocina.py. Medidas en mm.
+   Ángulo: 90° = tablilla perpendicular al muro; 40° y 140° = topes. z > 0 = cocina, z < 0 = patio; x > 0 = hacia el extremo libre. */
 window.CortasolPinoData={
- "name": "Cortasol de tablillas de pino orientables",
- "status": "Propuesta en estudio (4 de noviembre de 2026): todo en pino, sobre un antepecho de ladrillo de 10 cm. Marco de 140 mm de fondo en todo el perímetro, con esquinas traslapadas por capas y pestañas que bajan 60 mm por las dos caras del antepecho; tablillas de 100 mm por dentro del marco. Apoyado en el antepecho, atornillado arriba al riel del cielo raso y a la medianera; extremo derecho libre. Pines con resorte en las dos puntas y una barra de aluminio arriba, sin perillas",
+ "name": "Cierre de la cocina en pino: ventanal, puerta plegable y cielo raso",
+ "status": "Diseño ajustado a la obra terminada (21 de noviembre de 2026): ventanal de 3080 × 1260 en dos cuerpos sobre un antepecho de ladrillo a la vista de 10 cm y 1300 de alto; puerta plegable de 1910 × 2130 con sobreluz de tablillas hasta el cielo raso de 2560; cielo raso de machimbre sobre viguetas que apoyan en el ventanal y en una carrera contra el muro de la habitación. Marco y estructura en pino macizo de 40 mm; tablillas, pestañas y hojas en pino alistonado de 18 mm.",
  "vano": {
-  "L": 3000,
-  "H": 1300,
-  "nota": "Medida exterior del ventanal: 3000 de largo, desde la medianera hasta el extremo libre, y 1300 de alto, desde el antepecho de ladrillo (+120) hasta el cielo raso (+250). Medir el vano real en tres puntos antes de cortar."
+  "L": 3080,
+  "H": 1260,
+  "nota": "Medida en obra: 3080 de largo, de la medianera al filo del ladrillo del extremo libre, y 1260 de alto, del antepecho (+1300) al cielo raso (+2560). El marco mide 1256: 4 mm de calce bajo las viguetas. Volver a medir en tres puntos antes de cortar."
  },
  "acabado": {
-  "nota": "Marco y tablillas del mismo lote de pino, lijados igual y barnizados en la misma tanda: así el tono queda parejo y envejece igual. Acabado elegido: laca Montó Pur+Cat incoloro mate (interior/exterior, catalizada, tono miel); primera mano rebajada como sellador y dos manos normales. Sin sellador de nitrocelulosa debajo."
+  "nota": "Todo el pino del mismo lote: inmunizado antes de armar, lijado y barnizado en la misma tanda, para que el tono quede parejo. Laca Montó Pur+Cat incoloro mate: primera mano rebajada como sellador y dos manos normales. Hay techo encima: sin lluvia directa, pero el lado patio sí recibe sol y humedad del ambiente."
  },
  "lama": {
   "A": 100,
@@ -23,45 +22,38 @@ window.CortasolPinoData={
   "tolerancia": 4,
   "material": "Pino alistonado (finger joint) de 18 mm, barnizado por las seis caras",
   "densidad": 500,
-  "nota": "100 mm de ancho, igual que el muro: al girar ocupa un círculo de 102 mm y queda siempre por dentro del marco de 140. 18 mm de grueso dejan unos 5 mm de madera a cada lado del cuerpo del pin. 3 mm libres en cada punta: la pestaña del pin más el juego (ajustar al medir los pines). Densidad típica del pino seco, 450 a 550 kg/m³."
+  "nota": "100 mm de ancho, igual que el muro: al girar ocupa un círculo de 102 mm y queda dentro del marco de 140. 18 mm de grueso dejan unos 5 mm de madera a cada lado del cuerpo del pin. 3 mm libres en cada punta para la pestaña del pin y el juego. 15 por cuerpo, a paso 98,7 mm.",
+  "por_cuerpo": 15
  },
  "angulo": {
   "min": 40,
   "max": 140,
   "inicial": 45,
-  "nota": "Los extremos de la barra chocan con los tacos de tope del canal: a 40° y 140° las tablillas de los extremos quedan a unos 5 mm del lateral y el paso de aire no baja del 46 %; sin topes se cerrarían hasta tocarse cerca de 10°."
+  "nota": "Los extremos de cada barra chocan con los tacos de tope del canal: a 40° y 140° las tablillas de los extremos quedan a unos 5,2 mm del lateral o del montante y el paso de aire no baja del 46 %."
  },
  "marco": {
-  "capa": 18,
-  "t": 36,
+  "t": 40,
   "A": 140,
-  "tramo": 2000,
-  "paneles": 3,
-  "material": "Pino alistonado de 18 mm, el mismo de las tablillas",
-  "juntas": {
-   "entera": [
-    2000,
-    1000
-   ],
-   "trabada": [
-    1000,
-    2000
-   ],
-   "nota": "Dos tramos por capa y por riel, con las juntas cruzadas a 1 m: la capa interior en 2000 + 1000 (junta a 2 m de la medianera) y la exterior en 1000 + 2000 (junta a 1 m). Así cada riel trabaja como una sola pieza con solo dos juntas a tope, y el tramo de 2000 sale de un tablero de 2440."
+  "cuerpos": 2,
+  "luz": 1480.0,
+  "vuelo": 2,
+  "alto": 1256,
+  "material": "Pino macizo de 40 mm de grueso (4 × 14), cepillado, inmunizado y barnizado",
+  "nota": "Marco de pino macizo de 40 × 140 mm, igual en rieles, laterales y montante: 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña. Los rieles van de una sola pieza de 3080 mm. El montante central divide el ventanal en dos cuerpos de 1480,0 mm libres y baja al antepecho la carga del cielo raso.",
+  "montante": {
+   "t": 40,
+   "nota": "Sin montante, el riel superior acostado cruzaría 3000 mm y, con el cielo raso encima, se flecharía unos 29 mm: las tablillas se trabarían. Con el montante la luz baja a 1480,0 mm y la flecha a unos 1,7 mm."
   },
-  "nota": "Marco en dos capas de pino de 18 mm pegadas y prensadas, de 140 mm de fondo en todo el perímetro (rieles y laterales iguales): 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña, que hacen de gotero y absorben las diferencias del muro. En cada riel, dos tramos por capa: la exterior en 1000 + 2000 y la interior en 1982 + 982 (2000 + 1000 menos el escalón de cada esquina), con las juntas cruzadas a 1 m.",
   "pestana": {
    "t": 18,
    "h": 60,
-   "tramo": 2000,
    "remate": true,
-   "nota": "Pestañas de pino de 18 × 60 mm a lo largo de las dos caras del antepecho, pegadas y atornilladas por debajo de la base del riel inferior (los tornillos quedan ocultos bajo la tapa). El riel vuela 2 mm sobre cada pestaña. En el extremo libre, una pestaña de remate de 136 mm tapa la punta del muro y cierra la U. Ajustar los 60 mm para que el borde quede justo encima de una junta de mortero."
+   "nota": "Pestañas de pino alistonado de 18 × 60 mm por las dos caras del antepecho, pegadas y atornilladas por debajo del riel inferior. El riel vuela 2 mm sobre cada pestaña. En el extremo libre, un remate de 136 mm tapa la punta del muro y cierra la U. Ajustar los 60 mm para que el borde quede encima de una junta de mortero."
   },
-  "esquina": {
-   "escalon": 18,
+  "union": {
    "tarugos": 2,
    "tornillos": 2,
-   "nota": "Traslapo por capas, sin rebajes: la capa interior de cada riel (la tapa de abajo y las tiras de arriba) termina 18 mm antes de la punta, y la capa exterior de cada lateral es 36 mm más larga que la interior: entra 18 mm en ese escalón arriba y abajo. Cada esquina se pega en sus tres caras de contacto y lleva dos tarugos de 10 × 40 mm entre la capa exterior del riel y la punta del lateral, más dos tornillos de 4,5 × 70 desde la capa exterior del riel, tapados con tapones de pino. Armar el marco en el banco y escuadrarlo midiendo las diagonales."
+   "nota": "Rieles enteros; laterales y montante entre los rieles, a tope. Cada unión se pega y lleva dos tarugos de 10 × 60 mm y dos tornillos de 5 × 100 mm desde la cara exterior del riel, avellanados y tapados con tapones de pino. Armar en el banco sobre una superficie plana y escuadrar midiendo las diagonales de cada cuerpo."
   }
  },
  "mecanismo": {
@@ -70,15 +62,17 @@ window.CortasolPinoData={
   "canal": {
    "z0": -52,
    "z1": -9,
-   "nota": "Canal de 43 × 18 mm en la capa interior del riel superior, entre la tira patio (18) y la tira cocina (79): no hay que rutear. Queda boca abajo, encima de las tablillas."
+   "prof": 18,
+   "nota": "Canal de 43 × 18 mm ruteado por debajo del riel superior, de punta a punta, del lado patio (de z −52 a z −9). Queda boca abajo, encima de las tablillas. Rutear en dos o tres pasadas, con guía paralela."
   },
   "barra": {
-   "L": 2871,
+   "L": 1423,
    "A": 25.4,
    "e": 3.2,
    "agujero": 7,
-   "material": "Platina de aluminio de 1 × 1/8 pulg en una sola pieza",
-   "nota": "Descansa sobre las tablillas, apoyada en arandelas de nylon. Un agujero de 7 mm por tablilla a paso 97,6, centrado en el ancho. Sus extremos chocan con los tacos de tope: cortar unos milímetros más larga y limar hasta que tope a 40° y 140°."
+   "material": "Platina de aluminio de 1 × 1/8 pulg, una por cuerpo",
+   "nota": "Una por cuerpo, de 1423 mm. Descansa sobre arandelas de nylon. 15 agujeros de 7 mm a paso 98,7, centrados en el ancho; el primero a 20,8 mm de la punta. Cortar unos milímetros más larga y limar hasta que tope a 40° y 140°.",
+   "n": 2
   },
   "pasador": {
    "d": 6.35,
@@ -87,8 +81,10 @@ window.CortasolPinoData={
    "nota": "Varilla inox 304 de 1/4 pulg, pegada con epóxico en la punta superior de la tablilla, a 37 mm del eje hacia el patio. Sobresalen 9 mm: atraviesan la arandela y la barra."
   },
   "tope": {
-   "L": 18,
-   "nota": "Taco de pino de 18 mm que cierra el canal encima de la capa interior de cada lateral; la capa exterior del lateral, que sube hasta la base del riel, cierra la punta. La barra choca contra el taco en los extremos del giro."
+   "L": 40,
+   "A": 43,
+   "t": 18,
+   "nota": "Tacos de pino de 40 × 43 × 18 pegados dentro del canal, encima de cada lateral y del montante. Cada barra choca contra los tacos de su cuerpo en los extremos del giro; el del montante sirve a las dos."
   },
   "pines": {
    "modelo": "uxcell, 24 × 10 mm (0,94 × 0,39 pulg), punta metálica con resorte y cuerpo plástico",
@@ -105,210 +101,459 @@ window.CortasolPinoData={
   },
   "anclajes": {
    "antepecho": {
-    "n": 6,
-    "tornillo": "tornillo 5 × 70 con chazo plástico de 8 mm",
-    "nota": "Desde arriba, por el riel inferior, entre tablillas y en el centro del fondo, al ladrillo; cabeza avellanada y tapón de pino. Cordón de sellador entre riel y ladrillo."
-   },
-   "cielo": {
     "n": 8,
-    "tornillo": "tornillo autoperforante punta broca madera-metal #10 × 2 pulg, cabeza avellanada",
-    "nota": "Desde abajo, por el riel superior y el panel yeso, al riel metálico del cielo raso, cada 40 cm aproximadamente."
+    "tornillo": "tornillo 5 × 100 con chazo plástico de 8 mm",
+    "nota": "Cuatro por cuerpo, desde arriba por el riel inferior, entre tablillas, al ladrillo. Cabeza avellanada y tapón de pino. Cordón de sellador entre el riel y el ladrillo."
    },
    "medianera": {
     "n": 3,
-    "tornillo": "tornillo 5 × 70 con chazo plástico de 8 mm",
-    "nota": "Por el lateral izquierdo a la medianera, arriba, al centro y abajo."
+    "tornillo": "tornillo 5 × 100 con chazo plástico de 8 mm",
+    "nota": "Por el lateral izquierdo a la medianera: arriba, al centro y abajo."
+   },
+   "poste": {
+    "n": 3,
+    "tornillo": "tornillo para madera 5 × 120",
+    "nota": "El lateral del extremo libre se atornilla al poste de la puerta: así el extremo libre queda amarrado de piso a cielo."
    }
+  }
+ },
+ "puerta": {
+  "ancho": 1910,
+  "alto": 2130,
+  "plano": 50,
+  "cara": 1890,
+  "jamba": {
+   "t": 80,
+   "A": 100,
+   "piezas": 2
+  },
+  "poste": {
+   "t": 80,
+   "A": 100,
+   "piezas": 2
+  },
+  "dintel": {
+   "t": 40,
+   "h": 100
+  },
+  "vano": 1730,
+  "hojas": {
+   "n": 4,
+   "A": 427,
+   "h": 2060,
+   "t": 36,
+   "capa": 18,
+   "lado": 5,
+   "borde": 6.5,
+   "junta": 3,
+   "piso": 10,
+   "sistema": 60,
+   "montante": 70,
+   "travesanos": [
+    [
+     0,
+     130
+    ],
+    [
+     950,
+     1050
+    ],
+    [
+     1960,
+     2060
+    ]
+   ],
+   "huecos": [
+    [
+     130,
+     950
+    ],
+    [
+     1050,
+     1960
+    ]
+   ],
+   "tablillas": {
+    "n": 5,
+    "A": 40
+   }
+  },
+  "sobreluz": {
+   "liston": {
+    "A": 40,
+    "t": 18
+   },
+   "tablilla": {
+    "n": 19,
+    "A": 60,
+    "t": 18,
+    "L": 290
+   },
+   "luz": 29.5
+  },
+  "nota": "Vano de 1910, del muro de la habitación al filo del ladrillo, y 2130 de alto, como la puerta metálica. Dentro caben dos parales iguales de 80 × 100 (dos piezas de 40 × 100 pegadas cada uno), uno contra el muro y otro en la esquina, los 20 mm del vuelo y la pestaña del ventanal y 1730 mm para las cuatro hojas. Encima, un dintel de 40 × 100 de canto a 2130 recibe el riel del plegable, y una sobreluz de 19 tablillas verticales cierra hasta el cielo raso dejando paso de aire."
+ },
+ "cielo": {
+  "nivel": 2560,
+  "material": "Machimbre de pino de 10 mm",
+  "vigueta": {
+   "t": 40,
+   "h": 100,
+   "n": 7,
+   "L": 1980,
+   "sep": 501.6666666666667
+  },
+  "carrera": {
+   "t": 40,
+   "h": 100,
+   "L": 2980
+  },
+  "machimbre": {
+   "e": 10,
+   "util": 90,
+   "x": 1850,
+   "z": 3021.0,
+   "m2": 5.59
+  },
+  "carga": {
+   "kg": 117,
+   "flecha_sin": 29.3,
+   "flecha_con": 1.7
+  },
+  "nota": "7 viguetas de 40 × 100 de canto, a unos 502 mm entre ejes, apoyadas en la carrera contra el muro de la habitación y 90 mm sobre el riel superior del ventanal. La primera va atornillada a la medianera y la última sobre los dos parales de la puerta. El machimbre se clava por debajo, a lo largo del ventanal, con las juntas sobre las viguetas y alternadas: unos 5.6 m² (1,9 × 3,0 m). Las viguetas quedan encima de +2560: confirmar que haya al menos 11 cm libres bajo el techo. Peso estimado del cielo raso con margen: unos 117 kg, la mitad sobre el ventanal."
+ },
+ "obra": {
+  "antepecho": {
+   "t": 100,
+   "alto": 1300,
+   "material": "Ladrillo a la vista de 10 cm, sin repello",
+   "nota": "Muro de ladrillo de 10 cm exactos y 1300 de alto. El marco de 140 lo cubre con las dos pestañas y vuela 2 mm sobre ellas."
+  },
+  "cielo": {
+   "nivel": 2560,
+   "nota": "Cielo raso de machimbre a +2560 sobre la cocina; techo encima, sin lluvia directa."
+  },
+  "medianera": {
+   "t": 100,
+   "lado": "izquierdo visto desde la cocina",
+   "nota": "Ladrillo a la vista de 10 cm. El lateral izquierdo y la primera vigueta se atornillan a ella."
+  },
+  "habitacion": {
+   "nota": "Muro gris de la habitación: recibe la carrera del cielo raso y el paral de la puerta."
+  },
+  "libre": {
+   "lado": "derecho visto desde la cocina",
+   "nota": "El ventanal termina en el filo del ladrillo; el poste de la puerta queda al lado, del lado cocina, y se atornilla al lateral."
   }
  },
  "parts": [
   {
+   "id": "V01",
+   "grupo": "Ventanal",
+   "name": "Riel inferior",
+   "qty": 1,
+   "L": 3080,
+   "A": 140,
+   "t": 40,
+   "material": "macizo",
+   "note": "Una sola pieza. Huecos de las puntas de los pines a paso 98,7 en cada cuerpo, con su ranura de entrada de 25 × 2 mm hacia la cocina. Apoya en el antepecho con sellador; pestañas pegadas y atornilladas por debajo."
+  },
+  {
+   "id": "V02",
+   "grupo": "Ventanal",
+   "name": "Riel superior",
+   "qty": 1,
+   "L": 3080,
+   "A": 140,
+   "t": 40,
+   "material": "macizo",
+   "note": "Una sola pieza. Canal de 43 × 18 ruteado por debajo, de punta a punta, del lado patio; huecos de los pines alineados con los de abajo. Sobre él apoyan las viguetas del cielo raso (90 mm)."
+  },
+  {
+   "id": "V03",
+   "grupo": "Ventanal",
+   "name": "Lateral",
+   "qty": 2,
+   "L": 1176,
+   "A": 140,
+   "t": 40,
+   "material": "macizo",
+   "note": "Entre los dos rieles. Izquierdo atornillado a la medianera; derecho, en el extremo libre, atornillado al poste de la puerta."
+  },
+  {
+   "id": "V04",
+   "grupo": "Ventanal",
+   "name": "Montante central",
+   "qty": 1,
+   "L": 1176,
+   "A": 140,
+   "t": 40,
+   "material": "macizo",
+   "note": "Entre los rieles, al centro: deja dos cuerpos de 1480,0 mm libres y baja la carga del cielo raso al antepecho."
+  },
+  {
    "id": "T01",
+   "grupo": "Ventanal",
    "name": "Tablilla orientable",
    "qty": 30,
-   "L": 1218,
+   "L": 1170,
    "A": 100,
    "t": 18,
-   "note": "100 mm de ancho. Un pin con resorte al centro de cada punta. Arriba, pasador de 1/4 × 25 a 37 mm del centro hacia el patio, a la mitad del grueso, 16 mm pegado con epóxico. Todas iguales: hacerlas con plantilla."
+   "material": "tablero",
+   "note": "15 por cuerpo. Un pin con resorte al centro de cada punta. Arriba, pasador de 1/4 × 25 a 37 mm del centro hacia el patio, a la mitad del grueso, 16 mm pegado con epóxico. Hacerlas con plantilla."
   },
   {
-   "id": "R01",
-   "name": "Base del riel inferior · tramo corto",
-   "qty": 1,
-   "L": 1000,
-   "A": 140,
-   "t": 18,
-   "note": "Capa de abajo, en 1000 + 2000, sobre el ladrillo con un cordón de sellador. Tramo de 1000 del lado de la medianera."
-  },
-  {
-   "id": "R01L",
-   "name": "Base del riel inferior · tramo largo",
-   "qty": 1,
-   "L": 2000,
-   "A": 140,
-   "t": 18,
-   "note": "Tramo de 2000 hacia el extremo libre. Su junta con el tramo corto queda a 1 m de la medianera, cruzada con la de la capa interior."
-  },
-  {
-   "id": "R02",
-   "name": "Tapa del riel inferior · tramo largo",
-   "qty": 1,
-   "L": 1982,
-   "A": 140,
-   "t": 18,
-   "note": "Capa interior, en 1982 + 982, sin canal. Lleva los huecos de las puntas de los pines a paso 97,6, cada uno con su ranura de entrada de 25 × 2 mm hacia la cocina, y los tornillos al antepecho entre tablillas. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
-  },
-  {
-   "id": "R02E",
-   "name": "Tapa del riel inferior · tramo corto",
-   "qty": 1,
-   "L": 982,
-   "A": 140,
-   "t": 18,
-   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
-  },
-  {
-   "id": "R05",
-   "name": "Base del riel superior · tramo corto",
-   "qty": 1,
-   "L": 1000,
-   "A": 140,
-   "t": 18,
-   "note": "Capa de arriba, en 1000 + 2000, contra el panel yeso del cielo raso; los tornillos atraviesan hasta el riel metálico. Es el techo del canal de la barra. Tramo de 1000 del lado de la medianera."
-  },
-  {
-   "id": "R05L",
-   "name": "Base del riel superior · tramo largo",
-   "qty": 1,
-   "L": 2000,
-   "A": 140,
-   "t": 18,
-   "note": "Tramo de 2000 hacia el extremo libre. Su junta con el tramo corto queda a 1 m de la medianera, cruzada con la de la capa interior."
-  },
-  {
-   "id": "R06",
-   "name": "Tira cocina del riel superior · tramo largo",
-   "qty": 1,
-   "L": 1982,
-   "A": 79,
-   "t": 18,
-   "note": "Capa interior, de z −9 a z 70, del lado cocina. Un borde forma el canal. Lleva los huecos de las puntas de los pines de arriba, alineados con los de abajo. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
-  },
-  {
-   "id": "R06E",
-   "name": "Tira cocina del riel superior · tramo corto",
-   "qty": 1,
-   "L": 982,
-   "A": 79,
-   "t": 18,
-   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
-  },
-  {
-   "id": "R08",
-   "name": "Tira patio del riel superior · tramo largo",
-   "qty": 1,
-   "L": 1982,
-   "A": 18,
-   "t": 18,
-   "note": "Capa interior, de z −70 a z −52: cierra el canal del lado patio. Tira cuadrada de 18 × 18. Va del lado de la medianera y termina 18 mm antes de la punta: escalón para la capa exterior del lateral."
-  },
-  {
-   "id": "R08E",
-   "name": "Tira patio del riel superior · tramo corto",
-   "qty": 1,
-   "L": 982,
-   "A": 18,
-   "t": 18,
-   "note": "Tramo hacia el extremo libre; termina 18 mm antes de la punta. Su junta con el tramo largo queda a 2 m de la medianera."
-  },
-  {
-   "id": "R09",
-   "name": "Taco de tope",
-   "qty": 2,
-   "L": 43,
-   "A": 18,
-   "t": 18,
-   "note": "Cierra el canal encima de la capa interior de cada lateral. Pegado y atornillado: la barra choca aquí a 40° y 140°."
-  },
-  {
-   "id": "R07",
-   "name": "Lateral · capa interior",
-   "qty": 2,
-   "L": 1224,
-   "A": 140,
-   "t": 18,
-   "note": "Entre las tapas de los rieles. Lateral izquierdo: atornillado a la medianera. Lateral derecho: libre, a la vista por tres caras."
-  },
-  {
-   "id": "R07E",
-   "name": "Lateral · capa exterior",
-   "qty": 2,
-   "L": 1260,
-   "A": 140,
-   "t": 18,
-   "note": "36 mm más larga que la interior: entra 18 mm arriba y 18 abajo en el escalón de los rieles y forma el traslapo de la esquina. Es la cara que va contra la medianera o la que queda a la vista en el extremo libre."
-  },
-  {
-   "id": "R10",
+   "id": "V05",
+   "grupo": "Ventanal",
    "name": "Pestaña del antepecho · tramo largo",
    "qty": 2,
    "L": 2000,
    "A": 60,
    "t": 18,
-   "note": "Dos por riel, una por cara (cocina y patio), en 2000 + 1000, con la junta alineada con la de la tapa del riel. Pegada y atornillada por debajo de la base del riel inferior, contra la cara del ladrillo. Sellar la junta con el muro."
+   "material": "tablero",
+   "note": "Una por cara (cocina y patio), desde la medianera. Pegada y atornillada por debajo del riel inferior, contra la cara del ladrillo."
   },
   {
-   "id": "R10C",
+   "id": "V05C",
+   "grupo": "Ventanal",
    "name": "Pestaña del antepecho · tramo corto",
    "qty": 2,
-   "L": 1000,
+   "L": 1080,
    "A": 60,
    "t": 18,
-   "note": "Tramo de 1000 hacia el extremo libre, uno por cara."
+   "material": "tablero",
+   "note": "Una por cara, hasta el extremo libre."
   },
   {
-   "id": "R11",
-   "name": "Pestaña de remate del extremo libre",
+   "id": "V06",
+   "grupo": "Ventanal",
+   "name": "Remate del extremo libre",
    "qty": 1,
    "L": 136,
    "A": 60,
    "t": 18,
-   "note": "Tapa la punta del antepecho en el extremo libre (100 de muro + 18 + 18 de pestañas) y cierra la U con las dos pestañas."
+   "material": "tablero",
+   "note": "Tapa la punta del antepecho y cierra la U con las dos pestañas."
+  },
+  {
+   "id": "V07",
+   "grupo": "Ventanal",
+   "name": "Taco de tope",
+   "qty": 3,
+   "L": 40,
+   "A": 43,
+   "t": 18,
+   "material": "tablero",
+   "note": "Dentro del canal, encima de cada lateral y del montante. Pegado y atornillado: las barras chocan aquí."
   },
   {
    "id": "B01",
+   "grupo": "Ventanal",
    "name": "Barra del mecanismo",
-   "material": "aluminio",
-   "qty": 1,
-   "L": 2871,
+   "qty": 2,
+   "L": 1423,
    "A": 25.4,
    "t": 3.2,
-   "note": "Platina de aluminio 1 × 1/8 pulg de una barra de 6 m. 30 agujeros de 7 mm a paso 97,6, centrados en el ancho; el primero a 20,5 mm de la punta. Limar las puntas hasta que tope a 40° y 140°."
+   "material": "aluminio",
+   "note": "Una por cuerpo, de una platina de 6 m. 15 agujeros de 7 mm a paso 98,7; el primero a 20,8 mm de la punta. Limar las puntas hasta que tope a 40° y 140°."
+  },
+  {
+   "id": "P01",
+   "grupo": "Puerta",
+   "name": "Paral contra el muro",
+   "qty": 2,
+   "L": 2560,
+   "A": 100,
+   "t": 40,
+   "material": "macizo",
+   "note": "Dos piezas pegadas y atornilladas = 80 × 100, igual al poste de esquina. De piso a cielo, atornillado al muro de la habitación con 4 chazos. Arriba recibe la vigueta del borde."
+  },
+  {
+   "id": "P02",
+   "grupo": "Puerta",
+   "name": "Poste de esquina",
+   "qty": 2,
+   "L": 2560,
+   "A": 100,
+   "t": 40,
+   "material": "macizo",
+   "note": "Dos piezas pegadas y atornilladas = 80 × 100. De piso a cielo, junto al ventanal: recibe el dintel, la vigueta del borde y el lateral del ventanal. Escuadra al piso."
+  },
+  {
+   "id": "P03",
+   "grupo": "Puerta",
+   "name": "Dintel",
+   "qty": 1,
+   "L": 1730,
+   "A": 100,
+   "t": 40,
+   "material": "macizo",
+   "note": "De canto, entre los dos parales, con la cara inferior a 2130. Recibe el riel del sistema plegable."
+  },
+  {
+   "id": "H01",
+   "grupo": "Puerta",
+   "name": "Hoja · montante continuo (capa 1)",
+   "qty": 8,
+   "L": 2060,
+   "A": 70,
+   "t": 18,
+   "material": "tablero",
+   "note": "Dos por hoja."
+  },
+  {
+   "id": "H02",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño inferior corto (capa 1)",
+   "qty": 4,
+   "L": 287,
+   "A": 130,
+   "t": 18,
+   "material": "tablero",
+   "note": "Entre los montantes continuos."
+  },
+  {
+   "id": "H03",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño central corto (capa 1)",
+   "qty": 4,
+   "L": 287,
+   "A": 100,
+   "t": 18,
+   "material": "tablero",
+   "note": "Entre los montantes continuos."
+  },
+  {
+   "id": "H04",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño superior corto (capa 1)",
+   "qty": 4,
+   "L": 287,
+   "A": 100,
+   "t": 18,
+   "material": "tablero",
+   "note": "Entre los montantes continuos."
+  },
+  {
+   "id": "H05",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño inferior continuo (capa 2)",
+   "qty": 4,
+   "L": 427,
+   "A": 130,
+   "t": 18,
+   "material": "tablero",
+   "note": "De lado a lado de la hoja; traba la capa 1."
+  },
+  {
+   "id": "H06",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño central continuo (capa 2)",
+   "qty": 4,
+   "L": 427,
+   "A": 100,
+   "t": 18,
+   "material": "tablero",
+   "note": "De lado a lado de la hoja; traba la capa 1."
+  },
+  {
+   "id": "H07",
+   "grupo": "Puerta",
+   "name": "Hoja · travesaño superior continuo (capa 2)",
+   "qty": 4,
+   "L": 427,
+   "A": 100,
+   "t": 18,
+   "material": "tablero",
+   "note": "De lado a lado de la hoja; traba la capa 1."
+  },
+  {
+   "id": "H08",
+   "grupo": "Puerta",
+   "name": "Hoja · montante interrumpido, hueco 1 (capa 2)",
+   "qty": 8,
+   "L": 820,
+   "A": 70,
+   "t": 18,
+   "material": "tablero",
+   "note": "Entre los travesaños continuos."
+  },
+  {
+   "id": "H09",
+   "grupo": "Puerta",
+   "name": "Hoja · montante interrumpido, hueco 2 (capa 2)",
+   "qty": 8,
+   "L": 910,
+   "A": 70,
+   "t": 18,
+   "material": "tablero",
+   "note": "Entre los travesaños continuos."
+  },
+  {
+   "id": "H10",
+   "grupo": "Puerta",
+   "name": "Hoja · tablilla del hueco 1",
+   "qty": 20,
+   "L": 820,
+   "A": 40,
+   "t": 18,
+   "material": "tablero",
+   "note": "5 por hueco, entre las dos capas."
+  },
+  {
+   "id": "H11",
+   "grupo": "Puerta",
+   "name": "Hoja · tablilla del hueco 2",
+   "qty": 20,
+   "L": 910,
+   "A": 40,
+   "t": 18,
+   "material": "tablero",
+   "note": "5 por hueco, entre las dos capas."
+  },
+  {
+   "id": "S01",
+   "grupo": "Puerta",
+   "name": "Listón de la sobreluz",
+   "qty": 2,
+   "L": 1730,
+   "A": 40,
+   "t": 18,
+   "material": "tablero",
+   "note": "Uno sobre el dintel y otro bajo la vigueta del borde; las tablillas se pegan y clavan con puntilla sin cabeza."
+  },
+  {
+   "id": "S02",
+   "grupo": "Puerta",
+   "name": "Tablilla de la sobreluz",
+   "qty": 19,
+   "L": 290,
+   "A": 60,
+   "t": 18,
+   "material": "tablero",
+   "note": "Verticales y fijas, separadas 29,5 mm: dejan paso de aire permanente sobre la puerta."
+  },
+  {
+   "id": "C01",
+   "grupo": "Cielo raso",
+   "name": "Carrera contra el muro de la habitación",
+   "qty": 1,
+   "L": 2980,
+   "A": 100,
+   "t": 40,
+   "material": "macizo",
+   "note": "De canto, con la cara de arriba a +2560, anclada al muro con chazos de 3/8 × 3 pulg cada 50 cm. Termina contra el paral de la puerta."
+  },
+  {
+   "id": "C02",
+   "grupo": "Cielo raso",
+   "name": "Vigueta del cielo raso",
+   "qty": 7,
+   "L": 1980,
+   "A": 100,
+   "t": 40,
+   "material": "macizo",
+   "note": "De canto, a unos 502 mm entre ejes: de la carrera al riel superior del ventanal, con 90 mm de apoyo. Fijar con escuadra o tornillo inclinado de 5 × 100 en cada apoyo."
   }
- ],
- "obra": {
-  "antepecho": {
-   "t": 100,
-   "alto": 1200,
-   "material": "Ladrillo a la vista",
-   "nota": "Muro de ladrillo de 10 cm. El marco, de 140, cubre el muro y las dos pestañas y vuela 2 mm sobre ellas; las pestañas bajan 60 mm por el ladrillo y tapan el borde superior y la junta madera–ladrillo. Todo el peso se apoya en el muro."
-  },
-  "cielo": {
-   "panel": 12.7,
-   "riel": {
-    "A": 64,
-    "h": 25
-   },
-   "nota": "Cielo raso de panel yeso atornillado a perfiles metálicos. No carga la ventana: el riel solo la sostiene de lado. El riel debe quedar justo sobre la ventana y bien amarrado a la estructura."
-  },
-  "medianera": {
-   "t": 120,
-   "lado": "izquierdo visto desde la cocina",
-   "nota": "Muro de ladrillo de 2,50 m. El lateral de ese lado se atornilla a ella."
-  },
-  "libre": {
-   "lado": "derecho visto desde la cocina",
-   "nota": "Sin muro ni columna: el lateral queda a la vista por tres caras y se sostiene por las esquinas del marco."
-  }
- }
+ ]
 };
