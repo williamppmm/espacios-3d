@@ -2,7 +2,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['pino'],WINDOW_DESIGN='pino-definitiva-20261104';
-const proposalNotes={pino:'Cierre de la cocina en pino, medido en obra · Ventanal de 3,08 × 1,26 m en dos cuerpos de 15 tablillas de 100 × 18 mm, mostrado a 45°, con marco de pino macizo de 40 × 140 y montante central; puerta plegable de 2,13 m con sobreluz de tablillas; cielo raso de machimbre a 2,56 m sobre viguetas de 40 × 100. En la terraza las posiciones son aproximadas. Despiece y compras aparte (despiece-pino-cocina).'};
+const proposalNotes={pino:'Cierre de la cocina en pino, medido en obra · Ventanal de 3,08 × 1,26 m en dos cuerpos de 15 tablillas de 100 × 18 mm, mostrado a 45°, con marco de pino macizo de 40 × 140 y montante central; puerta plegable de 2,13 m con sobreluz de tablillas; cielo raso de panel de yeso blanco a 2,56 m sobre omegas y viguetas galvanizadas (distribución de referencia). En la terraza las posiciones son aproximadas. Despiece y compras aparte (despiece-pino-cocina).'};
 const kitchenHeight=window.CocinaPropuestaData.upperTop/10;
 const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,foldingDoor:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'pino',windowDesign:WINDOW_DESIGN,kitchenLed:false,closetLed:false},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:kitchenHeight,x:750,z:260,rotation:90,visible:true,open:0},
@@ -388,11 +388,14 @@ box(roof,1.48,.04,2.34,2.64,2.52,1.09,palette.roof);
 // Cielo raso al filo de la habitación y de la cara patio del marco adoptado.
 const ceiling={x0:3.38,x1:7.5,z0:-.08,z1:3};
 box(roof,ceiling.x1-ceiling.x0,.04,ceiling.z1-ceiling.z0,(ceiling.x0+ceiling.x1)/2,2.52,(ceiling.z0+ceiling.z1)/2,palette.roof);
-{const D=window.CortasolPinoData,C=D.cielo,v=C.vigueta,m=C.machimbre,y=C.nivel/1000,xw=KITCHEN_X-D.marco.A/2000,mach=mat(0xe0bd86);
- mach.transparent=true;mach.opacity=.8;mach.side=THREE.DoubleSide;
- box(roof,m.x/1000,m.e/1000,m.z/1000,xw-m.x/2000,y-m.e/2000,m.z/2000,mach);                                   // machimbre de la cocina
- for(let k=0;k<v.n;k++)box(roof,v.L/1000,v.h/1000,v.t/1000,xw+.09-v.L/2000,y+v.h/2000,(20+k*v.sep)/1000,palette.pino);   // viguetas
- box(roof,.04,C.carrera.h/1000,C.carrera.L/1000,xw+.09-v.L/1000+.02,y-C.carrera.h/2000,C.carrera.L/2000,palette.pino);}   // carrera
+const ceilingPanel = window.crearCieloPanelYeso(THREE);
+ceilingPanel.root.scale.x=-1;
+ceilingPanel.root.position.x=KITCHEN_X-window.CortasolPinoData.marco.A/2000;
+roof.add(ceilingPanel.root);
+$('ceiling-structure').addEventListener('change',event=>{
+ ceilingPanel.inspect(event.target.checked);
+ if(event.target.checked){state.room.roof=true;$('roof').checked=true;transform();save();}
+});
 // Medianera derecha de 2,50 m; lado izquierdo abierto sobre pilares cada ~4 m que reciben el techo en arco (flecha 0,50 m).
 {const n=Math.round(L/4);for(let j=0;j<=n;j++)box(floor,.2,2.5,.2,Math.min(L-.1,Math.max(.1,L*j/n)),1.25,W+.06,palette.white);
 box(floor,.2,2.5,.2,.1,1.25,-.06,palette.white);// Pilar de la esquina del fondo sobre la medianera, donde el muro es bajo.

@@ -1,7 +1,7 @@
 /* Ventanal de tablillas orientables en pino, medido en obra: dos cuerpos de 15 tablillas en un marco de pino macizo de 40 × 140.
    Rieles enteros de punta a punta; laterales y montante central entre ellos. Cada tablilla gira sobre dos pines con resorte y lleva
    arriba un pasador de 1/4" que entra en la platina de aluminio de su cuerpo. Las platinas corren en un canal ruteado por debajo del
-   riel superior y chocan con tacos de tope sobre los laterales y el montante. Encima apoyan las viguetas del cielo raso de machimbre.
+   riel superior y chocan con tacos de tope sobre los laterales y el montante. Encima apoyan las viguetas del cielo raso de panel de yeso.
    Unidades en mm. +z = cocina, −z = patio, y = 0 en el antepecho, x = 0 en el centro del ventanal. Medidas desde CortasolPinoData. */
 (()=>{'use strict';const T=THREE,D=window.CortasolPinoData,$=id=>document.getElementById(id),stage=$('stage');
 const V=D.vano,LA=D.lama,F=D.marco,M=D.mecanismo,AN=D.angulo,B=M.barra,PN=M.pines,PS=M.pasador,part=id=>D.parts.find(p=>p.id===id),SL=part('T01').L;
@@ -66,18 +66,20 @@ function slat(x,y0,h,parent,top,bottom){const g=new T.Group();g.position.set(x,0
  return g;}
 // --- Laterales y montante, entre los rieles.
 function uprights(list,h=YT-TT,parent=root){for(const x of list)box(TT,h,F.A,stileMat,x,TT+h/2,0,parent);}
-// --- La obra: antepecho de ladrillo de 10 cm, medianera a la izquierda, cielo raso de machimbre sobre viguetas y poste de la puerta en el extremo libre.
+// --- La obra: antepecho de ladrillo de 10 cm, medianera a la izquierda, cielo raso de panel de yeso sobre viguetas y poste de la puerta en el extremo libre.
 const O=D.obra,FL=-O.antepecho.alto,CI=D.cielo,PU=D.puerta;
 function brick(w,h){const c=document.createElement('canvas');c.width=256;c.height=128;const g=c.getContext('2d');g.fillStyle='#d9d2c4';g.fillRect(0,0,256,128);
  let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
  for(let row=0;row<2;row++)for(let k=-1;k<2;k++){const x=k*128+(row?64:0)+3,y=row*64+3;g.fillStyle=['#b4553a','#a84d34','#bd6344','#9f4a33'][Math.floor(r()*4)];g.fillRect(x,y,122,58);}
  const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(w/250,h/130);return mat(0xffffff,{map:t,roughness:.95});}
 const floor=mat(0xe6e3dc,{roughness:1});
-function ceiling(lift){const g=group(lift*3),v=CI.vigueta,m=CI.machimbre,z0=ZA-90,len=v.L;   // viguetas desde 90 mm dentro del riel hacia la cocina
- for(let k=0;k<v.n;k++){const x=-V.L/2+20+v.sep*k;box(v.t,v.h,len,ghost?see(railMat):railMat,x,V.H+v.h/2,z0+len/2,g);}
- const mz0=ZA,mz1=ZA+m.x,mx1=-V.L/2+m.z;box(mx1+V.L/2,m.e,mz1-mz0,ghost?see(stileMat):stileMat,(mx1-V.L/2)/2,V.H-m.e/2,(mz0+mz1)/2,g,false);
- for(let k=1;k*m.util<m.x;k++)box(mx1+V.L/2,.6,1.2,hole,(mx1-V.L/2)/2,V.H-m.e-.3,mz0+k*m.util,g,false);   // juntas del machimbre
- g.add(label('CIELO RASO DE MACHIMBRE',0,V.H+260,ZA+900,.8));}
+function ceiling(lift){
+ const g=group(lift*3),model=window.crearCieloPanelYeso(T);
+ model.root.scale.set(1000,1000,1000);model.root.rotation.y=-Math.PI/2;
+ model.root.position.set(-V.L/2+CI.panel.z,-O.antepecho.alto,ZA);
+ model.inspect(ghost);g.add(model.root);
+ g.add(label('PANEL DE YESO · OMEGAS Y VIGUETAS',0,V.H+260,ZA+900,.8));
+}
 function context(){const c=group(),ta=O.antepecho.t,tm=O.medianera.t;
  box(V.L,O.antepecho.alto,ta,brick(V.L,O.antepecho.alto),0,FL/2,0,c,false);
  box(tm,V.H-FL,1400,brick(1400,V.H-FL),-V.L/2-tm/2,(V.H+FL)/2,0,c,false);
@@ -131,7 +133,7 @@ function setAngle(v){phi=Math.min(AN.max,Math.max(AN.min,v));const f=phi*deg,st=
  const n=v=>v.toLocaleString('es-CO',{maximumFractionDigits:1});
  $('angle').value=Math.round(phi);$('angle-out').textContent=Math.round(phi)+'°';
  $('s-angle').textContent=Math.round(phi)+'°';$('s-air').textContent=Math.round(st.air*100)+' %';$('s-front').textContent=n(st.front)+' mm';$('s-bar').textContent=(st.barX>0?'+':'')+n(st.barX)+' mm';
- $('caption').textContent={all:'Dos cuerpos de '+LA.por_cuerpo+' tablillas en un marco de pino macizo de '+TT+' × '+F.A+': rieles enteros de '+V.L+' mm y montante central, que baja al antepecho la carga del cielo raso. Encima apoyan las viguetas del machimbre; a la derecha, el poste de la puerta. A '+Math.round(phi)+'° pasa '+Math.round(st.air*100)+' % del aire y de frente se ve '+n(st.front)+' mm entre tablillas. Cada cuerpo se gira por separado: al mover una o dos tablillas se mueven las '+LA.por_cuerpo+' de ese lado.'+(exploded?' Separado: tablillas, barras, riel superior y cielo raso.':''),
+ $('caption').textContent={all:'Dos cuerpos de '+LA.por_cuerpo+' tablillas en un marco de pino macizo de '+TT+' × '+F.A+': rieles enteros de '+V.L+' mm y montante central. Encima se muestra la perfilería metálica y la placa de yeso blanco; su dimensionamiento se valida en obra; a la derecha, el poste de la puerta. A '+Math.round(phi)+'° pasa '+Math.round(st.air*100)+' % del aire y de frente se ve '+n(st.front)+' mm entre tablillas. Cada cuerpo se gira por separado: al mover una o dos tablillas se mueven las '+LA.por_cuerpo+' de ese lado.'+(exploded?' Separado: tablillas, barras, riel superior y cielo raso.':''),
   top:'Mecanismo junto al montante (riel transparente): canal de '+(Z1-Z0)+' × '+CH+' ruteado por debajo del riel. Cada cuerpo tiene su platina; las dos chocan con el mismo taco de tope, encima del montante, a '+AN.min+'° y '+AN.max+'°. Los pasadores van a '+R+' mm del eje, hacia el patio, sobre arandelas de nylon.'+(exploded?' Separado: tablillas, barras y riel.':''),
   bottom:'Abajo, junto al montante: el riel macizo apoya en el ladrillo y sus pestañas de '+F.pestana.h+' mm bajan por las dos caras del muro. Cada tablilla se apoya en la pestaña de su pin; la punta entra en su hueco por una ranura de entrada de '+PN.ranura.L+' × '+PN.ranura.prof+' mm.',
   corner:'Esquina del extremo libre: el riel va entero y el lateral se apoya encima, a tope. Se pega, con dos tarugos de 10 × 60 y dos tornillos de 5 × 100 desde la cara inferior del riel, puestos en el banco antes de instalar. Arriba es igual, con los tornillos desde la cara superior. El poste de la puerta se atornilla a este lateral.'+(exploded?' Separado: lateral, tarugos y tornillos.':''),

@@ -1,5 +1,5 @@
 """Genera despiece-pino-cocina.xlsx y despiece-pino-cocina.html: todo el pino del cierre de la cocina (ventanal de tablillas
-orientables, puerta plegable con sobreluz y cielo raso de machimbre), medido en obra el 21/11/2026.
+orientables, puerta plegable con sobreluz y cielo raso de panel de yeso), medido en obra el 21/11/2026.
 
 Uso, desde la raíz del repositorio:
 
@@ -9,7 +9,7 @@ Fuente: assets/models/cortasol-pino-data.js (la misma que usan los visores del v
 Es un libro independiente: no entra en compras-proyecto.xlsx ni en los despieces de los muebles.
 - Pino macizo de 40 mm: plan de corte en piezas de 4 m (refilando 5 mm por punta y disco de 4 mm).
 - Pino alistonado de 18 mm: encaje de referencia en tableros de 2440 × 1220.
-- Machimbre de 10 mm: por metro cuadrado.
+- Panel de yeso y perfilería: referencias para cotizar; dimensionamiento pendiente de validar.
 """
 import html, json, math
 from pathlib import Path
@@ -25,7 +25,7 @@ SIERRA = 3
 DENSIDAD = 500
 LACA = dict(**{"4L": 249900, "750": 74900}, url4="https://www.homecenter.com.co/homecenter-co/product/256080/laca-para-metal-y-madera-interior-exterior-purcat-incoloro-mate-monto-4-l/256080/")
 RENDIMIENTO, MANOS = 10, 3                      # m² por litro y mano (estimado); una rebajada y dos normales
-MACH_REPOSICION, MACH_TABLA = 0.10, 3000        # 10 % de desperdicio; tablas de 3 m
+MACH_REPOSICION = 0.10                         # Reserva de área de placa para cotización
 
 t = (RAIZ / "assets" / "models" / "cortasol-pino-data.js").read_text(encoding="utf-8")
 D = json.loads(t[t.index("{"): t.rindex("}") + 1])
@@ -94,14 +94,14 @@ def main():
     t_refil = [[i, round(ocup(b), 3), " · ".join(f'tira {fmt(s["A"])}: ' + " + ".join(f"{pid} {fmt(L)}" for pid, L in s["items"]) for s in b["tiras"])]
                for i, b in enumerate(refil, 1)]
     # Machimbre.
-    m2 = C["machimbre"]["m2"]
+    m2 = C["panel"]["m2"]
     m2_compra = round(m2 * (1 + MACH_REPOSICION), 1)
-    tablas = math.ceil(m2_compra * 1e6 / (C["machimbre"]["util"] * MACH_TABLA))
+    placas = math.ceil(m2_compra / (1.22 * 2.44))
 
     vol = lambda p: p["qty"] * p["L"] * p["A"] * p["t"] / 1e9
     peso = {g: sum(vol(p) for p in madera if p["grupo"] == g) * DENSIDAD for g in ("Ventanal", "Puerta", "Cielo raso")}
-    peso_mach = m2 * 0.010 * DENSIDAD
-    area = sum(p["qty"] * 2 * (p["L"] * p["A"] + p["L"] * p["t"] + p["A"] * p["t"]) for p in madera) / 1e6 + 2 * m2
+    peso_mach = 0  # El peso de la placa y perfilería se verifica con el sistema elegido.
+    area = sum(p["qty"] * 2 * (p["L"] * p["A"] + p["L"] * p["t"] + p["A"] * p["t"]) for p in madera) / 1e6
     litros = area * MANOS / RENDIMIENTO
     latas = math.ceil(litros / 4)
     aire = lambda a: (paso * math.sin(math.radians(a)) - lama["t"]) / paso
@@ -109,13 +109,12 @@ def main():
     corre = R * (math.cos(math.radians(an["min"])) - math.cos(math.radians(an["max"])))
     uniones = 2 * (F["cuerpos"] + 1)                      # laterales y montante, arriba y abajo
     vig = C["vigueta"]
-    chazos_carrera = math.ceil(C["carrera"]["L"] / 500) + 1
+
 
     despiece = [[p["id"], p["grupo"], p["name"], MAT[p["material"]], p["qty"], p["L"], p["A"], p["t"],
                  round(p["qty"] * p["L"] * p["A"] / 1e6, 3), p["note"]] for p in parts]
-    despiece.append(["M01", "Cielo raso", "Machimbre de pino", "Machimbre de pino 10 mm", m2_compra, C["machimbre"]["z"], C["machimbre"]["x"],
-                     C["machimbre"]["e"], m2, f"{fmt(m2)} m² netos ({fmt(C['machimbre']['x'])} × {fmt(C['machimbre']['z'])}) + {MACH_REPOSICION:.0%} de desperdicio. "
-                     "Clavado por debajo de las viguetas, a lo largo del ventanal, con las juntas sobre las viguetas y alternadas."])
+    despiece.append(["Y01", "Cielo raso", "Placa de yeso blanca", "Panel de yeso", placas, 2440, 1220,
+                     C["panel"]["e"], m2, "Área neta más 10 % para estimación. Confirmar tipo de placa, formato, juntas y merma con el instalador."])
 
     cotiz = "cotizar"
     compras = [
@@ -124,10 +123,14 @@ def main():
           for e, a, n in pedido_macizo],
         ["Pino alistonado", f"Tablero alistonado de pino {TABLERO['e']} mm · {TABLERO['L']} × {TABLERO['A']} (referencia)", len(refil), "tablero", cotiz,
          "Tablillas del ventanal, pestañas, tacos, hojas de la puerta y sobreluz. Ver hoja «Tableros». Del mismo lote que el macizo si es posible."],
-        ["Machimbre", "Machimbre de pino de 10 mm", m2_compra, "m²", cotiz,
-         f"Unas {tablas} tablas de 3 m si el ancho útil es de {C['machimbre']['util']} mm. Comprar inmunizado o inmunizarlo con el resto."],
+        ["Cielo raso", "Placa de yeso de 12,7 mm · referencia 1220 × 2440", placas, "placa", cotiz,
+         "Ambientación de referencia. Confirmar placa adecuada al ambiente y plan de juntas antes de comprar."],
+        ["Cielo raso", "Omegas, viguetas y ángulos galvanizados", 1, "sistema", cotiz,
+         "En el 3D: omegas de 19 mm, viguetas de 38 mm y ángulos de 30 mm. Calibre, separación, cuelgues y anclajes por dimensionar."],
+        ["Cielo raso", "Tornillos para placa y perfilería, cinta, masilla y pintura blanca", 1, "lote", cotiz,
+         "Cantidades y compatibilidad según el sistema elegido; incluir juntas perimetrales con la madera."],
         ["Pino", "Corte en taller (sierra fina)", 1, "servicio", cotiz, f"{sum(p['qty'] for p in madera)} piezas. Veta siempre a lo largo."],
-        ["Acabado", "Inmunizante para madera, uso interior", 1, "galón", cotiz, "Antes de lijar y barnizar, sobre todas las piezas y el machimbre, si no vienen inmunizados. Dejar secar lo que indique la etiqueta."],
+        ["Acabado", "Inmunizante para madera, uso interior", 1, "galón", cotiz, "Antes de lijar y barnizar, sobre todas las piezas  si no vienen inmunizados. Dejar secar lo que indique la etiqueta."],
         ["Acabado", "Montó Laca Pur+Cat incoloro mate · 4 L (Homecenter 256080)", latas, "u", LACA["4L"],
          f"Tono miel. Unos {fmt(round(litros, 1))} L para {fmt(round(area, 1))} m² en {MANOS} manos (la primera rebajada como sellador). {LACA['url4']}"],
         ["Acabado", "Diluyente que indique la etiqueta de la laca", 2, "L", cotiz, "Primera mano y limpieza."],
@@ -135,20 +138,19 @@ def main():
         ["Acabado", "Mascarilla para vapores orgánicos y guantes de nitrilo", 1, "juego", cotiz, "La laca catalizada es inflamable: aplicar ventilado."],
         ["Armado", "Pegante para madera tipo Colbón", 2, "kg", cotiz, "Uniones del marco, poste de dos piezas, tacos y sobreluz."],
         ["Armado", "Tarugo de madera de 10 × 60 mm", 2 * uniones + 4, "u", cotiz, f"Dos por unión del ventanal ({uniones} uniones), pegados."],
-        ["Armado", "Tornillo para madera 5 × 100", 2 * uniones + 4 * vig["n"] + 8, "u", cotiz,
-         f"Dos por unión del ventanal desde la cara exterior del riel; dos por punta de vigueta, inclinados, a la carrera y al riel."],
+        ["Armado", "Tornillo para madera 5 × 100", 2 * uniones + 8, "u", cotiz,
+         f"Dos por unión del ventanal desde la cara exterior del riel; resto para la carpintería de pino."],
         ["Armado", "Tornillo para madera 5 × 120", AK["poste"]["n"] + 2, "u", cotiz, AK["poste"]["nota"]],
         ["Armado", "Tornillo para madera 5 × 70", 22, "u", cotiz, "Unir las dos piezas de cada paral (cada 40 cm, alternados) y las escuadras al piso."],
-        ["Armado", "Escuadra metálica de 40 × 40 mm", 2 * vig["n"] + 2, "u", cotiz, "Opcional: una por punta de vigueta, si no se usa tornillo inclinado; dos para el pie de cada paral."],
-        ["Armado", "Puntilla sin cabeza de 1 1/2 pulg o grapas para machimbre", 1, "caja", cotiz, "Machimbre a las viguetas y tablillas de la sobreluz a sus listones."],
+        ["Armado", "Escuadra metálica de 40 × 40 mm", 4, "u", cotiz, "Dos para el pie de cada paral de la puerta."],
+        ["Armado", "Puntilla sin cabeza para sobreluz", 1, "caja", cotiz, "Tablillas de la sobreluz a sus listones."],
         ["Fijación a la obra", AK["antepecho"]["tornillo"].capitalize() + " · antepecho", AK["antepecho"]["n"] + 2, "u", cotiz, AK["antepecho"]["nota"]],
-        ["Fijación a la obra", AK["medianera"]["tornillo"].capitalize() + " · medianera", AK["medianera"]["n"] + 3 + 1, "u", cotiz,
-         "Lateral izquierdo del ventanal (3) y vigueta junto a la medianera (3)."],
-        ["Fijación a la obra", "Chazo expansivo de 3/8 × 3 pulg con tornillo", chazos_carrera, "u", cotiz, "Carrera del cielo raso al muro de la habitación, cada 50 cm."],
+        ["Fijación a la obra", AK["medianera"]["tornillo"].capitalize() + " · medianera", AK["medianera"]["n"] + 1, "u", cotiz,
+         "Fijación de la carpintería de pino a la medianera."],
         ["Fijación a la obra", "Tornillo 5 × 100 con chazo plástico de 8 mm · paral", 4, "u", cotiz, "Paral de la puerta al muro de la habitación."],
         ["Fijación a la obra", "Sellador elastomérico o silicona neutra", 2, "tubo", cotiz, "Entre el riel inferior y el ladrillo, y en las juntas con la medianera y el muro."],
         ["Fijación a la obra", "Tapones de pino de 10 mm", AK["antepecho"]["n"] + AK["medianera"]["n"] + 2 * uniones + AK["poste"]["n"] + 6, "u", cotiz, "Tapan los tornillos a la vista."],
-        ["Fijación a la obra", "Calzas plásticas de nivelación", 1, "paquete", cotiz, "Antepecho y calce de 4 mm bajo las viguetas."],
+        ["Fijación a la obra", "Calzas plásticas de nivelación", 1, "paquete", cotiz, "Antepecho y ajuste del encuentro superior de la carpintería."],
         ["Mecanismo", f"Pines {PN['modelo']} · paquete de 80", 1, "paquete", cotiz, f"Amazon. {2 * lama['n']} pines + {80 - 2 * lama['n']} de repuesto. Medir antes de perforar."],
         ["Mecanismo", "Platina de aluminio 1 × 1/8 pulg (25,4 × 3,2 mm) · barra de 6 m", 1, "barra", cotiz,
          f"Dos barras de {B['L']} mm, una por cuerpo, con {lama['por_cuerpo']} agujeros de {B['agujero']} mm a paso {fmt(round(paso, 1))}."],
@@ -168,22 +170,22 @@ def main():
                                 f"paso {fmt(round(paso, 1))}, orientables de {an['min']}° a {an['max']}°; marco macizo de {F['t']} × {F['A']} con montante central"],
         ["Puerta", P_["hojas"]["n"], f"hojas de {P_['hojas']['A']} × {P_['hojas']['h']} × {P_['hojas']['t']}; dintel a {fmt(P_['alto'])} y sobreluz de "
                                      f"{P_['sobreluz']['tablilla']['n']} tablillas hasta el cielo raso"],
-        ["Cielo raso", vig["n"], f"viguetas de 40 × 100 a unos {vig['sep']:.0f} mm, carrera contra el muro y {fmt(m2)} m² de machimbre"],
+        ["Cielo raso", vig["n"], f"perfilería metálica ilustrativa y {fmt(m2)} m² de panel de yeso; validar apoyos y calibre"],
         *[[f"Pino macizo {e} × {a}", n, f"piezas de {LISTON['L'] // 1000} m (ver plan de corte)"] for e, a, n in pedido_macizo],
         ["Tableros alistonados 18 mm", len(refil), f"de {TABLERO['L']} × {TABLERO['A']} (referencia), refilando 5 mm por punta"],
-        ["Machimbre", m2_compra, f"m² con {MACH_REPOSICION:.0%} de desperdicio (unas {tablas} tablas de 3 m)"],
-        ["Peso de la madera", round(sum(peso.values()) + peso_mach), f"kg: ventanal {peso['Ventanal']:.0f}, puerta {peso['Puerta']:.0f}, estructura del cielo {peso['Cielo raso']:.0f} y machimbre {peso_mach:.0f}"],
-        ["Flecha del riel superior", C["carga"]["flecha_con"], f"mm con el montante central (sin él serían unos {C['carga']['flecha_sin']:.0f} mm), con unos {C['carga']['kg']} kg de cielo raso"],
+        ["Placas de yeso", placas, "Referencia 1220 × 2440 × 12,7 mm; confirmar plan de juntas"],
+        ["Peso de la madera", round(sum(peso.values())), f"kg: ventanal {peso['Ventanal']:.0f} y puerta {peso['Puerta']:.0f}"],
         ["Paso de aire del ventanal", round(aire(an["min"]) * 100), f"% a {an['min']}° y {an['max']}°; {aire(90) * 100:.0f} % a 90°. La sobreluz de la puerta suma paso permanente"],
         ["Recorrido de cada barra", round(corre, 1), f"mm a lo largo, dentro del canal de {M['canal']['z1'] - M['canal']['z0']} × {M['canal']['prof']}"],
         ["Superficie a barnizar", round(area, 1), f"m², todas las caras; unos {fmt(round(litros, 1))} L de laca ({latas} latas de 4 L)"],
         ["Total con precio de referencia", total, "Laca y varilla; el resto por cotizar"],
     ]
     pendientes = [
+        ["Perfilería del cielo raso", "Validar calibre, luces, separaciones, cuelgues y anclajes. Comprobar cualquier carga sobre el ventanal o el marco de la puerta antes de instalar.", "Antes de comprar"],
         ["Medida real del pino", "Medir el 4 × 14 y el 4 × 10 que entregue el depósito. Si llegan cepillados más delgados (p. ej. 38 × 135), avisar antes de cortar: cambian tablillas, barras y el vuelo sobre las pestañas.", "Antes de cortar"],
         ["Largo de las piezas", f"El plan usa piezas de {LISTON['L'] // 1000} m. Los rieles del ventanal ({fmt(D['vano']['L'])}) y los parales ({fmt(C['nivel'])}) no salen de 3 m.", "Al comprar"],
-        ["Espacio sobre el cielo raso", "Confirmar que haya al menos 11 cm libres entre +2560 y el techo para las viguetas de 100 mm.", "Antes de comprar"],
-        ["Muro de la habitación", "Confirmar de qué es (ladrillo, concreto) para elegir los chazos de la carrera y del paral.", "Antes de instalar"],
+        ["Espacio sobre el cielo raso", "La placa termina por debajo a +2560. La ambientación ocupa unos 70 mm por encima; confirmar espacio y sistema de soporte.", "Antes de comprar"],
+        ["Muro de la habitación", "Confirmar de qué es (ladrillo, concreto) para elegir los anclajes del cielo raso y del paral.", "Antes de instalar"],
         ["Vano real", "Medir ancho y alto del ventanal y de la puerta en tres puntos; revisar plomo del muro de la habitación y nivel del antepecho.", "Antes de cortar"],
         ["Sistema plegable", "Elegir el kit para hojas de 36 mm y ajustar el alto de las hojas a su plantilla (hoy 60 mm para riel y carros y 10 mm bajo la hoja).", "Antes de cortar las hojas"],
         ["Pines", "Comprar el paquete uxcell y medir cuerpo, punta y pestaña antes de perforar.", "Antes de perforar"],
@@ -247,12 +249,12 @@ def main():
             f'<a href="puerta-plegable.html">Puerta y cielo raso 3D</a> · <a href="despiece-pino-cocina.xlsx" download>Descargar Excel</a></p>',
             '<span class="tag">Pino de la cocina · independiente de los muebles</span><h1>Despiece y compras</h1>',
             '<nav class="tabs">' + "".join(f'<a href="#{a}">{t}</a>' for a, t, _ in secs) + '</nav>',
-            f'<p class="note">Medido en obra el {FECHA}. Pino macizo de 40 mm en piezas de 4 m, pino alistonado de 18 mm y machimbre de 10 mm, '
+            f'<p class="note">Medido en obra el {FECHA}. Pino macizo de 40 mm en piezas de 4 m, pino alistonado de 18 mm y cielo raso de panel de yeso, '
             'del mismo lote, inmunizado y barnizado en la misma tanda. No suma en compras-proyecto.</p>']
     for a, t, h in secs: body.append(f'<h2 id="{a}">{html.escape(t)}</h2>{h}')
     (RAIZ / "despiece-pino-cocina.html").write_text(page("Pino de la cocina · despiece", "".join(body)), encoding="utf-8")
     print("OK:", ", ".join(f"{e}×{a}: {n} piezas de 4 m" for e, a, n in pedido_macizo),
-          f"| tableros {len(refil)} {[round(ocup(b), 2) for b in refil]} | machimbre {m2_compra} m² | área {area:.1f} m², laca {litros:.1f} L | "
+          f"| tableros {len(refil)} {[round(ocup(b), 2) for b in refil]} | panel de yeso {m2_compra} m² | área {area:.1f} m², laca {litros:.1f} L | "
           f"madera {sum(peso.values()) + peso_mach:.0f} kg")
 
 

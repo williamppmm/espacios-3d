@@ -1,4 +1,4 @@
-/* Visor de la puerta plegable con su entorno real: ventanal de pino, antepecho, medianera, muro de la habitación y cielo raso de machimbre. */
+/* Visor de la puerta plegable con su entorno real: ventanal de pino, antepecho, medianera, muro de la habitación y cielo raso de panel de yeso. */
 (() => {
   const T = window.THREE, d = window.PuertaPlegableData, D = window.CortasolPinoData;
   const $ = id => document.getElementById(id);
@@ -17,12 +17,12 @@
   }
   $('sizing').textContent='Del muro de la habitación al filo del ladrillo hay '+mm(D.puerta.ancho)+'. Se descuentan '+mm(D.puerta.ancho-d.span)+' del vuelo y la pestaña del ventanal, '+mm(d.post)+' del poste de esquina y '+mm(d.jamb)+' del paral contra el muro: quedan '+mm(d.opening)+' para las cuatro hojas, con '+mm(d.joint)+' entre hojas y '+mm(d.edgeGap)+' en cada extremo. El dintel va con su cara inferior a '+mm(d.head)+', como la puerta metálica; bajo la hoja quedan '+mm(d.floorGap)+' y arriba '+mm(d.head-d.height-d.floorGap)+' para el riel y los carros.';
   const MAT={macizo:'Pino macizo 40 mm',tablero:'Pino alistonado 18 mm'};
-  for(const part of D.parts.filter(p=>p.grupo!=='Ventanal')){
+  for(const part of D.parts.filter(p=>p.grupo==='Puerta')){
     const row=$('cut-list').insertRow();
     for(const value of [part.grupo,part.name,MAT[part.material]||part.material,part.qty,format(part.L)+' × '+format(part.A)+' × '+format(part.t)])row.insertCell().textContent=value;
   }
   const weightPerLeaf=d.leafArea*.018*500/d.leaves;
-  $('material').textContent='Hojas en dos capas de pino alistonado de 18 mm: unos '+format(weightPerLeaf,1)+' kg de madera por hoja y '+format(weightPerLeaf*d.leaves,1)+' kg entre las cuatro, a 500 kg/m³ (antes de herrajes). Paso de aire entre las tablillas de las hojas: '+format(d.airArea,2)+' m²; la sobreluz deja '+format(d.transomAir,2)+' m² de paso permanente. Cielo raso: '+format(D.cielo.machimbre.m2,1)+' m² de machimbre sobre '+D.cielo.vigueta.n+' viguetas de 40 × 100.';
+  $('material').textContent='Hojas en dos capas de pino alistonado de 18 mm: unos '+format(weightPerLeaf,1)+' kg de madera por hoja y '+format(weightPerLeaf*d.leaves,1)+' kg entre las cuatro, a 500 kg/m³ (antes de herrajes). Paso de aire entre las tablillas de las hojas: '+format(d.airArea,2)+' m²; la sobreluz deja '+format(d.transomAir,2)+' m² de paso permanente. Cielo raso: '+format(D.cielo.panel.m2,1)+' m² de panel de yeso blanco, con omegas y viguetas galvanizadas. Perfilería de referencia por validar en obra.';
 
   // --- Escena
   const stage=$('stage');
@@ -47,12 +47,15 @@
   for(const z of[zMed+F.t/2,mid,zEnd-F.t/2])box(ext,A,F.alto-2*F.t,F.t,xf,(y0+y1)/2,z,pine);         // laterales y montante
   const P=F.luz/D.lama.por_cuerpo,SL=D.parts.find(p=>p.id==='T01').L;
   for(const c of[-1,1]){const zc=mid+c*(F.luz/2+F.t/2);for(let i=0;i<D.lama.por_cuerpo;i++){const o=box(ext,D.lama.A,SL,D.lama.t,xf,(y0+y1)/2,zc-F.luz/2+P*(i+.5),slat);o.rotation.y=Math.PI/4;}}
-  // Cielo raso: carrera contra el muro, viguetas encima del nivel y machimbre por debajo.
-  const C=D.cielo,v=C.vigueta;
-  box(ceil,40,C.carrera.h,C.carrera.L,20,d.ceiling-C.carrera.h/2,zMed+C.carrera.L/2,pine);
-  for(let k=0;k<v.n;k++)box(ceil,v.L,v.h,v.t,v.L/2,d.ceiling+v.h/2,-k*v.sep,pine);
-  const mz1=zEnd-D.puerta.plano-D.puerta.sobreluz.liston.t/2,mz0=zMed;
-  box(ceil,C.machimbre.x,C.machimbre.e,mz1-mz0,d.jamb+C.machimbre.x/2,d.ceiling-C.machimbre.e/2,(mz0+mz1)/2,mat(0xe0bd86,{roughness:.6,transparent:true,opacity:.92}));
+  const ceilingPanel=window.crearCieloPanelYeso(T);
+  ceilingPanel.root.scale.z=-1;
+  ceilingPanel.root.position.set(d.jamb/1000,0,zEnd/1000);
+  ceil.add(ceilingPanel.root);
+  $('ceiling-structure').onclick=()=>{
+    const button=$('ceiling-structure'), active=button.getAttribute('aria-pressed')!=='true';
+    ceilingPanel.inspect(active);button.setAttribute('aria-pressed',String(active));
+    showCeiling=true;ceilingUI();
+  };
   const floor=new T.Mesh(new T.PlaneGeometry(10,8),new T.MeshStandardMaterial({color:0xe1ddd1}));
   floor.rotation.x=-Math.PI/2;floor.position.set(1,-.002,-1.5);scene.add(floor);
   let renderer;

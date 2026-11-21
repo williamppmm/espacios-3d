@@ -1,15 +1,11 @@
-/* Cierre de la cocina en pino, medido en obra el 21/11/2026: ventanal de dos cuerpos con tablillas orientables, puerta plegable
-   de 213 cm con sobreluz de tablillas y estructura del cielo raso de machimbre. Marco y estructura en pino macizo de 40 mm; tablillas,
-   pestañas y hojas en pino alistonado de 18 mm. Fuente única para el visor del ventanal (assets/propuesta-lamas-pino.js), la puerta
-   (assets/models/puerta-plegable-*.js), la terraza (assets/app.js) y herramientas/build_pino_cocina.py. Medidas en mm.
-   Ángulo: 90° = tablilla perpendicular al muro; 40° y 140° = topes. z > 0 = cocina, z < 0 = patio; x > 0 = hacia el extremo libre. */
+/* Cielo raso definitivo de panel de yeso. Dimensiones en mm; perfilería ilustrativa por validar en obra. */
 window.CortasolPinoData={
  "name": "Cierre de la cocina en pino: ventanal, puerta plegable y cielo raso",
- "status": "Diseño ajustado a la obra terminada (21 de noviembre de 2026): ventanal de 3080 × 1260 en dos cuerpos sobre un antepecho de ladrillo a la vista de 10 cm y 1300 de alto; puerta plegable de 1910 × 2130 con sobreluz de tablillas hasta el cielo raso de 2560; cielo raso de machimbre sobre viguetas que apoyan en el ventanal y en una carrera contra el muro de la habitación. Marco y estructura en pino macizo de 40 mm; tablillas, pestañas y hojas en pino alistonado de 18 mm.",
+ "status": "Alternativa de cielo raso de panel de yeso con perfilería metálica. Ventanal y puerta de pino según medidas de obra. Ambientación de referencia. Placa blanca con cara inferior a +2560; omegas de 19 mm y viguetas de 38 mm por encima. Apoyo perimetral en los muros y encuentro con ventanal y parales de puerta. Calibre, separaciones, cuelgues y anclajes pendientes de verificar con el instalador según el sistema y sus cargas.",
  "vano": {
   "L": 3080,
   "H": 1260,
-  "nota": "Medida en obra: 3080 de largo, de la medianera al filo del ladrillo del extremo libre, y 1260 de alto, del antepecho (+1300) al cielo raso (+2560). El marco mide 1256: 4 mm de calce bajo las viguetas. Volver a medir en tres puntos antes de cortar."
+  "nota": "Ventanal de 3080 × 1260 sobre antepecho a +1300; encuentro con placa a +2560. Marco de 1256 mm y junta de 4 mm para ajuste en obra."
  },
  "acabado": {
   "nota": "Todo el pino del mismo lote: inmunizado antes de armar, lijado y barnizado en la misma tanda, para que el tono quede parejo. Laca Montó Pur+Cat incoloro mate: primera mano rebajada como sellador y dos manos normales. Hay techo encima: sin lluvia directa, pero el lado patio sí recibe sol y humedad del ambiente."
@@ -39,10 +35,10 @@ window.CortasolPinoData={
   "vuelo": 2,
   "alto": 1256,
   "material": "Pino macizo de 40 mm de grueso (4 × 14), cepillado, inmunizado y barnizado",
-  "nota": "Marco de pino macizo de 40 × 140 mm, igual en rieles, laterales y montante: 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña. Los rieles van de una sola pieza de 3080 mm. El montante central divide el ventanal en dos cuerpos de 1480,0 mm libres y baja al antepecho la carga del cielo raso.",
+  "nota": "Marco de pino macizo de 40 × 140 mm, igual en rieles, laterales y montante: 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña. Los rieles van de una sola pieza de 3080 mm. El montante central divide el ventanal en dos cuerpos de 1480,0 mm libres y rigidiza el conjunto.",
   "montante": {
    "t": 40,
-   "nota": "Sin montante, el riel superior acostado cruzaría 3000 mm y, con el cielo raso encima, se flecharía unos 29 mm: las tablillas se trabarían. Con el montante la luz baja a 1480,0 mm y la flecha a unos 1,7 mm."
+   "nota": "Montante central entre rieles para rigidizar el ventanal y dividirlo en dos cuerpos. Las cargas del nuevo cielo raso requieren verificación independiente."
   },
   "pestana": {
    "t": 18,
@@ -195,32 +191,32 @@ window.CortasolPinoData={
  },
  "cielo": {
   "nivel": 2560,
-  "material": "Machimbre de pino de 10 mm",
-  "vigueta": {
-   "t": 40,
-   "h": 100,
-   "n": 7,
-   "L": 1980,
-   "sep": 501.6666666666667
-  },
-  "carrera": {
-   "t": 40,
-   "h": 100,
-   "L": 2980
-  },
-  "machimbre": {
-   "e": 10,
-   "util": 90,
+  "material": "Panel de yeso de 12,7 mm sobre perfilería galvanizada",
+  "panel": {
+   "e": 12.7,
    "x": 1850,
-   "z": 3021.0,
+   "z": 3021,
    "m2": 5.59
   },
-  "carga": {
-   "kg": 117,
-   "flecha_sin": 29.3,
-   "flecha_con": 1.7
+  "vigueta": {
+   "t": 19,
+   "h": 38,
+   "n": 5,
+   "L": 1850,
+   "sep": 745.25
   },
-  "nota": "7 viguetas de 40 × 100 de canto, a unos 502 mm entre ejes, apoyadas en la carrera contra el muro de la habitación y 90 mm sobre el riel superior del ventanal. La primera va atornillada a la medianera y la última sobre los dos parales de la puerta. El machimbre se clava por debajo, a lo largo del ventanal, con las juntas sobre las viguetas y alternadas: unos 5.6 m² (1,9 × 3,0 m). Las viguetas quedan encima de +2560: confirmar que haya al menos 11 cm libres bajo el techo. Peso estimado del cielo raso con margen: unos 117 kg, la mitad sobre el ventanal."
+  "omega": {
+   "t": 58,
+   "h": 19,
+   "n": 6,
+   "L": 3021,
+   "sep": 358
+  },
+  "perimetral": {
+   "h": 30,
+   "t": 30
+  },
+  "nota": "Ambientación de referencia. Placa blanca con cara inferior a +2560; omegas de 19 mm y viguetas de 38 mm por encima. Apoyo perimetral en los muros y encuentro con ventanal y parales de puerta. Calibre, separaciones, cuelgues y anclajes pendientes de verificar con el instalador según el sistema y sus cargas."
  },
  "obra": {
   "antepecho": {
@@ -231,7 +227,7 @@ window.CortasolPinoData={
   },
   "cielo": {
    "nivel": 2560,
-   "nota": "Cielo raso de machimbre a +2560 sobre la cocina; techo encima, sin lluvia directa."
+   "nota": "Ambientación de referencia. Placa blanca con cara inferior a +2560; omegas de 19 mm y viguetas de 38 mm por encima. Apoyo perimetral en los muros y encuentro con ventanal y parales de puerta. Calibre, separaciones, cuelgues y anclajes pendientes de verificar con el instalador según el sistema y sus cargas."
   },
   "medianera": {
    "t": 100,
@@ -239,7 +235,7 @@ window.CortasolPinoData={
    "nota": "Ladrillo a la vista de 10 cm. El lateral izquierdo y la primera vigueta se atornillan a ella."
   },
   "habitacion": {
-   "nota": "Muro gris de la habitación: recibe la carrera del cielo raso y el paral de la puerta."
+   "nota": "Muro de la habitación: encuentro del perfil perimetral y del paral de pino de la puerta."
   },
   "libre": {
    "lado": "derecho visto desde la cocina",
@@ -267,7 +263,7 @@ window.CortasolPinoData={
    "A": 140,
    "t": 40,
    "material": "macizo",
-   "note": "Una sola pieza. Canal de 43 × 18 ruteado por debajo, de punta a punta, del lado patio; huecos de los pines alineados con los de abajo. Sobre él apoyan las viguetas del cielo raso (90 mm)."
+   "note": "Una sola pieza. Canal de 43 × 18 ruteado por debajo, de punta a punta, del lado patio; huecos de los pines alineados con los de abajo. Encuentro perimetral del cielo raso; apoyo estructural pendiente de verificar."
   },
   {
    "id": "V03",
@@ -289,7 +285,7 @@ window.CortasolPinoData={
    "A": 140,
    "t": 40,
    "material": "macizo",
-   "note": "Entre los rieles, al centro: deja dos cuerpos de 1480,0 mm libres y baja la carga del cielo raso al antepecho."
+   "note": "Entre los rieles, al centro: deja dos cuerpos de 1480,0 mm libres y rigidiza el ventanal."
   },
   {
    "id": "T01",
@@ -366,7 +362,7 @@ window.CortasolPinoData={
    "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Dos piezas pegadas y atornilladas = 80 × 100, igual al poste de esquina. De piso a cielo, atornillado al muro de la habitación con 4 chazos. Arriba recibe la vigueta del borde."
+   "note": "Dos piezas pegadas y atornilladas = 80 × 100, igual al poste de esquina. De piso a cielo, atornillado al muro de la habitación con 4 chazos. Arriba se encuentra con la perfilería del cielo raso."
   },
   {
    "id": "P02",
@@ -377,7 +373,7 @@ window.CortasolPinoData={
    "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Dos piezas pegadas y atornilladas = 80 × 100. De piso a cielo, junto al ventanal: recibe el dintel, la vigueta del borde y el lateral del ventanal. Escuadra al piso."
+   "note": "Dos piezas pegadas y atornilladas = 80 × 100. De piso a cielo, junto al ventanal: recibe el dintel, el encuentro del cielo raso y el lateral del ventanal. Escuadra al piso."
   },
   {
    "id": "P03",
@@ -520,7 +516,7 @@ window.CortasolPinoData={
    "A": 40,
    "t": 18,
    "material": "tablero",
-   "note": "Uno sobre el dintel y otro bajo la vigueta del borde; las tablillas se pegan y clavan con puntilla sin cabeza."
+   "note": "Uno sobre el dintel y otro bajo el encuentro del cielo raso; las tablillas se pegan y clavan con puntilla sin cabeza."
   },
   {
    "id": "S02",
@@ -532,28 +528,6 @@ window.CortasolPinoData={
    "t": 18,
    "material": "tablero",
    "note": "Verticales y fijas, separadas 29,5 mm: dejan paso de aire permanente sobre la puerta."
-  },
-  {
-   "id": "C01",
-   "grupo": "Cielo raso",
-   "name": "Carrera contra el muro de la habitación",
-   "qty": 1,
-   "L": 2980,
-   "A": 100,
-   "t": 40,
-   "material": "macizo",
-   "note": "De canto, con la cara de arriba a +2560, anclada al muro con chazos de 3/8 × 3 pulg cada 50 cm. Termina contra el paral de la puerta."
-  },
-  {
-   "id": "C02",
-   "grupo": "Cielo raso",
-   "name": "Vigueta del cielo raso",
-   "qty": 7,
-   "L": 1980,
-   "A": 100,
-   "t": 40,
-   "material": "macizo",
-   "note": "De canto, a unos 502 mm entre ejes: de la carrera al riel superior del ventanal, con 90 mm de apoyo. Fijar con escuadra o tornillo inclinado de 5 × 100 en cada apoyo."
   }
  ]
 };
