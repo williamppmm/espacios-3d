@@ -27,17 +27,17 @@ El aviso de ubicación detecta salidas del perímetro, ocupación de los patios 
 
 ## Cocina final (`cocina.html`)
 
-Mesón 260 × 62 cm. Módulos bajos 18 + 60 + 67 + 70 + 40 cm:
+Mesón 260 × 62 cm. Módulos bajos 15 + 63 + 67 + 70 + 40 cm (desde el 25/11/2026: el condimentero pasó de 18 a 15 cm y el hueco del horno de 60 a 63, por sugerencia del diseñador de Madecentro; arriba, S1 pasó de 19,5 a 16,5 y S2 de 60 a 63 para seguir alineados):
 
-- **B1 (18 cm exterior, 15 cm libres):** condimentero HSO317-15R. El herraje con sus rieles mide 135 mm (medido en una cocina real).
-- **B2 (60 cm):** horno H60EEVAL005 y estufa; nicho y ventilación según manual.
+- **B1 (15 cm exterior, 12 cm libres):** condimentero Bonuit HSO317-15R cromado, herraje publicado de 100 × 446 × 470 mm y carga declarada de 35 kg. Rieles y dos enganches frontales incluidos; montaje por plantilla del accesorio suministrado. Fuente: https://madecentro.com/products/canasta-condimentero-tres-niveles-cierre-lento
+- **B2 (63 cm exterior, 60 cm libres):** horno H60EEVAL005 y estufa. El vano de caja difiere del ruteo frontal de empotre; adaptar tapetas y apoyos con el horno y su manual. Reservar retales para esos ajustes en obra.
 - **B3 (67 cm):** cajón cubiertero (riel HRE550-55N) y dos puertas con entrepaño.
 - **B5 (70 cm):** lavaplatos Socoda AS350 de submontar; entrepaño desmontable con recorte de sifón en obra.
 - **B4 (40 cm):** puerta superior y basurero extraíble HSO688-00 sobre bastidor provisional (P072–P074) con riel HRE126-55.
-- **S2 sobre la campana (45 cm de alto):** deja 15 cm libres para la campana Tofu 60 (84 mm de chasis y 94 mm con vidrio según ficha; soporte al mueble por definir). Puerta abatible de 447 × 597 hacia arriba con dos brazos HEC060-03 y faja de agarre fija P071, pedida a 70 mm y rebajada a 60 en el armado. Las demás puertas altas sobresalen 2 cm por debajo como agarre.
+- **S2 sobre la campana (63 × 52,4 cm):** puerta abatible de 482 × 627 mm, peso estimado 3,0 kg. Base P075 de 600 × 335 mm, con cara inferior a 1620 mm, 120 mm sobre P052. Dos brazos HEC060-03, fuerza por seleccionar con la puerta real. Faja P071 de 600 × 60 mm, pedida a 70 mm y rebajada en el armado. Las demás puertas altas sobresalen 2 cm por debajo como agarre.
 - **Golas:** superior y media; los rebajes en laterales y travesaños se hacen en el armado, cuando se defina el borde del granito.
 
-88 piezas RH15 y 9 fondos de 6 mm; caben en 4 láminas RH15 y 1 de fondo (prueba de factibilidad; el plano de corte lo define el proveedor).
+85 piezas RH15 y 9 fondos de 6 mm; caben en 4 láminas RH15 y 1 de fondo (prueba de factibilidad; el plano de corte lo define el proveedor).
 
 ## Clóset principal (`closet.html`)
 
@@ -155,13 +155,13 @@ Se retiran C3-005 y C3-011. Pared estucada a la vista, marco completo C3-025 a C
 
 El PDF anterior de Madecentro (98 referencias RH15, 141 piezas) incluye los respaldos retirados y no corresponde a esta revisión. La revisión del 28/10 llevaba 102 referencias RH15, 145 piezas, además de 10 fondos RH6 de cocina y baño. El encaje conjunto encontrado mantiene 8 láminas RH15 y 1 RH6; menos superficie no se presupone ahorro de láminas.
 
-### Revisión de cocina del 29/10/2026
+### Revisión de cocina del 25/11/2026
 
-S2 mantiene caja de 450 mm: P045 450×320, fondo P048 596×446 y puerta P049 447×597. Se conserva P047 elevado y faja P071 de retal. Se añaden base P075 570×335 (y1655–1670) y dos apoyos P076 275×70 (y1670–1740), todos RH15 con flexible 0,45 en cuatro bordes. Unir apoyos a costados/P047 y base mediante cuatro escuadras, sin depender sólo del tornillo al canto. Fijar la campana por su plantilla real, con tornillos adecuados al tablero de 15 mm. Se cortan rectángulos, sin mecanizado de fábrica. Los apoyos z6–281 quedan 5 mm detrás de la faja z286–301.
+B1 pasa a 150 mm y B2 a 630 mm exteriores; sus luces con RH15 son 120 y 600 mm. S1 pasa a 165 mm y S2 a 630 mm para conservar la alineación del horno, la estufa y la campana en x = 695 mm. Los módulos desde B3 y S3 conservan sus posiciones; mesón de 2600 × 620 mm.
 
-Ficha Haceb Tofu 9002650 rev.00: chasis 84 mm, envolvente con vidrio 94 mm, recirculación, sin anclaje directo a pared. El chasis termina en y1655, bajo P075; su base nominal con vidrio queda en y1561: 649 mm sobre el cristal de la estufa (y912), por encima de los 600 mm mínimos de la ficha. Mantener libres las salidas. No perforar un ducto supuesto. Fuente: https://firplak.com/wp-content/uploads/2024/05/Campana-TOFU-60-V3-NEGRO.pdf . Dos brazos previstos: seleccionar fuerza por altura y peso real (puerta ≈2,7 kg); 60 N y su precio siguen provisionales. B4 superior y S5 limitadas a 90° junto a la pared; prever topes compatibles.
+S2 mide 524 mm de alto: P045 524 × 320, fondo P048 626 × 511 y puerta P049 482 × 627. P075 mide 600 × 335 y ocupa y1620–1635; P076 mide 275 × 70 y ocupa y1635–1705. Se conservan la faja retranqueada y las cuatro escuadras del soporte. Chasis de campana 84 mm, envolvente con vidrio 94 mm, centrada con la estufa; su parte inferior queda a 614 mm del cristal. Montaje y salidas de recirculación según la ficha Haceb y la plantilla real. Dos brazos previstos para unos 3,0 kg de puerta; fuerza por seleccionar.
 
-Quedan 76 referencias de cocina, 88 piezas RH15 y nueve fondos. Pedido conjunto: 113 referencias, 147 piezas RH15 y diez fondos RH6. Encaje conjunto encontrado: ocho RH15 más una RH6, con disco de 5 mm; flexible con reserva 186 m. El precio conocido se conserva, sin incluir cotizaciones faltantes de escuadras, fijaciones y cambios de brazos. No se incorporan las alternativas de aligerar la cocina del estudio independiente.
+El modelo y los Excel contienen 73 referencias de cocina, 85 piezas RH15 y nueve fondos. El pedido conjunto contiene 102 referencias RH15 (146 piezas) y diez referencias RH6 (diez fondos). Las cinco piezas del bastidor del basurero se obtienen de retales. El encaje conjunto de referencia conserva ocho láminas RH15 y una RH6. Los formatos Madecentro mantienen las medidas finales con canto y las sobremedidas de armado indicadas en cada pieza.
 
 ## Cierre de la cocina en pino (`ventana.html`)
 

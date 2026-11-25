@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from build_despiece import page, tabla, fmt
 
 RAIZ = Path(__file__).resolve().parent.parent
-FECHA = "31/10/2026"
+FECHA = "25/11/2026"
 PRECIO = {"RH15": 365872, "RH6": 212534, "rigido": 531600, "flexible": 285600, "bisagra_par": 17750}
 ROLLO = {"rigido": 100, "flexible": 200}
 RESERVA_BORDE, MARGEN = 0.05, 0.10   # m por borde y margen sobre el total de canto
