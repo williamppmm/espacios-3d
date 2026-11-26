@@ -92,12 +92,12 @@ function flaps(a,b,remate){const g=group(),PE=F.pestana,ta=O.antepecho.t;
 function fascia(lift=0){const g=group(lift*2);for(const sign of[-1,1])box(F.solapa.L,F.solapa.A,F.solapa.t,railMat,sign*F.solapa.L/2,YF-F.solapa.A/2,-ZA-15-F.solapa.t/2,g);return g;}
 function axial(r,length,m,pos,axis,parent=root){const o=cyl(r,length,m,...pos,parent);if(axis==='x')o.rotation.z=-Math.PI/2;if(axis==='z')o.rotation.x=Math.PI/2;return o;}
 function cornerHardware(x,y,sign,spread=0,parent=root){
- // Tarugos longitudinales: 30 mm embebidos en cada pieza. Tornillos altos evitan el rebaje de 18.
- for(const z of[10,35])axial(4,60,dowel,[x+sign*spread/2,y+20,z],'x',parent);
+ // Tarugos longitudinales: 25 mm embebidos en cada pieza. Tornillos altos evitan el rebaje de 18.
+ for(const z of[10,35])axial(4,F.union.tarugo_L,dowel,[x+sign*spread/2,y+20,z],'x',parent);
  for(const z of[-25,25]){axial(2.5,90,steel,[x+sign*(40-45+spread),y+30,z],'x',parent);axial(5,3,steel,[x+sign*(40+spread),y+30,z],'x',parent);}
 }
 function centerHardware(y,sign,spread=0,parent=root){
- for(const z of[10,35])axial(4,60,dowel,[0,y+sign*spread/2,z],'y',parent);
+ for(const z of[10,35])axial(4,F.union.tarugo_L,dowel,[0,y+sign*spread/2,z],'y',parent);
  for(const x of[-10,10]){axial(2.5,90,steel,[x,y+sign*(40-45+spread),22.5],'y',parent);axial(5,3,steel,[x,y+sign*(40+spread),22.5],'y',parent);}
 }
 function assembly(lift){
@@ -107,7 +107,7 @@ function assembly(lift){
  if(step>=2){box(TT,YT-TT,F.A,stileMat,0,TT+(YT-TT)/2+spread,0,rg);centerHardware(TT,-1,spread,rg);}
  if(step>=3){topRail(-V.L/2+TT,V.L/2-TT,spread/2);for(const sign of[-1,1])cornerHardware(sign*(V.L/2-TT),YT,sign,spread,rg);centerHardware(YT,1,spread,rg);}
  if(step>=4){const g=group();for(const x of xs)slat(x,Y0,SL,g,true,true);centers.forEach(c=>bar(B.L,c,bayXs(c),0));}
- root.add(label('3000 horizontal + 40 + 40 = 3080 exterior',0,-100,80,1.5),label('COSTADOS COMPLETOS · 1256',-V.L/2-170,YF/2,0,.8),label('Ø8 × 60 · tarugos',V.L/2+50,180,-230,.7));
+ root.add(label('3000 horizontal + 40 + 40 = 3080 exterior',0,-100,80,1.5),label('COSTADOS COMPLETOS · 1256',-V.L/2-170,YF/2,0,.8),label('Ø8 × 50 · tarugos',V.L/2+50,180,-230,.7));
 }
 const plugMat=mat(0x8a6236,{roughness:.7});
 function anchors(){const g=group(),A=M.anclajes,r=5,per=A.antepecho.n/2;
@@ -154,7 +154,7 @@ function setAngle(v){phi=Math.min(AN.max,Math.max(AN.min,v));const f=phi*deg,st=
  $('caption').textContent={all:'Dos cuerpos de '+LA.por_cuerpo+' tablillas en un marco de pino macizo de '+TT+' × '+F.A+': rieles enteros de '+(V.L-2*TT)+' mm y montante central. Encima se muestra la perfilería metálica y la placa de yeso blanco; su dimensionamiento se valida en obra; a la derecha, el poste de la puerta. A '+Math.round(phi)+'° pasa '+Math.round(st.air*100)+' % del aire y de frente se ve '+n(st.front)+' mm entre tablillas. Cada cuerpo se gira por separado: al mover una o dos tablillas se mueven las '+LA.por_cuerpo+' de ese lado.'+(exploded?' Separado: tablillas, barras, riel superior y cielo raso.':''),
   top:'Mecanismo junto al montante (riel transparente): rebaje abierto al patio de '+(Z1-Z0)+' × '+CH+' propuesto por debajo del riel. Cada cuerpo tiene su platina de 1430 mm; ajustar los topes físicos en la prueba para el recorrido representado de '+AN.min+'° y '+AN.max+'°. Los pasadores van a '+R+' mm del eje, hacia el patio, sobre arandelas de nylon.'+(exploded?' Separado: tablillas, barras y riel.':''),
   bottom:'Abajo, junto al montante: el riel macizo apoya en el ladrillo y sus pestañas de '+F.pestana.h+' mm bajan por las dos caras del muro. Cada tablilla se apoya en la pestaña de su pin; la punta entra en su hueco por una ranura de entrada de '+PN.ranura.L+' × '+PN.ranura.prof+' mm.',
-  corner:'El costado es completo: el riel de 3000 llega a su cara interior. Dos tarugos Ø8 × 60 traban la unión con pegante y dos tornillos inox 5 × 90 entran desde el canto exterior del costado. Las caras cocina y patio quedan libres de cabezas. Taladros de referencia: presentar plantilla y evitar el rebaje superior. Tapones sobre las cabezas si quedan expuestas.'+(exploded?' Separado para ver la dirección de entrada.':''),
+  corner:'El costado es completo: el riel de 3000 llega a su cara interior. Dos tarugos Ø8 × 50 traban la unión con pegante y dos tornillos Deck 10 × 3½\" (4,8 × 90) entran desde el canto exterior del costado. Las caras cocina y patio quedan libres de cabezas. Taladros de referencia: presentar plantilla y evitar el rebaje superior. Tapones sobre las cabezas si quedan expuestas.'+(exploded?' Separado para ver la dirección de entrada.':''),
   assembly:'Armado en banco. '+['Presentar el riel inferior continuo de 3000 × 100 × 40.','Añadir costados completos de 1256: tarugos encolados y tornillos desde sus cantos exteriores.','Añadir montante de 1176: tornillos desde abajo del riel, antes de instalar.','Colocar el riel superior: tornillos desde arriba hacia el montante y desde los cantos de los costados hacia el riel.','Después de curar y fijar el marco, montar pines, tablillas y barras; probar antes de poner la solapa desmontable.'][step]+(exploded?' La separación es ilustrativa; los largos del despiece no cambian.':''),
   plan:'Planta por encima de las tablillas, junto al montante: cada barra se corre '+n(R*(Math.cos(AN.min*deg)-Math.cos(AN.max*deg)))+' mm a lo largo y '+n(R*(1-Math.sin(AN.min*deg)))+' mm hacia el patio dentro del canal (líneas oscuras). Holgura de la tablilla del extremo con el montante o el lateral: '+n(st.side)+' mm.'}[mode];}
 function view(){camera.up.set(0,1,0);const Q={all:[[3000,700,4600],[0,300,300]],assembly:[[2500,2000,4300],[0,650,0]],top:[[-480,YT-360,-660],[0,YT-40,-20]],bottom:[[-480,230,660],[0,-10,0]],corner:[[V.L/2+560,420,760],[V.L/2-110,90,0]],plan:[[0,YS+800,1],[0,YS,0]]}[mode];

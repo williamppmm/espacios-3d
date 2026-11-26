@@ -34,6 +34,18 @@ const beams=sheet('Los 4 bastidores','Corte de los 4 bastidores · sección 100 
  [12,30,14,40,18,90],d.frames,70);
 const assembly=sheet('Armado y controles','Armado y controles de esta revisión','Cotas finales para marco exterior 3080 × 1256 mm. Las piezas de entrega tienen margen solo en los largos.',
  ['Control','Medida o criterio','Aplicación'],[39,49,116],d.notes,65);
+const guide=sheet('Guía de armado','Guía de armado del ventanal','Orden recomendado: probar, mecanizar, inmunizar, barnizar tablillas sueltas, armar el marco con madera limpia y barnizarlo armado.',
+ ['Paso','Etapa','Qué hacer','Cuidado'],[8,26,80,70],d.assembly,58);
+guide.getRangeByIndexes(6,0,d.assembly.length,1).format.horizontalAlignment='center';
+const buy=sheet('Compras','Compras de la ventana · productos del mercado',d.shopping_note,
+ ['Grupo','Producto','Cant.','Unidad','Dónde','Código','Cómo buscarlo','Precio COP','Subtotal COP','Nota'],[18,46,8,11,24,10,30,14,14,70],
+ d.shopping.map(r=>[r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],null,r[8]]),44);
+const n=d.shopping.length,last=6+n;
+buy.getRange(`I7:I${last}`).formulas=d.shopping.map((r,i)=>[`=IF(ISNUMBER(H${7+i}),C${7+i}*H${7+i},"")`]);
+buy.getRange(`H7:I${last+2}`).setNumberFormat('#,##0');
+buy.getRange(`A${last+2}`).values=[['Total con precio de referencia']];buy.getRange(`I${last+2}`).formulas=[[`=SUM(I7:I${last})`]];
+buy.getRange(`J${last+2}`).values=[['El resto por cotizar']];
+buy.getRange(`A${last+2}:J${last+2}`).format.font={name:'Arial',size:10,bold:true};
 wb.recalculate();
 for(const [name,range,file] of [['Pedido de piezas','A6:H12','pedido'],['Los 4 bastidores','A6:F10','bastidores'],['Las 9 tablas','A6:F9','tablas']]){
  const p=await wb.render({sheetName:name,range,scale:1,format:'png'});await fs.writeFile(dir+'/'+file+'.png',new Uint8Array(await p.arrayBuffer()));

@@ -317,8 +317,8 @@
     ],
     [
       "Uniones del marco",
-      "2 tarugos Ø8 × 60 + 2 tornillos 5 × 90 por unión",
-      "Seis uniones a tope con dos tarugos Ø8 × 60 y dos tornillos inox de 5 × 90 por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
+      "2 tarugos Ø8 × 50 + 2 tornillos 10 × 3½\" por unión",
+      "Seis uniones a tope con dos tarugos Ø8 × 50 y dos tornillos Deck Ruspert de 10 × 3½\" (4,8 × 90) por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
     ],
     [
       "Alcance",
@@ -332,18 +332,18 @@
     ],
     [
       "Pegante",
-      "Titebond III Ultimate o equivalente exterior protegido",
-      "Encolar superficies de madera limpia sin acabado; aplicar presión con sargentos y respetar el curado de la ficha. Dejar al menos 24 h antes de solicitar las uniones. Fuente: https://www.titebond.com/App_Static/literature/glues/FF681_TBIIIUltimateBrochureTB.pdf"
+      "Pegante Carpincol para madera 1 kg (Afix)",
+      "O Carpincol MR60, con más resistencia a la humedad. Encolar madera limpia y sin barniz; tiempo abierto de unos 10 min; no solicitar las uniones antes de 24 h."
     ],
     [
       "Tornillos ocultos",
-      "12 instalados; comprar 16 inox 5 × 90",
+      "12 instalados; comprar 16 Deck Ruspert 10 × 3½\" (4 paquetes de 4)",
       "8 en las cuatro esquinas desde el canto exterior de los costados y 4 en el montante desde arriba/abajo. Tapones Ø10; ensayo de pretaladro y profundidad."
     ],
     [
       "Tarugos del marco",
-      "12 instalados; comprar 16 Ø8 × 60",
-      "Dos por cada una de las seis uniones. Centro de taladros coordinado con el rebaje. No intercambiar la plantilla de esquina con la del montante."
+      "12 instalados; comprar 16 Ø8 × 50",
+      "25 mm en cada pieza. Dos por cada una de las seis uniones. Centro de taladros coordinado con el rebaje. No intercambiar la plantilla de esquina con la del montante."
     ],
     [
       "Calces al poste",
@@ -355,5 +355,436 @@
       "Separación al marco de 15 mm mediante retales",
       "La cara interior de la solapa queda a z −65. No apoyar contra barra ni cerrar el acceso con pegante."
     ]
-  ]
+  ],
+  "assembly": [
+    [
+      1,
+      "Prueba en retal",
+      "Con un trozo de riel y 3 o 4 tablillas: taladrar pines y pasadores, probar giro, roce y la barra.",
+      "No mecanizar las 32 tablillas ni el riel superior hasta que la prueba funcione. Si el pin raja la tablilla de 15, parar y revisar."
+    ],
+    [
+      2,
+      "Cortar y mecanizar",
+      "Largos finales, huecos de tarugos con plantilla, huecos de pines, pasadores, rebaje 45 × 18 y pretaladros de tornillos.",
+      "Plantilla de esquina distinta de la del montante, para no caer en el rebaje. Todo el mecanizado antes de inmunizar y barnizar."
+    ],
+    [
+      3,
+      "Inmunizar",
+      "Todas las piezas, por todas las caras, si el pino no viene inmunizado.",
+      "Dejar secar lo que indique la etiqueta antes de lijar, pegar o barnizar."
+    ],
+    [
+      4,
+      "Lijar piezas sueltas",
+      "Lija 150 y luego 220. Limpiar la resina de los nudos con diluyente y retirar el polvo.",
+      "Es mucho más fácil lijar antes de armar."
+    ],
+    [
+      5,
+      "Pasadores",
+      "Pegar los pasadores inox en las tablillas con epóxico.",
+      "Sobre madera limpia, antes del barniz. Dejar curar según el epóxico."
+    ],
+    [
+      6,
+      "Barnizar tablillas",
+      "Sueltas, por las seis caras: primera mano rebajada como sellador, lija 320 y dos manos más.",
+      "No llenar de barniz los huecos de los pines. Una vez montadas no se puede llegar bien entre ellas."
+    ],
+    [
+      7,
+      "Proteger caras de unión",
+      "Si se adelanta la primera mano del marco, tapar con cinta las puntas de rieles y montante y donde apoyan en los costados.",
+      "El pegante no agarra sobre barniz."
+    ],
+    [
+      8,
+      "Presentar en seco",
+      "Armar sin pegante sobre un piso plano: montante entre rieles y costados en los extremos. Medir diagonales.",
+      "Corregir aquí cualquier diferencia de largos antes de encolar."
+    ],
+    [
+      9,
+      "Encolar el montante",
+      "Pegante en tarugos y caras; unir el montante a los dos rieles y atornillar desde arriba y desde abajo.",
+      "Los tornillos de 10 × 3½\" hacen de prensa. Limpiar el pegante que salga con un trapo húmedo."
+    ],
+    [
+      10,
+      "Encolar los costados",
+      "Pegante en tarugos y caras; unir los costados a los rieles y atornillar desde el canto exterior.",
+      "Trabajar rápido: el pegante da unos 10 minutos."
+    ],
+    [
+      11,
+      "Escuadrar",
+      "Medir las dos diagonales; deben dar igual. Empujar en diagonal para corregir.",
+      "Hacerlo antes de que el pegante seque."
+    ],
+    [
+      12,
+      "Dejar curar",
+      "24 h sin mover ni cargar el marco.",
+      "Temperatura y humedad según la etiqueta del pegante."
+    ],
+    [
+      13,
+      "Tapones y barniz del marco",
+      "Pegar tapones de pino, enrasar y lijar uniones. Sellador y dos manos.",
+      "Mismo lote de laca y misma tanda que las tablillas, para que el tono quede parejo."
+    ],
+    [
+      14,
+      "Instalar el marco",
+      "Calzar y nivelar sobre el antepecho con cordón de sellador. 8 tornillos al ladrillo, 3 a la medianera y 3 al poste con sus calces de 20.",
+      "Pretaladrar el ladrillo con broca de 8 y chazo plástico; tapones en las cabezas."
+    ],
+    [
+      15,
+      "Montar tablillas y barras",
+      "Colocar las tablillas con sus pines, luego las barras sobre los pasadores. Probar el recorrido y ajustar el taco de tope.",
+      "Mover todo el recorrido despacio, buscando roces."
+    ],
+    [
+      16,
+      "Carteras y solapa",
+      "Atornillar carteras desde atrás y el remate. Solapa con separadores de 15 y tornillos, sin pegante.",
+      "La solapa debe poder desmontarse para revisar el mecanismo."
+    ]
+  ],
+  "shopping": [
+    [
+      "Acabado",
+      "Laca Pur+Cat Incoloro Mate Montó 4 L",
+      1,
+      "u",
+      "Homecenter",
+      "256080",
+      "laca Pur+Cat Montó 4 L",
+      249900,
+      "Confirmar si trae catalizador. Primera mano rebajada como sellador y dos manos más; unos 3,9 L para 12,9 m²."
+    ],
+    [
+      "Acabado",
+      "Catalizador de la Pur+Cat",
+      1,
+      "si aplica",
+      "Homecenter",
+      "",
+      "catalizador Pur+Cat Montó",
+      null,
+      "Solo si no viene incluido en la laca. Proporción según etiqueta; mezclar solo lo de cada sesión."
+    ],
+    [
+      "Acabado",
+      "Diluyente indicado en la etiqueta de la laca",
+      2,
+      "L",
+      "Homecenter",
+      "",
+      "diluyente poliuretano Montó",
+      null,
+      "Para rebajar la primera mano y limpiar."
+    ],
+    [
+      "Acabado",
+      "Inmunizante para madera Texsa 1 galón",
+      1,
+      "galón",
+      "Homecenter",
+      "92215",
+      "inmunizante Texsa",
+      121900,
+      "Incoloro, contra hongos y comején. 15 m² por mano: alcanza para la ventana y sobra para la puerta. Probar barniz y pegante en retal."
+    ],
+    [
+      "Acabado",
+      "Lija para madera grano 150",
+      4,
+      "pliego",
+      "Homecenter",
+      "",
+      "lija madera 150",
+      null,
+      "Primer lijado de piezas sueltas."
+    ],
+    [
+      "Acabado",
+      "Lija grano 220",
+      6,
+      "pliego",
+      "Homecenter",
+      "",
+      "lija 220",
+      null,
+      "Antes del sellador."
+    ],
+    [
+      "Acabado",
+      "Lija grano 320",
+      6,
+      "pliego",
+      "Homecenter",
+      "",
+      "lija 320",
+      null,
+      "Entre manos, sin presión."
+    ],
+    [
+      "Acabado",
+      "Cinta de enmascarar 1 pulg",
+      1,
+      "rollo",
+      "Homecenter",
+      "",
+      "cinta de enmascarar",
+      null,
+      "Proteger caras de unión y huecos de pines."
+    ],
+    [
+      "Acabado",
+      "Brocha de 2 pulg",
+      1,
+      "u",
+      "Homecenter",
+      "",
+      "brocha 2 pulgadas",
+      null,
+      "Inmunizante y laca."
+    ],
+    [
+      "Acabado",
+      "Rodillo de espuma de 4 pulg",
+      1,
+      "u",
+      "Homecenter",
+      "",
+      "rodillo espuma 4",
+      null,
+      "Caras planas de tablillas y marco."
+    ],
+    [
+      "Acabado",
+      "Respirador para vapores orgánicos",
+      1,
+      "u",
+      "Homecenter",
+      "",
+      "respirador vapores orgánicos",
+      null,
+      "La laca catalizada y el inmunizante se aplican ventilado."
+    ],
+    [
+      "Acabado",
+      "Guantes de nitrilo",
+      1,
+      "caja",
+      "Homecenter",
+      "",
+      "guantes nitrilo",
+      null,
+      ""
+    ],
+    [
+      "Acabado",
+      "Estopa o trapos",
+      1,
+      "paquete",
+      "Homecenter",
+      "",
+      "estopa",
+      null,
+      "Limpiar pegante y polvo."
+    ],
+    [
+      "Armado",
+      "Pegante Carpincol para madera 1 kg (Afix)",
+      1,
+      "u",
+      "Homecenter",
+      "203374",
+      "Carpincol 1 kilo",
+      32900,
+      "Ya comprado. Alternativa con más resistencia a la humedad: Carpincol MR60 1 kg (Mercado Libre). Madera limpia y sin barniz."
+    ],
+    [
+      "Armado",
+      "Tarugo de madera 8 × 50 mm · paquete × 100",
+      1,
+      "paquete",
+      "Mercado Libre",
+      "",
+      "tarugo madera 8x50",
+      null,
+      "12 en las uniones y 4 de reserva; el resto para la prueba en retal. Entran 25 mm en cada pieza."
+    ],
+    [
+      "Armado",
+      "Tornillo Deck Ruspert 10 × 3½ pulg (Fixser) · paquete × 4",
+      4,
+      "paquete",
+      "Homecenter",
+      "592306",
+      "tornillo deck ruspert 10 x 3 1/2",
+      10900,
+      "Uniones del marco: 12 y 4 de reserva. Recubrimiento cerámico anticorrosión."
+    ],
+    [
+      "Armado",
+      "Tapón de madera de 10 mm",
+      32,
+      "u",
+      "Homecenter",
+      "",
+      "tapón madera 10 mm",
+      null,
+      "O cortarlos del retal con cortatapones."
+    ],
+    [
+      "Armado",
+      "Tornillo madera cabeza plana inoxidable 8 × 1¼ pulg (Fixser) · paquete × 4",
+      4,
+      "paquete",
+      "Homecenter",
+      "592266",
+      "tornillo madera inoxidable 8 x 1 1/4",
+      10900,
+      "Carteras."
+    ],
+    [
+      "Armado",
+      "Tornillo Deck Ruspert 8 × 2 pulg (Fixser) · paquete × 4",
+      2,
+      "paquete",
+      "Homecenter",
+      "592313",
+      "tornillo deck ruspert 8 x 2",
+      7000,
+      "Solapa desmontable con separadores de 15."
+    ],
+    [
+      "Armado",
+      "Puntilla sin cabeza 1 pulg · 500 g (C.A. Mejía)",
+      1,
+      "u",
+      "Homecenter",
+      "514296",
+      "puntilla sin cabeza 1",
+      7200,
+      "Remate del extremo libre, con pegante. Sobra para la puerta."
+    ],
+    [
+      "Fijación a la obra",
+      "Sikaflex-11 FC Purform 300 ml",
+      1,
+      "tubo",
+      "Homecenter",
+      "728174",
+      "Sikaflex-11 FC",
+      51900,
+      "Entre riel inferior y ladrillo y en juntas con medianera y poste. Gris o marrón. Requiere pistola de calafateo."
+    ],
+    [
+      "Fijación a la obra",
+      "Tornillo Deck Ruspert 10 × 4 pulg (Fixser) · paquete × 4",
+      4,
+      "paquete",
+      "Homecenter",
+      "592314",
+      "tornillo deck ruspert 10 x 4",
+      11900,
+      "Con chazo: 8 al antepecho, 3 a la medianera y reserva."
+    ],
+    [
+      "Fijación a la obra",
+      "Chazo estriado 5/16 pulg · 100 und (Fixser)",
+      1,
+      "paquete",
+      "Homecenter",
+      "259352",
+      "chazo estriado 5/16",
+      8900,
+      "Broca de 5/16 o 8 mm para ladrillo."
+    ],
+    [
+      "Fijación a la obra",
+      "Tornillo para madera de 5 pulg (Deck 10 × 5 si existe)",
+      5,
+      "u",
+      "Homecenter o ferretería",
+      "",
+      "tornillo deck 10 x 5",
+      null,
+      "Pendiente de comprar. 3 al poste de la puerta a través del costado y el calce de 20, y 2 de reserva. Con 4 pulg solo entraría 40 mm en el poste."
+    ],
+    [
+      "Fijación a la obra",
+      "Calzas plásticas de nivelación",
+      1,
+      "paquete",
+      "Homecenter",
+      "",
+      "cuñas de nivelación plásticas",
+      null,
+      "Nivelar el marco sobre el antepecho."
+    ],
+    [
+      "Mecanismo",
+      "Pines con resorte uxcell 24 × 10 mm",
+      80,
+      "u",
+      "Amazon",
+      "",
+      "uxcell spring loaded pins 24mm 10mm",
+      null,
+      "60 montados y 20 de repuesto. Comprar primero 8 para la prueba en retal."
+    ],
+    [
+      "Mecanismo",
+      "Varilla lisa inoxidable 304 de 1/4 pulg (6,35 mm) · 1 m",
+      1,
+      "u",
+      "Merkatronix o ferretería industrial",
+      "",
+      "varilla inoxidable 1/4 lisa",
+      15000,
+      "30 pasadores de 25 mm. Después de la prueba."
+    ],
+    [
+      "Mecanismo",
+      "Epóxico de dos componentes, curado normal",
+      1,
+      "u",
+      "Homecenter",
+      "",
+      "adhesivo epóxico 2 componentes",
+      null,
+      "Pasadores en las tablillas. No el de 5 minutos."
+    ],
+    [
+      "Mecanismo",
+      "Arandela plana de nylon de 1/4 pulg",
+      40,
+      "u",
+      "Ferretería o Mercado Libre",
+      "",
+      "arandela nylon 1/4",
+      null,
+      "Una por pasador y reserva. Después de la prueba."
+    ],
+    [
+      "Mecanismo",
+      "Platina de aluminio 1 × 1/8 pulg (25,4 × 3,2 mm)",
+      3,
+      "m",
+      "Homecenter o depósito de aluminio",
+      "",
+      "platina aluminio 1 x 1/8",
+      null,
+      "Dos barras de 1430: un tramo de 3 m o dos de 1,5 m. Después de la prueba."
+    ]
+  ],
+  "shopping_note": "Sin madera ni herramientas. Precios de referencia de Homecenter Colombia al 25/11/2026; confirmar en tienda. Lo del mecanismo, salvo lo de la prueba, se compra después de probar en retal."
 }

@@ -10,6 +10,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT
 root=Path(__file__).resolve().parent.parent;tmp=Path(os.environ['TEMP'])/'ventana-material-local';tmp.mkdir(exist_ok=True);d=json.loads((root/'herramientas/ventana_pino_corte.json').read_text(encoding='utf-8'))
 for name,file in [('Arial','arial.ttf'),('ArialBold','arialbd.ttf')]:pdfmetrics.registerFont(TTFont(name,str(Path('C:/Windows/Fonts')/file)))
+pdfmetrics.registerFontFamily('Arial',normal='Arial',bold='ArialBold',italic='Arial',boldItalic='ArialBold')
 W,H=landscape(A4);margin=34;usable=W-2*margin
 ink=colors.HexColor('#253b35');gray=colors.HexColor('#59675d');pale=colors.HexColor('#e9f0e9');amber=colors.HexColor('#fff0cd')
 path=root/'pedido-corte-ventana-pino.pdf';c=canvas.Canvas(str(path),pagesize=(W,H));c.setTitle('Pedido de corte - ventana de pino - 9 tablas y 4 bastidores')
@@ -24,7 +25,7 @@ def title(page,title,sub):
  p(sub,margin,H-58)
  c.setStrokeColor(colors.HexColor('#ccd7cc'));c.line(margin,29,W-margin,29)
  c.setFillColor(gray);c.setFont('Arial',8);c.drawString(margin,17,'25/11/2026 · Ventana con madera local · Todas las medidas en milímetros')
- c.drawRightString(W-margin,17,str(page)+' / 4')
+ c.drawRightString(W-margin,17,str(page)+' / 5')
 
 def table(rows,widths,x,y):
  styled=[[Paragraph(str(v),head if i==0 else small) for v in row] for i,row in enumerate(rows)]
@@ -100,10 +101,10 @@ title(4,'Uniones ocultas y orden de armado','Detalle de referencia para carpinte
 y=H-91
 rows=[['Accesorio','Instalado / compra orientativa','Dónde se usa']]
 rows += [
- ['Tarugo Ø8 × 60', '12 / comprar 16','Dos por unión; seis uniones. Encolar y alojar unos 30 mm en cada pieza.'],
- ['Tornillo inox 5 × 90','12 / comprar 16','Esquinas desde cantos exteriores de costados. Montante desde arriba/abajo de rieles. Pretaladro y tapones.'],
+ ['Tarugo Ø8 × 50', '12 / comprar 16','Dos por unión; seis uniones. Encolar y alojar unos 25 mm en cada pieza. Paquete de 100 de Mercado Libre.'],
+ ['Tornillo Deck Ruspert 10 × 3½"','12 / comprar 16','Esquinas desde cantos exteriores de costados. Montante desde arriba/abajo de rieles. Pretaladro y tapones.'],
  ['Tapón de pino Ø10','Según cabezas expuestas','Tapa la cabeza sin dejar metal al frente; verificar rebaje según tornillo real.'],
- ['Pegante para madera','Frasco de unos 500 ml','Titebond III Ultimate o equivalente declarado para humedad y exterior protegido. Estimación del ventanal.'],
+ ['Pegante PVA D3','Frasco de unos 500 ml','Resistente al agua: Titebond II o III, o marca nacional cuya etiqueta diga D3, resistente al agua o exterior.'],
  ['Calces al poste','3 de 100 × 80 × 20','Desde retal de bastidor 4. Rellenan los 20 mm que deja el marco más delgado hacia el poste.'],
  ['Separadores de solapa','Desde retal, espesor 15','Dejan 15 mm entre cara patio del marco y cara interior de solapa; probar paso libre de barra.'],
 ]
@@ -114,13 +115,21 @@ for text in [
  '<b>3. Probar el mecanismo.</b> Ensayo con tres tablillas y herrajes recibidos. Pin de Ø10 deja 2,5 mm por cara en pino de 15; comprobar ajuste sin rajar. Rebaje abierto al patio y topes se aprueban en la prueba.',
  '<b>4. Instalar.</b> Apoyo nivelado y calzado sobre el antepecho; elegir anclajes según ladrillo real. Carteras desde detrás; solapa superior desmontable. El cielo raso necesita soporte propio.',
  '<b>Visualizar el armado:</b> abrir propuesta-4-tablillas-pino.html, elegir Armado paso a paso, mover el control y pulsar Separar piezas. La vista Unión oculta muestra la esquina.',
- '<b>Fuente del adhesivo:</b> titebond.com/App_Static/literature/glues/FF681_TBIIIUltimateBrochureTB.pdf',
+ '<b>Paso a paso completo:</b> página 5, guía de armado.',
 ]:
  y=p(text,margin,y-10,sty=small)
+c.showPage()
+title(5,'Guía de armado','Probar, mecanizar, inmunizar, barnizar las tablillas sueltas, armar el marco con madera limpia y barnizarlo ya armado.')
+rows=[['Paso','Etapa','Qué hacer','Cuidado']]+[[s[0],'<b>'+s[1]+'</b>',s[2],s[3]] for s in d['assembly']]
+guide=ParagraphStyle('guide',parent=small,fontSize=8.8,leading=11)
+styled=[[Paragraph(str(v),head if i==0 else guide) for v in row] for i,row in enumerate(rows)]
+t=Table(styled,colWidths=[34,112,(usable-146)*.53,(usable-146)*.47],hAlign='LEFT')
+t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),ink),('VALIGN',(0,0),(-1,-1),'MIDDLE'),('TOPPADDING',(0,0),(-1,-1),4),('BOTTOMPADDING',(0,0),(-1,-1),4),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('LINEBELOW',(0,0),(-1,-1),.35,colors.HexColor('#d8e0d8')),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#f3f6f1')])]))
+tw,th=t.wrap(usable,999);assert th<H-115,th;t.drawOn(c,margin,H-78-th)
 c.save()
 print('OK PDF',path)
 # Renderizar todas las páginas para inspección.
 import fitz
 pdf=fitz.open(path)
-assert len(pdf)==4
+assert len(pdf)==5
 for i,page in enumerate(pdf):page.get_pixmap(matrix=fitz.Matrix(1.3,1.3)).save(tmp/f'pdf-{i+1}.png')

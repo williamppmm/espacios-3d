@@ -50,10 +50,10 @@ window.CortasolPinoData={
    "tarugos": 2,
    "tornillos": 2,
    "tarugo_d": 8,
-   "tarugo_L": 60,
+   "tarugo_L": 50,
    "tornillo_d": 5,
    "tornillo_L": 90,
-   "nota": "Seis uniones a tope con dos tarugos Ø8 × 60 y dos tornillos inox de 5 × 90 por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
+   "nota": "Seis uniones a tope con dos tarugos Ø8 × 50 y dos tornillos Deck Ruspert de 10 × 3½\" (4,8 × 90) por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
   },
   "solapa": {
    "n": 2,
@@ -110,17 +110,17 @@ window.CortasolPinoData={
   "anclajes": {
    "antepecho": {
     "n": 8,
-    "tornillo": "tornillo 5 × 100 con chazo plástico de 8 mm",
+    "tornillo": "tornillo Deck 10 × 4\" (4,8 × 100) con chazo estriado de 5/16\" (8 mm)",
     "nota": "Cuatro por cuerpo, desde arriba por el riel inferior, entre tablillas, al ladrillo. Cabeza avellanada y tapón de pino. Cordón de sellador entre el riel y el ladrillo."
    },
    "medianera": {
     "n": 3,
-    "tornillo": "tornillo 5 × 100 con chazo plástico de 8 mm",
+    "tornillo": "tornillo Deck 10 × 4\" (4,8 × 100) con chazo estriado de 5/16\" (8 mm)",
     "nota": "Por el lateral izquierdo a la medianera: arriba, al centro y abajo."
    },
    "poste": {
     "n": 3,
-    "tornillo": "tornillo para madera 5 × 120",
+    "tornillo": "tornillo para madera de 5\" (≈ 4,8 × 127)",
     "nota": "El lateral del extremo libre se atornilla al poste de la puerta: así el extremo libre queda amarrado de piso a cielo."
    }
   }
@@ -581,7 +581,7 @@ window.CortasolPinoData={
   "nota": "Se conserva la posición de la puerta y del cielo raso. Al reducir el marco de 140 a 100, queda una separación de 20 hacia el poste: tres calces macizos de 20, obtenidos de retal, salvan la unión. No dejar tornillos trabajando sobre ese vacío."
  },
  "armado": {
-  "pegante": "Titebond III Ultimate, o adhesivo para madera declarado apto para exterior protegido y humedad",
+  "pegante": "Pegante Carpincol para madera 1 kg (Afix), o Carpincol MR60 con más resistencia a la humedad",
   "fuente": "https://www.titebond.com/App_Static/literature/glues/FF681_TBIIIUltimateBrochureTB.pdf",
   "prensas": "Encolar superficies de madera limpia sin acabado; aplicar presión con sargentos y respetar el curado de la ficha. Dejar al menos 24 h antes de solicitar las uniones.",
   "clavos": "Puntillas solo para sujetar remates mientras se trabaja; los marcos se unen con tarugos y tornillos.",
