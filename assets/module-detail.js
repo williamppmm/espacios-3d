@@ -90,5 +90,6 @@ window.addEventListener('espacios-fullscreen',e=>{if(!e.detail)close();chips();}
 new ResizeObserver(()=>{if(active)requestAnimationFrame(frame);}).observe(stage);
 // Toque en el 3D: selecciona la tabla del módulo activo.
 function pickAt(e){const r=o.canvas.getBoundingClientRect(),ray=new T.Raycaster();ray.setFromCamera(new T.Vector2((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2),camera);const hit=ray.intersectObjects(modMeshes(),false).find(h=>o.pieceOf(h.object));if(hit)pick(o.pieceOf(hit.object));}
+chips();   // si el visor ya abrió en pantalla completa (vista rápida), muestra de una vez las pestañas de módulos
 return {open,close:()=>close(true),pick:pickAt,get active(){return !!active;}};
 };

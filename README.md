@@ -85,7 +85,8 @@ Las medidas terminadas y posiciones del modelo no cambian. Cambian los descuento
 
 | Ruta | Uso |
 | --- | --- |
-| `index.html`, `assets/app.css`, `assets/app.js` | Herramienta general y distribución de la terraza |
+| `index.html` | Vista rápida (portada): cocina, clóset o baño a pantalla completa, con sus módulos. Carga `cocina.html`, `closet.html` o `bano.html` con `?rapida`, que abre el visor ya en pantalla completa (`assets/fullscreen.js`) |
+| `terraza.html`, `assets/app.css`, `assets/app.js` | Vista detallada: herramienta general y distribución de la terraza (antes `index.html?vista=detallada`, que ahora redirige aquí) |
 | `cocina.html`, `assets/cocina.js` | Visor detallado de la cocina |
 | `closet.html`, `assets/closet.js` | Visor detallado del clóset |
 | `assets/visor.css` | Estilos de los visores detallados |

@@ -1,24 +1,61 @@
 <!doctype html>
-<html lang="es" data-vista="rapida"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#253b35"><title>Espacios 3D · Tu espacio, pieza a pieza</title><script>if(new URLSearchParams(location.search).get("vista")==="detallada")document.documentElement.dataset.vista="detallada";</script><link rel="stylesheet" href="assets/app.css?v=vista-rapida"></head><body>
-<header class="top"><a class="brand" href="./"><span class="mark">E³</span><span>Espacios <b>3D</b><small>Tu espacio, pieza a pieza</small></span></a><nav><a href="recorridos/terraza-cartagena-realista.mp4">Ver recorrido ↗</a><a href="cocina.html">Cocina ↗</a><a href="puerta-plegable.html">Puerta plegable &#8599;</a><a href="ventana.html">Ventana ↗</a><a href="closet.html">Clóset ↗</a><a href="bano.html">Baño ↗</a><a href="despiece-cocina.html">Despiece cocina ↗</a><a href="despiece-closet.html">Despiece clóset ↗</a><a href="despiece-bano.html">Despiece baño ↗</a><a href="compras-proyecto.html">Compras ↗</a></nav><a class="view-switch quick-only" href="?vista=detallada">Vista detallada ↗</a><a class="view-switch detailed-only" href="?vista=rapida">Vista rápida ↗</a></header><main>
-<section class="quick-only quick-project" aria-label="Proyecto y muebles">
- <h1>Terraza Cali</h1>
- <nav id="quick-items" aria-label="Muebles del proyecto">
-  <button type="button" data-quick="kitchen" aria-pressed="true">Cocina</button>
-  <button type="button" data-quick="closet" aria-pressed="false">Clóset</button>
-  <button type="button" data-quick="bathroom" aria-pressed="false">Baño</button>
-  <button type="button" data-quick="room" aria-pressed="false">Terraza</button>
- </nav>
-</section>
-<section class="intro"><div><p class="eyebrow">ESTUDIO DE DISTRIBUCIÓN</p><h1>Todo en su lugar.</h1><p>Explora cada mueble o reúne tus diseños en la terraza.</p></div><div class="mode"><button id="mode-room" aria-pressed="true">Ambiente</button><button id="mode-item" aria-pressed="false">Mueble individual</button></div></section>
-<div class="workspace"><aside class="panel library"><div class="panel-title"><h2>Tu proyecto</h2><span class="badge">01</span></div><label class="field">Nombre<input id="project-name" maxlength="80" value="Terraza Cali"></label><div id="items" class="items"></div><details open><summary>Diseños</summary><div class="catalog" id="catalog"></div></details><p class="aside-note">Toca un diseño para verlo o añadirlo. Medidas en centímetros; la cocina, el clóset y el baño tienen visor detallado, despiece y compras.</p><div class="project-actions"><button id="export">Descargar proyecto</button><button id="import">Abrir proyecto</button><input type="file" accept=".json,application/json" id="project-file" hidden><button id="reset" class="quiet">Restaurar terraza inicial</button></div><p id="save-state" class="aside-note" role="status">Guardado en este navegador</p></aside>
-<section class="viewer"><div class="view-toolbar"><div><button data-view="general" aria-pressed="true">Perspectiva</button><button data-view="top" aria-pressed="false">Planta</button><button data-view="front" aria-pressed="false">Frente</button><button data-view="entrance" aria-pressed="false">Entrada</button></div><div class="zone-bar" id="zone-bar"><span>Ir a</span><button data-view="laundry" aria-pressed="false">Lavadero</button><button data-view="bath" aria-pressed="false">Baño</button><button data-view="bedroom" aria-pressed="false">Habitación</button><button data-view="kitchen" aria-pressed="false">Cocina</button><button data-view="lounge" aria-pressed="false">Frente</button></div><button id="fit">Encuadrar ↗</button></div><div id="detail-links"><a class="detail-link" id="despiece-link" href="despiece-cocina.html">Consultar despiece de esta versión ↗</a><a class="detail-link" id="viewer-link" href="cocina.html">Abrir visor detallado ↗</a></div><div id="stage"><div class="quick-only quick-zoom" role="group" aria-label="Zoom">
- <button type="button" id="quick-zoom-out" aria-label="Alejar">−</button>
- <button type="button" id="quick-zoom-in" aria-label="Acercar">+</button>
-</div><div id="loading">Preparando tu espacio…</div><div id="canvas-label"></div><div class="gesture">Un dedo gira · dos mueven o acercan · doble toque centra la vista · toca puertas y cajones</div><div id="error" hidden><h2>No se pudo iniciar el visor 3D</h2><p>Ábrelo desde GitHub Pages en Safari. La vista rápida de Archivos no ejecuta el modelo.</p><a href="cocina.html">Abrir cocina detallada</a></div></div>
-<section class="quick-only quick-dimensions" id="quick-dimensions" aria-labelledby="quick-dimensions-title">
- <div class="quick-dimensions-top"><h2 id="quick-dimensions-title">Medidas por módulo</h2><a id="quick-model-link" href="cocina.html">Detalles del mueble ↗</a></div>
- <dl id="quick-modules"></dl>
-</section><div class="viewer-bottom"><span>● <span id="scene-status">Terraza del plano compartido</span></span><button id="snapshot">Guardar imagen ↓</button></div><div id="warnings" role="status"></div><p class="drawing-note">Terraza basada en tu maqueta: baño, habitación, cocina y patios sin losa. Ubicación del mobiliario y altura perimetral ajustables. No sustituye un plano de obra.</p></section>
-<aside class="panel inspector"><div class="panel-title"><h2 id="selected-title">Cocina Cartagena</h2><span class="badge">02</span></div><label class="field">Nombre del mueble<input id="item-name" maxlength="60"></label><label class="field" id="variant-label">Versión<select id="variant"></select></label><p id="item-description" class="aside-note"></p><fieldset><legend>Dimensiones <span>cm</span></legend><div class="triple"><label>Ancho<input id="w" type="number" min="30" max="500"></label><label>Fondo<input id="d" type="number" min="20" max="120"></label><label>Alto<input id="h" type="number" min="30" max="300"></label></div><p id="fixed-note" class="aside-note"></p></fieldset><fieldset id="placement"><legend>Ubicación <span>cm / grados</span></legend><div class="triple"><label>Desde el fondo<input id="x" type="number" step="1"></label><label>Desde medianera<input id="z" type="number" step="1"></label><label>Giro<input id="rotation" type="number" min="-360" max="360" step="90"></label></div><p class="aside-note">Coordenadas del origen del mueble. El giro se aplica sobre ese punto; usa la planta para colocarlo.</p></fieldset><label class="field" id="open-label">Abrir puertas y cajones<input id="openness" type="range" min="0" max="1" step=".01" value="0"></label><label class="check"><input type="checkbox" id="visible"> Mostrar este mueble</label><button id="remove" class="quiet danger">Quitar del proyecto</button><hr><details open id="room-options"><summary>Terraza y capas</summary><p class="aside-note">20,30 × 5,75 m · medianera y muros nuevos 2,50 m · lado abierto sobre pilares. Distribución del plano compartido.</p><label class="field">Muros bajos del perímetro <output id="wall-height-value">1,10 m</output><input id="wall-height" type="range" min=".9" max="2.5" step=".1" value="1.1"></label><label class="field">Abrir puertas de baño y habitación<input id="doors" type="range" min="0" max="1" step=".01" value="1"></label><label class="field">Ventana de cocina<select id="proposal"><option value="">Ocultar ventana</option><option value="pino">Pino · ventana definitiva</option></select></label><p id="proposal-note" class="aside-note" hidden></p><label class="field">Apertura de la puerta plegable<input id="folding-door" type="range" min="0" max="1" step=".01" value="1"></label><button id="folding-door-focus" class="quiet" type="button">Ver acceso de cocina</button><label class="check"><input id="closet-led" type="checkbox"> LED opcional bajo maletero del clóset</label><label class="check"><input id="kitchen-led" type="checkbox"> LED opcional bajo muebles altos de cocina</label><label class="check"><input id="roof" type="checkbox"> Cielo raso</label><label class="check"><input id="ceiling-structure" type="checkbox"> Ver estructura del cielo raso de cocina</label><label class="check"><input id="vault" type="checkbox"> Techo en arco</label><label class="check"><input id="architecture" type="checkbox" checked> Muros interiores</label><label class="check"><input id="furnishings" type="checkbox" checked> Cama, aparatos y muebles de referencia</label><label class="check"><input id="labels" type="checkbox" checked> Nombres de zonas</label></details></aside></div>
-<footer><span>ESPACIOS 3D</span><p>Guardado en este navegador. Descarga el proyecto para llevarlo al iPad o compartirlo; los cambios no se sincronizan entre dispositivos.</p><a href="README.md">Acerca del proyecto</a></footer></main><noscript><p>Activa JavaScript en Safari para usar el visor. <a href="despiece-cocina.html">Consultar despiece</a></p></noscript><script src="assets/vendor/three-r128.min.js"></script><script src="assets/vendor/OrbitControls-r128.js"></script><script src="assets/models/cocina-data.js?v=20261125-condimentero-150-revision"></script><script src="assets/models/cocina-modelo.js?v=20261125-condimentero-150-revision"></script><script src="assets/models/closet-data.js?v=20261115-tapa-bastidor"></script><script src="assets/models/closet-modelo.js?v=20261115-tapa-bastidor"></script><script src="assets/models/bano-data.js?v=20261031-cierre-1"></script><script src="assets/models/bano-modelo.js"></script><script src="assets/models/cortasol-pino-data.js?v=20261121-panel-1"></script><script src="assets/models/cielo-panel-yeso.js?v=20261121-panel-1"></script><script src="assets/models/puerta-plegable-data.js?v=20261121-obra-2"></script><script src="assets/models/puerta-plegable-modelo.js?v=20261121-obra-1"></script><script src="assets/app.js?v=20261121-panel-1"></script><script src="assets/fullscreen.js"></script></body></html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#253b35">
+<title>Espacios 3D · Tu espacio, pieza a pieza</title>
+<script>if(new URLSearchParams(location.search).get("vista")==="detallada")location.replace("terraza.html"+location.hash);</script>
+<style>
+/* Vista rápida: cada mueble a pantalla completa, con sus módulos. Carga las páginas de cada mueble en modo ?rapida. */
+:root{--ink:#253b35;--muted:#5d6d63;--line:#d3d8ce;--paper:#f6f5ef;--card:#fffefa}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font:14px/1.4 Arial,Helvetica,sans-serif}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:var(--card)}
+.brand{display:flex;align-items:center;gap:9px;color:inherit;text-decoration:none;margin-right:auto}
+.brand .mark{font:23px Georgia,serif;border:1px solid var(--ink);padding:2px 5px;line-height:1}
+.brand b{font-weight:400;color:var(--muted)}
+.brand span{font-size:19px}
+.switch{display:flex;gap:6px;flex-wrap:wrap}
+.switch button{min-height:42px;padding:8px 16px;font:14px Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:22px;cursor:pointer;touch-action:manipulation}
+.switch button[aria-pressed=true]{color:#fff;background:var(--ink);border-color:var(--ink)}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{display:inline-flex;align-items:center;min-height:42px;padding:8px 13px;font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:8px;background:#fff}
+.links a.main{color:#fff;background:var(--ink);border-color:var(--ink)}
+.frame{position:relative;flex:1;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#e3e3dd}
+@media (max-width:720px){.top{gap:8px;padding-block:8px}.brand{margin-right:0}.brand span:not(.mark){display:none}.switch button{min-height:38px;padding:6px 12px}.links{width:100%}.links a{padding:5px 10px;font-size:12px;min-height:34px}#page{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="./"><span class="mark">E³</span><span>Espacios <b>3D</b></span></a>
+<nav class="switch" aria-label="Mueble">
+<button type="button" data-m="cocina" aria-pressed="true">Cocina</button>
+<button type="button" data-m="closet" aria-pressed="false">Clóset</button>
+<button type="button" data-m="bano" aria-pressed="false">Baño</button>
+</nav>
+<nav class="links" aria-label="Más vistas">
+<a id="page" href="cocina.html">Página del mueble ↗</a>
+<a id="despiece" href="despiece-cocina.html">Despiece ↗</a>
+<a class="main" href="terraza.html">Terraza completa ↗</a>
+</nav>
+</header>
+<div class="frame"><iframe id="viewer" title="Visor 3D del mueble" src="about:blank" allow="fullscreen"></iframe></div>
+<script>
+(()=>{'use strict';
+const M={cocina:'Cocina',closet:'Clóset',bano:'Baño'},frame=document.getElementById('viewer');
+const keep=k=>{try{localStorage.setItem('espacios-rapida',k);}catch(e){}};
+const read=()=>{try{return localStorage.getItem('espacios-rapida');}catch(e){return null;}};
+function show(k,push){if(!M[k])k='cocina';
+ for(const b of document.querySelectorAll('.switch button'))b.setAttribute('aria-pressed',String(b.dataset.m===k));
+ frame.src=k+'.html?rapida';frame.title='Visor 3D · '+M[k];
+ document.getElementById('page').href=k+'.html';document.getElementById('despiece').href='despiece-'+k+'.html';
+ document.title=M[k]+' · Espacios 3D';keep(k);if(push)history.replaceState(null,'','#'+k);}
+for(const b of document.querySelectorAll('.switch button'))b.onclick=()=>show(b.dataset.m,true);
+show(location.hash.slice(1)||read()||'cocina',false);
+})();
+</script>
+</body>
+</html>
