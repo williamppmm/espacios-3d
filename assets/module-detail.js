@@ -48,7 +48,7 @@ function edgeText(p){if(!p.edges)return 'Sin canto';const e=p.edges.map(edge);if
  const side=(a,b,one,two)=>{const v=[a,b].filter(Boolean);return !v.length?'':v.length===1?'1 '+one+' de '+fmt(v[0])+' mm':v[0]===v[1]?'2 '+two+' de '+fmt(v[0])+' mm':two+' de '+fmt(v[0])+' y '+fmt(v[1])+' mm';};
  return 'Canto en '+[side(e[0],e[1],'largo','largos'),side(e[2],e[3],'corto','cortos')].filter(Boolean).join(' · ')+(e.some(x=>!x)?'; el resto sin canto':'');}
 const cut=p=>p.edges?[p.L-edge(p.edges[2])-edge(p.edges[3]),p.A-edge(p.edges[0])-edge(p.edges[1])]:[p.L,p.A];
-let active=null,picked=null,tagMode=0,ghostHidden=false,collapsed=false,saved=null,offset=[0,0];
+let active=null,picked=null,tagMode=2,ghostHidden=false,collapsed=false,saved=null,offset=[0,0];
 const tagModes=['Rótulos: medidas','Rótulos: código','Rótulos: ocultos'],tags=[];
 const modMeshes=()=>o.meshes().filter(m=>o.moduleOf(m)===active.id);
 function tagTexture(txt,on){const c=document.createElement('canvas'),g=c.getContext('2d'),font='600 38px Arial, Helvetica, sans-serif';g.font=font;const w=Math.ceil(g.measureText(txt).width)+30;c.width=w;c.height=58;g.font=font;g.fillStyle=on?'#253b35':'rgba(255,254,248,.94)';g.strokeStyle=on?'#253b35':'#8fa47c';g.lineWidth=3;g.beginPath();g.rect(1.5,1.5,w-3,55);g.fill();g.stroke();g.fillStyle=on?'#ffffff':'#253b35';g.textBaseline='middle';g.fillText(txt,15,31);const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;t.minFilter=T.LinearFilter;t.generateMipmaps=false;return {t,aspect:w/58};}
@@ -83,7 +83,33 @@ function render(){const m=active,parts=o.parts(m.id),count=parts.reduce((n,p)=>n
  const range=panel.querySelector('input[type=range]');if(range){range.value=o.openValue?.()??0;range.oninput=()=>o.setOpen(Number(range.value));}
  chips();}
 function pick(id){picked=picked===id?null:id;paint();panel.querySelectorAll('[data-piece]').forEach(b=>{const on=b.dataset.piece===picked;b.setAttribute('aria-pressed',String(on));if(on)b.scrollIntoView({block:'nearest',behavior:'smooth'});});}
-function chips(){const bar=FS?.bar;if(!bar)return;bar.replaceChildren();if(!FS.on())return;for(const [id,label] of [[null,o.wholeLabel||'Mueble completo'],...o.modules.map(m=>[m.id,m.chip||m.id])]){const b=document.createElement('button');b.type='button';b.textContent=label;const m=o.modules.find(x=>x.id===id);if(m)b.title=m.title;b.setAttribute('aria-pressed',String((active?.id??null)===id));b.onclick=()=>id?open(id):close(true);bar.append(b);}}
+function chips(){
+ const bar=FS?.bar;
+ if(!bar)return;
+ bar.replaceChildren();
+ if(!FS.on())return;
+ for(const [id,label] of [[null,o.wholeLabel||'Mueble completo'],...o.modules.map(m=>[m.id,m.chip||m.id])]){
+  const button=document.createElement('button');
+  button.type='button';button.textContent=label;
+  const module=o.modules.find(m=>m.id===id);
+  if(module)button.title=module.title;
+  button.setAttribute('aria-pressed',String((active?.id??null)===id));
+  button.onclick=()=>id?open(id):close(true);
+  bar.append(button);
+ }
+ // El control existente de cotas también queda accesible en la presentación a pantalla completa.
+ const labelsButton=document.getElementById('t-labels');
+ if(!active&&labelsButton){
+  const button=document.createElement('button');
+  button.type='button';button.textContent=labelsButton.textContent;
+  button.setAttribute('aria-pressed',labelsButton.getAttribute('aria-pressed'));
+  button.onclick=()=>{
+   labelsButton.click();
+   button.setAttribute('aria-pressed',labelsButton.getAttribute('aria-pressed'));
+  };
+  bar.append(button);
+ }
+}
 function open(id){const m=o.modules.find(x=>x.id===id);if(!m)return;if(!FS.on())FS.set(true);if(!active)save();else clearTags();active=m;picked=null;stage.classList.add('md-on');for(const [h] of saved.hide)h.visible=false;render();buildTags();paint();frame();}
 function close(stay){if(!active)return;clearTags();restore();active=null;picked=null;stage.classList.remove('md-on');camera.clearViewOffset();camera.updateProjectionMatrix();o.onClose?.();if(stay)chips();}
 window.addEventListener('espacios-fullscreen',e=>{if(!e.detail)close();chips();});
