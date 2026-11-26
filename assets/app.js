@@ -2,7 +2,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='espacios3d.project.v1',L=20.30,W=5.75;
 const PROPOSALS=['pino'],WINDOW_DESIGN='pino-definitiva-20261104';
-const proposalNotes={pino:'Cierre de la cocina en pino, medido en obra · Ventanal de 3,08 × 1,26 m en dos cuerpos de 15 tablillas de 100 × 18 mm, mostrado a 45°, con marco de pino macizo de 40 × 140 y montante central; puerta plegable de 2,13 m con sobreluz de tablillas; cielo raso de panel de yeso blanco a 2,56 m sobre omegas y viguetas galvanizadas (distribución de referencia). En la terraza las posiciones son aproximadas. Despiece y compras aparte (despiece-pino-cocina).'};
+const proposalNotes={pino:'Cierre de la cocina en pino, medido en obra · Ventanal de 3,08 × 1,26 m en dos cuerpos de 15 tablillas de 100 × 15 mm, mostrado a 45°, con marco de pino macizo de 40 × 100 (rieles de 3000 entre costados completos) y montante central; puerta plegable de 2,13 m con sobreluz de tablillas; cielo raso de panel de yeso blanco a 2,56 m sobre omegas y viguetas galvanizadas (distribución de referencia). En la terraza las posiciones son aproximadas. Despiece y compras aparte (despiece-pino-cocina).'};
 const kitchenHeight=window.CocinaPropuestaData.upperTop/10;
 const initial=()=>({schema:'espacios-3d',version:1,name:'Terraza Cali',selected:'kitchen-1',mode:'room',room:{wallHeight:1.1,doors:1,foldingDoor:1,roof:false,vault:false,architecture:true,furnishings:true,labels:true,bathroomDesigned:true,bathroomWallCorrected:true,kitchenCorner:true,proposal:'pino',windowDesign:WINDOW_DESIGN,kitchenLed:false,closetLed:false},items:[
  {id:'kitchen-1',type:'kitchen',variant:'final',name:'Cocina Cartagena',w:260,d:62,h:kitchenHeight,x:750,z:260,rotation:90,visible:true,open:0},
@@ -275,15 +275,17 @@ function buildProposal(){while(proposal.children.length)dispose(proposal.childre
  // Coordenadas locales del visor del ventanal: x a lo largo (hacia el extremo libre), y desde el antepecho, z hacia la cocina.
  const local=(w,h,d,lx,ly,lz,material,name)=>{const o=box(proposal,mm(d),mm(h),mm(w),x-mm(lz),y0+mm(ly),mid+mm(lx),material);o.name=name;return o;};
  const L=D.vano.L,TT=F.t,SL=D.parts.find(p=>p.id==='T01').L,YT=TT+2*LA.holgura+SL,WB=F.luz,P=WB/LA.por_cuerpo;
- local(L,TT,F.A,0,TT/2,0,marco,'pino-riel-inferior');local(L,TT,F.A,0,YT+TT/2,0,marco,'pino-riel-superior');
- const posts=[-L/2+TT/2,0,L/2-TT/2];for(const px of posts)local(TT,YT-TT,F.A,px,TT+(YT-TT)/2,0,marco,'pino-lateral-montante');
+ local(L-2*TT,TT,F.A,0,TT/2,0,marco,'pino-riel-inferior');local(L-2*TT,TT,F.A,0,YT+TT/2,0,marco,'pino-riel-superior');
+ const posts=[-L/2+TT/2,0,L/2-TT/2];for(const px of posts){const side=px!==0;local(TT,side?F.alto:YT-TT,F.A,px,side?F.alto/2:TT+(YT-TT)/2,0,marco,'pino-lateral-montante');}
  const PE=F.pestana;for(const sd of[-1,1])local(L,PE.h,PE.t,0,-PE.h/2,sd*(D.obra.antepecho.t/2+PE.t/2),marco,'pino-pestana');
  if(PE.remate)local(PE.t,PE.h,D.obra.antepecho.t+2*PE.t,L/2+PE.t/2,-PE.h/2,0,marco,'pino-remate');
  const phi=D.angulo.inicial*Math.PI/180;
  for(const c of[-1,1]){const cx=c*(WB/2+TT/2);
   for(let i=0;i<LA.por_cuerpo;i++){const o=local(LA.A,SL,LA.t,cx-WB/2+P*(i+.5),TT+LA.holgura+SL/2,0,lamina,'cortasol-tablilla');o.rotation.y=-phi;}
   local(M.barra.L,M.barra.e,M.barra.A,cx-M.manivela*Math.cos(phi),TT+LA.holgura+SL+1+M.barra.e/2,-M.manivela*Math.sin(phi),palette.fence,'pino-barra');}
- for(const px of posts)local(M.tope.L,M.canal.prof,M.canal.z1-M.canal.z0,px,YT+M.canal.prof/2,(M.canal.z0+M.canal.z1)/2,marco,'pino-tope');
+ for(const px of [0])local(M.tope.L,M.canal.prof,M.canal.z1-M.canal.z0,px,YT+M.canal.prof/2,(M.canal.z0+M.canal.z1)/2,marco,'pino-tope');
+ for(const sign of[-1,1])local(F.solapa.L,F.solapa.A,F.solapa.t,sign*F.solapa.L/2,F.alto-F.solapa.A/2,-F.A/2-15-F.solapa.t/2,marco,'pino-solapa-superior');
+ for(const y of[250,650,1050])local(100,80,D.encuentro.calce_poste,L/2-D.puerta.plano,y,F.A/2+D.encuentro.calce_poste/2,marco,'pino-calce-poste');
  for(const z of [1.4,2.4])rejilla(z,.25,.3,.15);}
 function proposalUI(){const k=state.room.proposal;$('proposal-note').hidden=!proposalNotes[k];$('proposal-note').textContent=proposalNotes[k]||'';}
 function buildPerimeter(){while(perimeter.children.length)dispose(perimeter.children[0]);const h=state.room.wallHeight;wall(perimeter,'x',-.12,L+.12,W+.06,h);wall(perimeter,'z',0,W,-.06,h);wall(perimeter,'x',-.12,2,-.06,h);frontGrille();perimeter.traverse(o=>{if(o.material&&o.material!==palette.fence&&h>1.5){o.material.transparent=true;o.material.opacity=.5;}});
@@ -378,7 +380,7 @@ const buildingDoors=[[3.3,2.2,.7,bathroomFloor.level],[6.86,2.88,.9,0]].map(([x,
  return pivot;
 });
 const foldingDoor=window.crearPuertaPlegable(THREE);
-{const D=window.CortasolPinoData,d=window.PuertaPlegableData,x0=KITCHEN_X-D.marco.A/2000-d.span/1000,z=(D.vano.L-D.puerta.plano)/1000;
+{const D=window.CortasolPinoData,d=window.PuertaPlegableData,x0=KITCHEN_X-D.encuentro.plano_cocina/1000-d.span/1000,z=(D.vano.L-D.puerta.plano)/1000;
  foldingDoor.root.position.set(x0,0,z);
  // Con KITCHEN_X = 9,46 el paral contra el muro queda en x = 7,50, justo donde termina el muro de la habitación.
 }
@@ -390,7 +392,7 @@ const ceiling={x0:3.38,x1:7.5,z0:-.08,z1:3};
 box(roof,ceiling.x1-ceiling.x0,.04,ceiling.z1-ceiling.z0,(ceiling.x0+ceiling.x1)/2,2.52,(ceiling.z0+ceiling.z1)/2,palette.roof);
 const ceilingPanel = window.crearCieloPanelYeso(THREE);
 ceilingPanel.root.scale.x=-1;
-ceilingPanel.root.position.x=KITCHEN_X-window.CortasolPinoData.marco.A/2000;
+ceilingPanel.root.position.x=KITCHEN_X-window.CortasolPinoData.encuentro.plano_cocina/1000;
 roof.add(ceilingPanel.root);
 $('ceiling-structure').addEventListener('change',event=>{
  ceilingPanel.inspect(event.target.checked);

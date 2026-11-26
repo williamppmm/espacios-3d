@@ -1,0 +1,359 @@
+{
+  "date": "25/11/2026",
+  "parts": [
+    [
+      "V01",
+      "Riel inferior",
+      1,
+      "Bastidor 1",
+      3010,
+      100,
+      40,
+      3000,
+      100,
+      40,
+      "Entregar el bastidor entero más largo disponible: preferible 3020, largo útil mínimo 3010. Ajustar finalmente a 3000. Conservar sanas las dos puntas."
+    ],
+    [
+      "V02",
+      "Riel superior",
+      1,
+      "Bastidor 2",
+      3010,
+      100,
+      40,
+      3000,
+      100,
+      40,
+      "Entregar el bastidor entero más largo disponible: preferible 3020, largo útil mínimo 3010. Ajustar finalmente a 3000. Canal y taladros después de la prueba del mecanismo."
+    ],
+    [
+      "V03",
+      "Costado completo",
+      2,
+      "Bastidor 3",
+      1280,
+      100,
+      40,
+      1256,
+      100,
+      40,
+      "Costados de altura completa. Los horizontales se colocan entre ellos."
+    ],
+    [
+      "V04",
+      "Montante central",
+      1,
+      "Bastidor 4",
+      1200,
+      100,
+      40,
+      1176,
+      100,
+      40,
+      "Entre los dos horizontales, centrado."
+    ],
+    [
+      "T01",
+      "Tablilla orientable",
+      32,
+      "Tablas 1-9",
+      1180,
+      100,
+      15,
+      1170,
+      100,
+      15,
+      "30 montadas y 2 de repuesto. Pedir ancho y espesor terminados; ajustar largos iguales."
+    ],
+    [
+      "C01",
+      "Cartera inferior interior",
+      2,
+      "Tablas 8 y 9",
+      1550,
+      50,
+      15,
+      1540,
+      50,
+      15,
+      "Dos tramos por cara. Presentar y ajustar a 3080 totales. Altura propuesta 50."
+    ],
+    [
+      "C02",
+      "Cartera inferior exterior",
+      2,
+      "Tablas 8 y 9",
+      1550,
+      50,
+      15,
+      1540,
+      50,
+      15,
+      "Dos tramos por cara. Altura propuesta 50. Se sobrepone a marco y ladrillo."
+    ],
+    [
+      "C03",
+      "Solapa superior exterior",
+      2,
+      "Tablas 8 y 9",
+      1550,
+      100,
+      15,
+      1540,
+      100,
+      15,
+      "Dos tramos. Altura propuesta 100 para ocultar perfiles; situar según cielo raso real."
+    ],
+    [
+      "C04",
+      "Remate del antepecho",
+      1,
+      "Retal tabla 8/9",
+      150,
+      50,
+      15,
+      130,
+      50,
+      15,
+      "130 = ladrillo 100 + dos carteras de 15. Ajustar al antepecho real."
+    ],
+    [
+      "R01",
+      "Reserva para topes y calces",
+      1,
+      "Retales",
+      200,
+      100,
+      15,
+      null,
+      null,
+      null,
+      "Conservar para separadores y pruebas. Topes de 18 y calces de 20 desde sobrantes del bastidor 4."
+    ]
+  ],
+  "boards": [
+    [
+      1,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      2,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      3,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      4,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      5,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      6,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      7,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "2 paños de 1180 × ancho útil",
+      "4 tablillas 1180 × 100 × 15",
+      "Retal ancho de unos 620-650 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      8,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "1 paño de 1180 y 1 paño de 1550 × ancho útil",
+      "2 tablillas 1180 × 100 × 15; 1 solapa 1550 × 100 × 15; 2 carteras 1550 × 50 × 15",
+      "Retal ancho de unos 240-270 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ],
+    [
+      9,
+      "3000-3020 × 220 × 20",
+      "15 mm final",
+      "1 paño de 1180 y 1 paño de 1550 × ancho útil",
+      "2 tablillas 1180 × 100 × 15; 1 solapa 1550 × 100 × 15; 2 carteras 1550 × 50 × 15",
+      "Retal ancho de unos 240-270 mm de largo",
+      "Cepillar a 15; sanear cantos conservando al menos 210 mm útiles. Cortar primero paños y luego tiras."
+    ]
+  ],
+  "frames": [
+    [
+      1,
+      "Preferible 3020; útil ≥3010",
+      1,
+      "Entero, sección 100 × 40",
+      3000,
+      "Riel inferior. Escuadrar ambas puntas; margen total de 10–20 mm según largo útil."
+    ],
+    [
+      2,
+      "Preferible 3020; útil ≥3010",
+      1,
+      "Entero, sección 100 × 40",
+      3000,
+      "Riel superior. Escuadrar después de medir el vano."
+    ],
+    [
+      3,
+      "3000-3020",
+      2,
+      "1280 × 100 × 40",
+      1256,
+      "Los dos costados completos. Dejar el retal de unos 430-450 mm."
+    ],
+    [
+      4,
+      "3000-3020",
+      1,
+      "1200 × 100 × 40",
+      1176,
+      "Montante central. Conservar retal de unos 1790-1810 mm."
+    ]
+  ],
+  "notes": [
+    [
+      "Medidas exteriores de referencia",
+      "3080 × 1256 mm",
+      "Vano medido 3080 × 1260. Los 4 mm de altura son para ajuste; comprobar ancho, altura y diagonales en obra."
+    ],
+    [
+      "Composición horizontal",
+      "40 + 3000 + 40 = 3080",
+      "Los costados son completos; ambos horizontales quedan entre los costados."
+    ],
+    [
+      "Composición vertical",
+      "40 + 1176 + 40 = 1256",
+      "El montante central queda entre los horizontales."
+    ],
+    [
+      "Luz de cada cuerpo",
+      "1480 × 1176 mm",
+      "(3000 − 40)/2 = 1480. Quince tablillas por cuerpo."
+    ],
+    [
+      "Tablillas terminadas",
+      "1170 × 100 × 15 mm",
+      "1176 − 1170 = 6 mm, nominalmente 3 mm por punta. Terminar las 32 iguales."
+    ],
+    [
+      "Carteras inferiores",
+      "4 tramos de 1540 × 50 × 15",
+      "50 mm de altura es el criterio adoptado para este corte. Dos tramos por cada cara del antepecho."
+    ],
+    [
+      "Solapa superior",
+      "2 tramos de 1540 × 100 × 15",
+      "100 mm de altura es el criterio adoptado. El conjunto de placa, omega y vigueta del modelo ocupa unos 70 mm. Presentar antes de fijar."
+    ],
+    [
+      "Si los rieles solo miden 3000",
+      "Marco alternativo 3070 mm",
+      "Con rieles terminados de 2990 y los mismos costados, exterior 3070. Quedan 10 mm en un vano de 3080. Carteras se ajustan a 3070; nuevo paso nominal 1475/15 = 98,3333. Registrar la elección antes de perforar."
+    ],
+    [
+      "Madera y escuadrado",
+      "Secciones finales 100 × 40 y 100/50 × 15",
+      "Los únicos márgenes de las piezas están en el largo. Cepillar las nueve tablas completas a 15 mm con caras paralelas antes de dividir."
+    ],
+    [
+      "Sierra y saneado",
+      "4 mm de disco previstos",
+      "Refilado de referencia 5 mm por borde. Mantener al menos 210 mm de ancho útil. Para las carteras de 100 + 50 + 50 hacen falta al menos 208 mm útiles con dos separaciones de 4 mm."
+    ],
+    [
+      "Orden de trabajo",
+      "Cepillar → paños → tiras → identificar",
+      "Trazar todas las piezas antes de cortar. Las tablas 8 y 9 aportan las carteras; conservar en ellas el paño largo de 1550 mm."
+    ],
+    [
+      "Mecanismo superior",
+      "Rebaje abierto al patio 45 × 18; radio 32",
+      "Propuesta compatible geométricamente con marco de 100. Quedan 22 de lomo; platinas de 1430 y solapa desmontable. Validar con pines reales en retal antes de fresar."
+    ],
+    [
+      "Pines en tablilla de 15",
+      "Medir el accesorio recibido",
+      "Si el cuerpo mide Ø10, centrado deja 2,5 mm de madera por cara. Plantilla, pretaladro y prueba en retal antes de perforar las 32 tablillas."
+    ],
+    [
+      "Uniones del marco",
+      "2 tarugos Ø8 × 60 + 2 tornillos 5 × 90 por unión",
+      "Seis uniones a tope con dos tarugos Ø8 × 60 y dos tornillos inox de 5 × 90 por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
+    ],
+    [
+      "Alcance",
+      "Ventana de pino de material local",
+      "Visor individual y terraza usan marco de 100 y tablillas de 15. Probar el mecanismo; puerta plegable y cielo tienen despiece propio. Mantener posición de puerta con calces de 20."
+    ],
+    [
+      "Selección de los rieles",
+      "Preferible 3020; útil mínimo 3010",
+      "Medir el largo realmente sano antes de comprar. Si solo hay 3000, aplicar la alternativa de marco 3070 y rieles finales 2990."
+    ],
+    [
+      "Pegante",
+      "Titebond III Ultimate o equivalente exterior protegido",
+      "Encolar superficies de madera limpia sin acabado; aplicar presión con sargentos y respetar el curado de la ficha. Dejar al menos 24 h antes de solicitar las uniones. Fuente: https://www.titebond.com/App_Static/literature/glues/FF681_TBIIIUltimateBrochureTB.pdf"
+    ],
+    [
+      "Tornillos ocultos",
+      "12 instalados; comprar 16 inox 5 × 90",
+      "8 en las cuatro esquinas desde el canto exterior de los costados y 4 en el montante desde arriba/abajo. Tapones Ø10; ensayo de pretaladro y profundidad."
+    ],
+    [
+      "Tarugos del marco",
+      "12 instalados; comprar 16 Ø8 × 60",
+      "Dos por cada una de las seis uniones. Centro de taladros coordinado con el rebaje. No intercambiar la plantilla de esquina con la del montante."
+    ],
+    [
+      "Calces al poste",
+      "3 de 100 × 80 × 20 desde retal de bastidor 4",
+      "La reducción de fondo deja 20 mm hacia el poste; cubrir ese vacío con madera antes de atornillar. Mantiene puerta y cielo en posición."
+    ],
+    [
+      "Solapa desmontable",
+      "Separación al marco de 15 mm mediante retales",
+      "La cara interior de la solapa queda a z −65. No apoyar contra barra ni cerrar el acceso con pegante."
+    ]
+  ]
+}

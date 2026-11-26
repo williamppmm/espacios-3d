@@ -1,7 +1,7 @@
-/* Cielo raso definitivo de panel de yeso. Dimensiones en mm; perfilería ilustrativa por validar en obra. */
+/* Ventanal con madera local; cotas en mm. Mecanismo sujeto a prueba en retal. */
 window.CortasolPinoData={
  "name": "Cierre de la cocina en pino: ventanal, puerta plegable y cielo raso",
- "status": "Alternativa de cielo raso de panel de yeso con perfilería metálica. Ventanal y puerta de pino según medidas de obra. Ambientación de referencia. Placa blanca con cara inferior a +2560; omegas de 19 mm y viguetas de 38 mm por encima. Apoyo perimetral en los muros y encuentro con ventanal y parales de puerta. Calibre, separaciones, cuelgues y anclajes pendientes de verificar con el instalador según el sistema y sus cargas.",
+ "status": "Ventanal adaptado al pino disponible: marco 40 × 100, rieles continuos de 3000 entre costados completos, tablillas 100 × 15. Uniones con tarugos y tornillos ocultos. El mecanismo se presenta como propuesta para probar con los pines reales antes de mecanizar. Cielo raso con soporte independiente por verificar con su instalador.",
  "vano": {
   "L": 3080,
   "H": 1260,
@@ -12,75 +12,87 @@ window.CortasolPinoData={
  },
  "lama": {
   "A": 100,
-  "t": 18,
+  "t": 15,
   "n": 30,
   "holgura": 3,
   "tolerancia": 4,
-  "material": "Pino alistonado (finger joint) de 18 mm, barnizado por las seis caras",
+  "material": "Tabla de pino macizo cepillada a 15 mm",
   "densidad": 500,
-  "nota": "100 mm de ancho, igual que el muro: al girar ocupa un círculo de 102 mm y queda dentro del marco de 140. 18 mm de grueso dejan unos 5 mm de madera a cada lado del cuerpo del pin. 3 mm libres en cada punta para la pestaña del pin y el juego. 15 por cuerpo, a paso 98,7 mm.",
+  "nota": "30 instaladas y 2 de repuesto. Acabado por las seis caras. El cuerpo de pin de Ø10 deja solo 2,5 mm por cara: probar el pin recibido en un retal antes de taladrar.",
   "por_cuerpo": 15
  },
  "angulo": {
   "min": 40,
   "max": 140,
   "inicial": 45,
-  "nota": "Los extremos de cada barra chocan con los tacos de tope del canal: a 40° y 140° las tablillas de los extremos quedan a unos 5,2 mm del lateral o del montante y el paso de aire no baja del 46 %."
+  "nota": "40–140° es el recorrido representado. Ajustar topes reales en el prototipo y comprobar roce con todas las piezas terminadas."
  },
  "marco": {
   "t": 40,
-  "A": 140,
+  "A": 100,
   "cuerpos": 2,
   "luz": 1480.0,
-  "vuelo": 2,
+  "vuelo": 0,
   "alto": 1256,
-  "material": "Pino macizo de 40 mm de grueso (4 × 14), cepillado, inmunizado y barnizado",
-  "nota": "Marco de pino macizo de 40 × 140 mm, igual en rieles, laterales y montante: 100 del ladrillo, 18 de pestaña por cada cara y 2 mm de vuelo sobre cada pestaña. Los rieles van de una sola pieza de 3080 mm. El montante central divide el ventanal en dos cuerpos de 1480,0 mm libres y rigidiza el conjunto.",
+  "material": "Pino macizo cepillado a 40 × 100 mm",
+  "nota": "Costados completos de 1256; rieles de 3000 entre costados. Exterior nominal 3080 × 1256. Montante de 1176 entre rieles. Medir el vano y descontar la holgura de instalación antes de dar los largos definitivos.",
   "montante": {
    "t": 40,
    "nota": "Montante central entre rieles para rigidizar el ventanal y dividirlo en dos cuerpos. Las cargas del nuevo cielo raso requieren verificación independiente."
   },
   "pestana": {
-   "t": 18,
-   "h": 60,
+   "t": 15,
+   "h": 50,
    "remate": true,
-   "nota": "Pestañas de pino alistonado de 18 × 60 mm por las dos caras del antepecho, pegadas y atornilladas por debajo del riel inferior. El riel vuela 2 mm sobre cada pestaña. En el extremo libre, un remate de 136 mm tapa la punta del muro y cierra la U. Ajustar los 60 mm para que el borde quede encima de una junta de mortero."
+   "nota": "Cuatro tramos de cartera 1540 × 50 × 15, dos por cara. Atornillar desde detrás antes de instalar, con pretaladro y sin atravesar los 15 mm. Junta de cada cara sobre el centro del marco; presentar antes de fijar."
   },
   "union": {
    "tarugos": 2,
    "tornillos": 2,
-   "nota": "Rieles enteros; laterales y montante entre los rieles, a tope. Cada unión se pega y lleva dos tarugos de 10 × 60 mm y dos tornillos de 5 × 100 mm desde la cara exterior del riel, avellanados y tapados con tapones de pino. Armar en el banco sobre una superficie plana y escuadrar midiendo las diagonales de cada cuerpo."
+   "tarugo_d": 8,
+   "tarugo_L": 60,
+   "tornillo_d": 5,
+   "tornillo_L": 90,
+   "nota": "Seis uniones a tope con dos tarugos Ø8 × 60 y dos tornillos inox de 5 × 90 por unión. Esquinas: tornillos desde los cantos exteriores de los costados. Montante: tornillos desde arriba/abajo de los rieles. Pretaladro y rebaje para cabeza; tapones de pino. Plantilla diferenciada para evitar el rebaje del mecanismo. No pegar sobre barniz."
+  },
+  "solapa": {
+   "n": 2,
+   "L": 1540,
+   "A": 100,
+   "t": 15,
+   "nota": "Solapa superior hacia el patio: tapa la zona del mecanismo y el encuentro visual del cielo raso. Desmontable con tornillos y tapones; no encolar sobre el canal."
   }
  },
  "mecanismo": {
-  "manivela": 37,
+  "manivela": 32,
   "lado": "patio",
   "canal": {
-   "z0": -52,
-   "z1": -9,
+   "z0": -50,
+   "z1": -5,
    "prof": 18,
-   "nota": "Canal de 43 × 18 mm ruteado por debajo del riel superior, de punta a punta, del lado patio (de z −52 a z −9). Queda boca abajo, encima de las tablillas. Rutear en dos o tres pasadas, con guía paralela."
+   "nota": "Propuesta de rebaje abierto al patio de 45 × 18 en el riel superior, entre los costados; conserva 22 mm de lomo. Radio del pasador reducido a 32. Probar antes de fresar; la solapa exterior desmontable tapa el rebaje sin tocar la barra.",
+   "abierto": true
   },
   "barra": {
-   "L": 1423,
+   "L": 1430,
    "A": 25.4,
    "e": 3.2,
    "agujero": 7,
    "material": "Platina de aluminio de 1 × 1/8 pulg, una por cuerpo",
-   "nota": "Una por cuerpo, de 1423 mm. Descansa sobre arandelas de nylon. 15 agujeros de 7 mm a paso 98,7, centrados en el ancho; el primero a 20,8 mm de la punta. Cortar unos milímetros más larga y limar hasta que tope a 40° y 140°.",
+   "nota": "Dos platinas de 1430 × 25,4 × 3,2. Quince agujeros a paso 1480/15 = 98,6667. Primer agujero nominal a 24,3333 del extremo. Cortar y ajustar topes con plantilla de prueba; los ángulos del visor no sustituyen los topes físicos.",
    "n": 2
   },
   "pasador": {
    "d": 6.35,
    "L": 25,
    "dentro": 16,
-   "nota": "Varilla inox 304 de 1/4 pulg, pegada con epóxico en la punta superior de la tablilla, a 37 mm del eje hacia el patio. Sobresalen 9 mm: atraviesan la arandela y la barra."
+   "nota": "Pasador inox de 6,35 × 25 a 32 mm del eje hacia el patio, insertado 16 mm y pegado con epóxico compatible. Probar taladro y giro en pino de 15 antes de hacer la serie."
   },
   "tope": {
    "L": 40,
-   "A": 43,
+   "A": 45,
    "t": 18,
-   "nota": "Tacos de pino de 40 × 43 × 18 pegados dentro del canal, encima de cada lateral y del montante. Cada barra choca contra los tacos de su cuerpo en los extremos del giro; el del montante sirve a las dos."
+   "nota": "Taco central en el rebaje, ajustado después de probar las barras. Los costados completos delimitan los extremos. No fabricar tacos en serie antes de comprobar el recorrido."
   },
   "pines": {
    "modelo": "uxcell, 24 × 10 mm (0,94 × 0,39 pulg), punta metálica con resorte y cuerpo plástico",
@@ -223,7 +235,7 @@ window.CortasolPinoData={
    "t": 100,
    "alto": 1300,
    "material": "Ladrillo a la vista de 10 cm, sin repello",
-   "nota": "Muro de ladrillo de 10 cm exactos y 1300 de alto. El marco de 140 lo cubre con las dos pestañas y vuela 2 mm sobre ellas."
+   "nota": "Ladrillo de 100 de fondo, marco de 100 centrado encima. Carteras de 15 sobrepuestas por ambas caras; no se suman al fondo del marco."
   },
   "cielo": {
    "nivel": 2560,
@@ -248,33 +260,33 @@ window.CortasolPinoData={
    "grupo": "Ventanal",
    "name": "Riel inferior",
    "qty": 1,
-   "L": 3080,
-   "A": 140,
+   "L": 3000,
+   "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Una sola pieza. Huecos de las puntas de los pines a paso 98,7 en cada cuerpo, con su ranura de entrada de 25 × 2 mm hacia la cocina. Apoya en el antepecho con sellador; pestañas pegadas y atornilladas por debajo."
+   "note": "Entre costados completos, una sola pieza. Entregar entero ≥3010 útil, preferible 3020. Ajustar al hueco real y escuadrar en armado."
   },
   {
    "id": "V02",
    "grupo": "Ventanal",
    "name": "Riel superior",
    "qty": 1,
-   "L": 3080,
-   "A": 140,
+   "L": 3000,
+   "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Una sola pieza. Canal de 43 × 18 ruteado por debajo, de punta a punta, del lado patio; huecos de los pines alineados con los de abajo. Encuentro perimetral del cielo raso; apoyo estructural pendiente de verificar."
+   "note": "Entre costados completos, una sola pieza. Entregar entero ≥3010 útil. Rebaje abierto al patio de 45 × 18 solo después de la prueba del mecanismo; soporte del cielo independiente."
   },
   {
    "id": "V03",
    "grupo": "Ventanal",
-   "name": "Lateral",
+   "name": "Costado completo",
    "qty": 2,
-   "L": 1176,
-   "A": 140,
+   "L": 1256,
+   "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Entre los dos rieles. Izquierdo atornillado a la medianera; derecho, en el extremo libre, atornillado al poste de la puerta."
+   "note": "Dos costados completos; los rieles de 3000 van entre ellos. Entregar 1280 para escuadrar a 1256 nominal."
   },
   {
    "id": "V04",
@@ -282,10 +294,10 @@ window.CortasolPinoData={
    "name": "Montante central",
    "qty": 1,
    "L": 1176,
-   "A": 140,
+   "A": 100,
    "t": 40,
    "material": "macizo",
-   "note": "Entre los rieles, al centro: deja dos cuerpos de 1480,0 mm libres y rigidiza el ventanal."
+   "note": "Montante entre rieles, apoya el horizontal superior en el centro. Entregar 1200 y ajustar a 1176 nominal."
   },
   {
    "id": "T01",
@@ -294,64 +306,64 @@ window.CortasolPinoData={
    "qty": 30,
    "L": 1170,
    "A": 100,
-   "t": 18,
-   "material": "tablero",
-   "note": "15 por cuerpo. Un pin con resorte al centro de cada punta. Arriba, pasador de 1/4 × 25 a 37 mm del centro hacia el patio, a la mitad del grueso, 16 mm pegado con epóxico. Hacerlas con plantilla."
+   "t": 15,
+   "material": "tabla15",
+   "note": "30 instaladas; pedir otras 2 de repuesto. Entrega 1180, montaje 1170. Tabla de pino de 220 × 20 cepillada a 15 y dividida en dos tiras terminadas de 100."
   },
   {
    "id": "V05",
    "grupo": "Ventanal",
-   "name": "Pestaña del antepecho · tramo largo",
+   "name": "Cartera inferior · primer tramo por cara",
    "qty": 2,
-   "L": 2000,
-   "A": 60,
-   "t": 18,
-   "material": "tablero",
-   "note": "Una por cara (cocina y patio), desde la medianera. Pegada y atornillada por debajo del riel inferior, contra la cara del ladrillo."
+   "L": 1540,
+   "A": 50,
+   "t": 15,
+   "material": "tabla15",
+   "note": "Entregar 1550; finalizar después de presentar el marco. Dos tramos por cara; tornillos ocultos desde detrás."
   },
   {
    "id": "V05C",
    "grupo": "Ventanal",
-   "name": "Pestaña del antepecho · tramo corto",
+   "name": "Cartera inferior · segundo tramo por cara",
    "qty": 2,
-   "L": 1080,
-   "A": 60,
-   "t": 18,
-   "material": "tablero",
-   "note": "Una por cara, hasta el extremo libre."
+   "L": 1540,
+   "A": 50,
+   "t": 15,
+   "material": "tabla15",
+   "note": "Entregar 1550; finalizar después de presentar el marco. Dos tramos por cara; tornillos ocultos desde detrás."
   },
   {
    "id": "V06",
    "grupo": "Ventanal",
    "name": "Remate del extremo libre",
    "qty": 1,
-   "L": 136,
-   "A": 60,
-   "t": 18,
-   "material": "tablero",
-   "note": "Tapa la punta del antepecho y cierra la U con las dos pestañas."
+   "L": 130,
+   "A": 50,
+   "t": 15,
+   "material": "tabla15",
+   "note": "Desde retal 150 × 50 × 15; adaptar al antepecho más ambas carteras."
   },
   {
    "id": "V07",
    "grupo": "Ventanal",
    "name": "Taco de tope",
-   "qty": 3,
+   "qty": 1,
    "L": 40,
-   "A": 43,
+   "A": 45,
    "t": 18,
-   "material": "tablero",
-   "note": "Dentro del canal, encima de cada lateral y del montante. Pegado y atornillado: las barras chocan aquí."
+   "material": "retal",
+   "note": "Desde retal del bastidor, espesor 18 ajustado en armado. Tope central de referencia; probar antes de cortar."
   },
   {
    "id": "B01",
    "grupo": "Ventanal",
    "name": "Barra del mecanismo",
    "qty": 2,
-   "L": 1423,
+   "L": 1430,
    "A": 25.4,
    "t": 3.2,
    "material": "aluminio",
-   "note": "Una por cuerpo, de una platina de 6 m. 15 agujeros de 7 mm a paso 98,7; el primero a 20,8 mm de la punta. Limar las puntas hasta que tope a 40° y 140°."
+   "note": "Dos platinas de 1430 × 25,4 × 3,2. Quince agujeros a paso 1480/15 = 98,6667. Primer agujero nominal a 24,3333 del extremo. Cortar y ajustar topes con plantilla de prueba; los ángulos del visor no sustituyen los topes físicos."
   },
   {
    "id": "P01",
@@ -528,6 +540,51 @@ window.CortasolPinoData={
    "t": 18,
    "material": "tablero",
    "note": "Verticales y fijas, separadas 29,5 mm: dejan paso de aire permanente sobre la puerta."
+  },
+  {
+   "id": "V08",
+   "grupo": "Ventanal",
+   "name": "Solapa superior exterior · tramo",
+   "qty": 2,
+   "L": 1540,
+   "A": 100,
+   "t": 15,
+   "material": "tabla15",
+   "note": "Entrega 1550; dos tramos. Cara interior a z −65 para dejar 15 mm libres al rebaje; usar separadores desde retal y tornillos desmontables."
+  },
+  {
+   "id": "V09",
+   "grupo": "Ventanal",
+   "name": "Calce de unión al poste",
+   "qty": 3,
+   "L": 100,
+   "A": 80,
+   "t": 20,
+   "material": "retal",
+   "note": "Sacar del sobrante del cuarto bastidor: espesor terminado 20 para mantener la puerta y el cielo en su posición. Taladrar junto con el poste al presentar."
+  },
+  {
+   "id": "T02",
+   "grupo": "Ventanal",
+   "name": "Tablilla de repuesto",
+   "qty": 2,
+   "L": 1170,
+   "A": 100,
+   "t": 15,
+   "material": "tabla15",
+   "note": "Incluidas en el pedido de 32 tablillas; mismo cepillado y acabado."
   }
- ]
+ ],
+ "encuentro": {
+  "plano_cocina": 70,
+  "calce_poste": 20,
+  "nota": "Se conserva la posición de la puerta y del cielo raso. Al reducir el marco de 140 a 100, queda una separación de 20 hacia el poste: tres calces macizos de 20, obtenidos de retal, salvan la unión. No dejar tornillos trabajando sobre ese vacío."
+ },
+ "armado": {
+  "pegante": "Titebond III Ultimate, o adhesivo para madera declarado apto para exterior protegido y humedad",
+  "fuente": "https://www.titebond.com/App_Static/literature/glues/FF681_TBIIIUltimateBrochureTB.pdf",
+  "prensas": "Encolar superficies de madera limpia sin acabado; aplicar presión con sargentos y respetar el curado de la ficha. Dejar al menos 24 h antes de solicitar las uniones.",
+  "clavos": "Puntillas solo para sujetar remates mientras se trabaja; los marcos se unen con tarugos y tornillos.",
+  "fijacion": "Anclar en soporte firme. Elegir chazo y profundidad al comprobar si el ladrillo es hueco; no asumir que cualquier chazo de expansión sirve. Calzas rígidas bajo los apoyos; sellador flexible en la junta con mampostería."
+ }
 };
