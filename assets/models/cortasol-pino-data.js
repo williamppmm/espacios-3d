@@ -308,7 +308,7 @@ window.CortasolPinoData={
    "A": 100,
    "t": 15,
    "material": "tabla15",
-   "note": "30 instaladas; pedir otras 2 de repuesto. Entrega 1180, montaje 1170. Tabla de pino de 220 × 20 cepillada a 15 y dividida en dos tiras terminadas de 100."
+   "note": "30 instaladas y 4 de repuesto. Entrega 1180, montaje 1170. De tiras enteras de 100 × 15 cepilladas en la carpintería; corte en casa con tope fijo."
   },
   {
    "id": "V05",
@@ -567,12 +567,12 @@ window.CortasolPinoData={
    "id": "T02",
    "grupo": "Ventanal",
    "name": "Tablilla de repuesto",
-   "qty": 2,
+   "qty": 4,
    "L": 1170,
    "A": 100,
    "t": 15,
    "material": "tabla15",
-   "note": "Incluidas en el pedido de 32 tablillas; mismo cepillado y acabado."
+   "note": "Incluidas en el pedido de 34 tablillas; mismo corte, cepillado y acabado."
   }
  ],
  "encuentro": {

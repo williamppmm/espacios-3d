@@ -117,13 +117,14 @@ def main():
     local = json.loads((RAIZ / "herramientas/ventana_pino_corte.json").read_text(encoding="utf-8"))
     cotiz = "cotizar"
     compras = [
-        ["Ventanal local", "Bastidor 100 × 40 · largo 3000–3020", 4, "pieza", cotiz, "Dos enteros con ≥3010 útiles; otro para dos costados de 1280 y otro para montante de 1200. Calces y topes desde retales. Ver pedido individual."],
-        ["Ventanal local", "Tabla 3000–3020 × 220 × 20 · cepillar a 15", 9, "tabla", cotiz, "32 tablillas (30 + 2), cuatro carteras y dos solapas. No sumar estas piezas al encaje alistonado de la puerta."],
+        ["Ventanal local", "Bastidor entero cepillado 40 × 100 · 3000–3020", 4, "pieza", cotiz, "Dos con ≥3010 sanos para los rieles; otro para los dos costados y otro para el montante. Se cortan en casa. Ver pedido individual."],
+        ["Ventanal local", "Tira entera cepillada 100 × 15 × 3000", 18, "tira", cotiz, "34 tablillas (30 + 4 de repuesto) y dos solapas. Corte en casa. Salen de 10 tablas de 220 en la carpintería."],
+        ["Ventanal local", "Tira entera cepillada 50 × 15 × 3000", 4, "tira", cotiz, "Cuatro carteras y el remate. Corte en casa."],
         *[["Pino macizo", f"Pino cepillado de {e} × {a} mm (4 × {a // 10}) · pieza de {LISTON['L']} mm", n, "pieza", cotiz,
            f"Ver hoja «Pino macizo»: plan de corte refilando {LISTON['refilado']} mm por punta y disco de {LISTON['disco']} mm. Rectas, secas, sin nudos sueltos."]
           for e, a, n in pedido_macizo],
         ["Pino alistonado", f"Tablero alistonado de pino {TABLERO['e']} mm · {TABLERO['L']} × {TABLERO['A']} (referencia)", len(refil), "tablero", cotiz,
-         "Solo hojas de la puerta y sobreluz; ventanal desde nueve tablas independientes. Ver hoja «Tableros». Del mismo lote que el macizo si es posible."],
+         "Solo hojas de la puerta y sobreluz; ventanal desde tiras propias de 100 y 50 × 15. Ver hoja «Tableros». Del mismo lote que el macizo si es posible."],
         ["Cielo raso", "Placa de yeso de 12,7 mm · referencia 1220 × 2440", placas, "placa", cotiz,
          "Ambientación de referencia. Confirmar placa adecuada al ambiente y plan de juntas antes de comprar."],
         ["Cielo raso", "Omegas, viguetas y ángulos galvanizados", 1, "sistema", cotiz,
@@ -204,11 +205,11 @@ def main():
     H_DESP = ["ID", "Grupo", "Pieza", "Material", "Cant.", "Largo", "Ancho", "Esp.", "Área m²", "Observaciones"]
     H_PLAN = ["Sección", "Pieza de 3020", "Cortes", "Sobrante mm"]
     H_TAB = ["Tablero", "Ocupación", "Tiras y piezas"]
-    hoja("Resumen", "Pino de cocina · material local", ["Ventanal: pedido propio de 9 tablas y 4 bastidores. Puerta y cielo conservan su diseño."], ["Concepto", "Valor", "Nota"], resumen, [35,18,110])
+    hoja("Resumen", "Pino de cocina · material local", ["Ventanal: pedido propio de 4 bastidores, 18 tiras de 100 × 15 y 4 de 50 × 15. Puerta y cielo conservan su diseño."], ["Concepto", "Valor", "Nota"], resumen, [35,18,110])
     hoja("Despiece", "Medidas finales de montaje", ["Ver pedido individual para largos con margen y repuestos. Ventanal y puerta utilizan materiales diferentes."],H_DESP,despiece,[9,16,38,30,9,12,12,10,14,110])
-    hoja("Ventanal local", "Corte de 9 tablas y 4 bastidores", ["Tabla de 220 × 20 cepillada a 15; bastidor 100 × 40 terminado. Largos de entrega con margen."], ["ID","Pieza","Cant.","Origen","Entrega L","Ancho","Espesor","Final L","Final ancho","Final esp.","Nota"],local["parts"],[10,32,9,22,12,12,10,12,12,12,100])
+    hoja("Ventanal local", "Ventanal · 4 bastidores y 22 tiras", ["Piezas enteras cepilladas; todos los largos se cortan en casa."], ["ID","Pieza","Cant.","Origen","Primer corte","Ancho","Espesor","Final L","Final ancho","Final esp.","Nota"],local["parts"],[10,32,9,22,12,12,10,12,12,12,100])
     hoja("Pino macizo", "Puerta · plan en bastidores de 3020", ["Excluye los cuatro bastidores del ventanal; no duplicar la compra."],H_PLAN,plan,[15,15,95,18])
-    hoja("Tableros", "Puerta · alistonado 18 mm", ["Excluye las nueve tablas cepilladas a 15 del ventanal."],H_TAB,t_refil,[12,14,120])
+    hoja("Tableros", "Puerta · alistonado 18 mm", ["Excluye las tiras de 15 mm del ventanal."],H_TAB,t_refil,[12,14,120])
     rows = [[*r[:5], {"formula": f'=IF(AND(ISNUMBER(C{i}),ISNUMBER(E{i})),C{i}*E{i},"Por cotizar")'},r[5]] for i,r in enumerate(compras,7)]
     rows.append([None,"Total con precio de referencia",None,None,None,{"formula":f"=SUM(F7:F{6+len(compras)})"},None])
     hoja("Compras", "Compras independientes de los muebles", ["Cotizar no equivale a cero. Ventanal y puerta separados para evitar duplicados."],["Grupo","Ítem","Cant.","Unidad","Precio COP","Subtotal COP","Nota"],rows,[20,55,10,20,18,18,110])
@@ -218,7 +219,7 @@ def main():
         source=Path(tmp)/"libro.json";source.write_text(json.dumps(specs,ensure_ascii=False),encoding="utf-8")
         subprocess.run(["node",str(RAIZ/"herramientas/exportar_pino.mjs"),str(source),str(RAIZ/"despiece-pino-cocina.xlsx")],check=True)
 
-    secs = [("ventanal-local", "Ventanal · pedido local", "<p>9 tablas y 4 bastidores. <a href=\"despiece-ventana-pino-con-margen.xlsx\">Pedido con márgenes</a> · <a href=\"pedido-corte-ventana-pino.pdf\">PDF de corte</a></p>"), ("resumen", "Resumen", tabla(resumen, ["Concepto", "Valor", "Nota"], num_cols=(1,), wrap_cols=(2,))),
+    secs = [("ventanal-local", "Ventanal · pedido local", "<p>4 bastidores de 40 × 100, 18 tiras de 100 × 15 y 4 de 50 × 15, enteras. <a href=\"despiece-ventana-pino-con-margen.xlsx\">Pedido y corte en casa</a> · <a href=\"pedido-corte-ventana-pino.pdf\">PDF de corte</a></p>"), ("resumen", "Resumen", tabla(resumen, ["Concepto", "Valor", "Nota"], num_cols=(1,), wrap_cols=(2,))),
             ("despiece", "Despiece", tabla(despiece, H_DESP, num_cols=(4, 5, 6, 7, 8), wrap_cols=(9,))),
             ("macizo", "Pino macizo · plan de corte", tabla(plan, H_PLAN, num_cols=(1, 3), wrap_cols=(2,))),
             ("tableros", "Tableros alistonados", tabla(t_refil, H_TAB, num_cols=(1,), wrap_cols=(2,))),
@@ -230,7 +231,7 @@ def main():
             f'<a href="puerta-plegable.html">Puerta y cielo raso 3D</a> · <a href="despiece-pino-cocina.xlsx" download>Descargar Excel</a></p>',
             '<span class="tag">Pino de la cocina · independiente de los muebles</span><h1>Despiece y compras</h1>',
             '<nav class="tabs">' + "".join(f'<a href="#{a}">{t}</a>' for a, t, _ in secs) + '</nav>',
-            f'<p class="note">Medido en obra el {FECHA}. Ventanal de madera local: nueve tablas cepilladas a 15 y cuatro bastidores 100 × 40; puerta con alistonado de 18 y bastidores de 3020; cielo de panel de yeso, '
+            f'<p class="note">Medido en obra el {FECHA}. Ventanal de madera local: cuatro bastidores de 40 × 100 y tiras cepilladas de 100 y 50 × 15; puerta con alistonado de 18 y bastidores de 3020; cielo de panel de yeso, '
             'del mismo lote, inmunizado y barnizado en la misma tanda. No suma en compras-proyecto.</p>']
     for a, t, h in secs: body.append(f'<h2 id="{a}">{html.escape(t)}</h2>{h}')
     (RAIZ / "despiece-pino-cocina.html").write_text(page("Pino de la cocina · despiece", "".join(body)), encoding="utf-8")

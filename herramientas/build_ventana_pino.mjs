@@ -16,21 +16,20 @@ function sheet(name,title,note,headers,widths,rows,height=65){
  widths.forEach((w,i)=>s.getRangeByIndexes(0,i,1,1).format.columnWidth=w);
  s.freezePanes.freezeRows(6);return s;
 }
-const order=sheet('Pedido de piezas','Ventana de pino · corte para material local','25/11/2026 · Todas las cotas en mm. 9 tablas y 4 bastidores. Tablas cepilladas a 15 mm; bastidores terminados a 100 × 40 mm.',
- ['ID','Pieza','Cant.','Largo a entregar (mín.)','Ancho terminado','Espesor terminado','Largo de montaje','Destino y ajuste'],
- [10,34,9,16,17,17,18,88],d.parts.map(p=>[p[0],p[1],p[2],p[4],p[5],p[6],p[7],p[3]+'. '+p[10]]),62);
-order.getRange('C7:G16').setNumberFormat('0');order.getRange('D7:D16').format.fill=amber;
-order.getRange('A18').values=[['Piezas / reservas a entregar']];order.getRange('C18').formulas=[['=SUM(C7:C16)']];
-order.getRange('A20').values=[['Compra de madera']];order.getRange('D20').values=[['9 tablas de 3000–3020 × 220 × 20, cepilladas a 15. 4 bastidores de 100 × 40; seleccionar 2 enteros, preferiblemente de 3020 y con al menos 3010 útiles para los rieles.']];
-order.getRange('A21').values=[['Control de tablillas']];order.getRange('D21').values=[['32 de 1180 × 100 × 15: 30 para montar y 2 de repuesto.']];
-order.getRange('A22').values=[['Largos definitivos']];order.getRange('D22').values=[['Escuadrar en el armado: rieles 3000, costados 1256, montante 1176 y tablillas 1170. Medir el vano antes de terminar.']];
-order.getRange('A23').values=[['Mecanizado del mecanismo']];order.getRange('D23').values=[['Rebaje propuesto 45 × 18 abierto al patio, radio 32 y barras 1430. Ensayar primero con pines reales; ver Armado y controles.']];
-order.getRange('A18:H23').format.font={name:'Arial',size:10};order.getRange('C18').setNumberFormat('0');
-const tables=sheet('Las 9 tablas','Corte de las 9 tablas · cepillado a 15 mm','Sanear los cantos conservando al menos 210 mm de ancho útil. Disco previsto 4 mm. Cortar primero los paños y luego las tiras.',
- ['Tabla','Material de entrada','Cepillado','Paños al largo','Piezas resultantes','Retal que se conserva','Orden de trabajo'],
- [10,24,16,46,65,39,62],d.boards,88);
-const beams=sheet('Los 4 bastidores','Corte de los 4 bastidores · sección 100 × 40 mm','Los costados son de altura completa; los horizontales quedan entre ellos. Este cambio permite rieles finales de 3000 mm.',
- ['Bastidor','Largo de entrada','Cant. piezas','Entrega de taller','Largo final','Uso'],
+const order=sheet('Pedido a la carpintería','Ventana de pino · pedido a la carpintería','25/11/2026 · Todas las cotas en mm. Piezas enteras, cepilladas; los largos se cortan en casa.',
+ ['Ref.','Pieza','Cant.','Sección (mm)','Largo (mm)','Indicaciones'],[10,36,9,16,16,100],d.order,58);
+order.getRange('C7:C10').setNumberFormat('0');order.getRange('C7:E10').format.fill=amber;
+order.getRange('A12').values=[['Material de origen']];order.getRange('B12').values=[[d.order_note]];
+order.getRange('A13').values=[['Pedir además']];order.getRange('B13').values=[['Que entreguen todos los retales. Que la madera esté seca (15 % o menos) y derecha. Medir las piezas al recibirlas.']];
+order.getRange('A12:F13').format.font={name:'Arial',size:10};order.getRange('A12:A13').format.font={name:'Arial',size:10,bold:true};
+const pieces=sheet('Corte en casa','Piezas que salen del pedido · corte en casa','Primer corte con margen en el largo y ajuste final en el armado.',
+ ['ID','Pieza','Cant.','Primer corte','Ancho','Espesor','Largo final','Sale de','Nota'],
+ [10,34,9,14,10,10,14,30,80],d.parts.map(p=>[p[0],p[1],p[2],p[4],p[5],p[6],p[7],p[3],p[10]]),52);
+pieces.getRange('C7:G16').setNumberFormat('0');
+const tables=sheet('Las tiras','Corte de las tiras en casa','Cada tira llega entera de 3000. Cortar con tope fijo; el disco y el escuadrado salen del sobrante.',
+ ['Tiras','Cant.','Medida de entrega','Cortes por tira','Resultado','Sobrante'],[24,8,22,22,60,22],d.strips,48);
+const beams=sheet('Los 4 bastidores','Los 4 bastidores · sección 40 × 100 mm','Llegan enteros. Los costados son de altura completa y los rieles de 3000 van entre ellos. Cortes en casa.',
+ ['Bastidor','Largo entregado','Cant. piezas','Corte','Largo final','Uso'],
  [12,30,14,40,18,90],d.frames,70);
 const assembly=sheet('Armado y controles','Armado y controles de esta revisión','Cotas finales para marco exterior 3080 × 1256 mm. Las piezas de entrega tienen margen solo en los largos.',
  ['Control','Medida o criterio','Aplicación'],[39,49,116],d.notes,65);
@@ -46,8 +45,13 @@ buy.getRange(`H7:I${last+2}`).setNumberFormat('#,##0');
 buy.getRange(`A${last+2}`).values=[['Total con precio de referencia']];buy.getRange(`I${last+2}`).formulas=[[`=SUM(I7:I${last})`]];
 buy.getRange(`J${last+2}`).values=[['El resto por cotizar']];
 buy.getRange(`A${last+2}:J${last+2}`).format.font={name:'Arial',size:10,bold:true};
+const PE=d.pecera;
+const fish=sheet('Pecera · pino',PE.titulo,PE.nota,['Código','Pieza','Cant.','Largo final','Sección','Nota'],[10,38,9,14,12,80],PE.piezas.map(x=>[x[0],x[1],x[2],x[3],'50 × 50',x[4]]),40);
+const r0=8+PE.piezas.length;fish.getRange(`A${r0}`).values=[['Corte de los listones de 3000']];fish.getRange(`A${r0}`).format.font={name:'Arial',size:11,bold:true};
+PE.barras.forEach((b,i)=>{fish.getRange(`A${r0+1+i}:D${r0+1+i}`).values=[[`Listón ${b[0]}`,b[1].length?b[1].map(x=>x[0]+' '+x[1]).join(' + '):'Reserva','',b[2]]];});
+fish.getRange(`A${r0+6}`).values=[[PE.seccion_alt]];
 wb.recalculate();
-for(const [name,range,file] of [['Pedido de piezas','A6:H12','pedido'],['Los 4 bastidores','A6:F10','bastidores'],['Las 9 tablas','A6:F9','tablas']]){
+for(const [name,range,file] of [['Pedido a la carpintería','A6:F9','pedido'],['Los 4 bastidores','A6:F10','bastidores'],['Las tiras','A6:F10','tablas']]){
  const p=await wb.render({sheetName:name,range,scale:1,format:'png'});await fs.writeFile(dir+'/'+file+'.png',new Uint8Array(await p.arrayBuffer()));
 }
 const output=await SpreadsheetFile.exportXlsx(wb);const target=path.join(root,'despiece-ventana-pino-con-margen.xlsx');await output.save(target);await fs.rm(target+'.inspect.ndjson',{force:true});

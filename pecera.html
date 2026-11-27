@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mueble de la pecera · Espacios 3D</title>
+<style>
+:root{--ink:#172538;--muted:#5d6f80;--bg:#f2f5f7;--card:#fff;--line:#e3e9ee;--accent:#174d70;--warn:#e5a53e;--ok:#2f8a57;--bad:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#14283b;color:#fff;padding:20px 5vw}
+header h1{margin:0;font-size:24px}
+header p{margin:6px 0 0;color:#c9d5df;font-size:14px}header .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}header .links a{color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:6px 11px;font-size:13px;text-decoration:none}header .links a:hover{background:#ffffff1a}
+.layout{max-width:1380px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px;align-items:start}
+.panel{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 3px 18px #19344a13}
+aside.panel{position:sticky;top:12px}
+h2{margin:0 0 12px;font-size:18px}
+h3{margin:18px 0 8px;font-size:15px}
+label{display:block;font-size:12.5px;font-weight:650;margin:10px 0 4px}
+input,select{width:100%;padding:8px 10px;border:1px solid #ccd5dd;border-radius:8px;font:inherit;font-size:15px;background:#fff;color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sep{border:0;border-top:1px solid var(--line);margin:16px 0 4px}
+.hint{font-size:12px;color:var(--muted);line-height:1.45}
+.note{padding:11px 12px;border-left:4px solid var(--warn);background:#fff8eb;font-size:12.5px;line-height:1.5;margin-top:14px;border-radius:0 8px 8px 0}
+.reco{padding:14px 16px;border-left:4px solid var(--accent);background:#eef5fa;border-radius:0 10px 10px 0;font-size:14px;line-height:1.55;margin-bottom:14px}
+.reco b{color:var(--accent)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+button{border:0;background:#e7edf2;padding:9px 13px;border-radius:8px;cursor:pointer;color:#263b4d;font:inherit;font-weight:650;font-size:14px}
+button.active,button.primary{background:var(--accent);color:#fff}
+.toggles{display:flex;gap:18px;flex-wrap:wrap;margin:0 0 10px}
+.toggle{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;margin:0;cursor:pointer}
+.toggle input{width:auto;margin:0}
+.canvas{background:#fbfcfd;border:1px solid var(--line);border-radius:12px;padding:10px}
+.canvas svg{width:100%;height:auto;max-height:660px;display:block}
+.caption{font-size:13px;color:var(--muted);margin:8px 2px 0;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.metric{background:#edf3f7;border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+.metric b{display:block;font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#f0f4f6;font-weight:650;white-space:nowrap}
+td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.code{font-weight:700;color:var(--accent);white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+ol.steps{padding-left:22px;line-height:1.55;font-size:14px;margin:0}
+ol.steps li{margin-bottom:7px}
+ul.tips{padding-left:20px;line-height:1.55;font-size:14px;margin:0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.grid3 .canvas svg{max-height:420px}
+.three-ui{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.three{border-radius:10px;overflow:hidden;min-height:360px;background:#eef3f6}
+.three canvas{display:block;width:100%;touch-action:none;cursor:grab}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+section.block{margin-top:22px}
+.sum{font-size:13px;color:var(--muted);margin:8px 0 0}
+#printAll{display:none}
+@media(max-width:860px){.layout{grid-template-columns:1fr}aside.panel{position:static}}
+@media print{
+  body{background:#fff}
+  header{background:none;color:#000;padding:0 0 8px}header p{color:#333}
+  .layout{display:block;margin:0;padding:0}
+  aside.panel,.tabs,.actions,#viewWrap,.toggles{display:none}
+  .panel{box-shadow:none;padding:0}
+  #printAll{display:block}
+  #printAll .canvas{break-inside:avoid;margin-bottom:12px}
+  section.block,tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<!-- Copia integrada de la carpeta pecera (mueble-pecera-detallado.html): forro en Cartagena y pedido conjunto de Madecentro, ver herramientas/build_despiece_pecera.py. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7a5527" stroke-width="1.1" stroke-opacity=".5"/></pattern>
+  <pattern id="grain" width="24" height="90" patternUnits="userSpaceOnUse"><path d="M6 0Q16 40 8 90M18 0Q10 50 19 90" stroke="#fff" stroke-opacity=".18" fill="none" stroke-width="1.5"/></pattern>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
+</defs></svg>
+
+<header>
+  <h1>🐠 Mueble para pecera PY-800 · diseño de fabricación</h1>
+  <p>Armazón interno de pino 5 × 5 con parales centrales que carga la pecera · forro en RH15 Cartagena, como la cocina · puertas con gola</p><p class="links"><a href="./">← Espacios 3D</a><a href="compras-proyecto.html">Pedido conjunto de Madecentro ↗</a><a href="despiece-pecera.xlsx">Despiece de la pecera (Excel)</a><a href="pedido-corte-ventana-pino.pdf">Pino 50 × 50 · pedido a la carpintería (pág. 6)</a></p>
+</header>
+
+<main class="layout">
+<aside class="panel">
+  <h2>Datos de la pecera</h2>
+  <div class="row2">
+    <div><label for="tL">Largo (mm)</label><input id="tL" type="number" value="785" min="400" max="1500" step="0.5"></div>
+    <div><label for="tP">Fondo (mm)</label><input id="tP" type="number" value="340" min="200" max="700" step="0.5"></div>
+  </div>
+  <div class="row2">
+    <div><label for="tA">Alto (mm)</label><input id="tA" type="number" value="540" min="200" max="900" step="1"></div>
+    <div><label for="tW">Nivel agua (mm)</label><input id="tW" type="number" value="460" min="100" max="900" step="1"></div>
+  </div>
+  <label for="tE">Espesor del vidrio</label>
+  <select id="tE"><option value="6">6 mm</option><option value="8" selected>8 mm</option><option value="10">10 mm</option></select>
+  <div class="row2">
+    <div><label for="sub">Sustrato + rocas (kg)</label><input id="sub" type="number" value="25" min="0" max="150"></div>
+    <div><label for="acc">Tapa, luz, equipos (kg)</label><input id="acc" type="number" value="5" min="0" max="50"></div>
+  </div>
+  <hr class="sep">
+  <h2 style="margin-top:12px">Mueble</h2>
+  <label for="sH">Altura del mueble (mm)</label>
+  <input id="sH" type="number" value="700" min="550" max="950" step="5">
+  <label for="gola">Gola libre (mm)</label>
+  <input id="gola" type="number" value="28" min="20" max="40">
+  <label for="pine">Pino disponible (sección real)</label>
+  <select id="pine"><option value="50" selected>5 × 5 cm (recomendado)</option><option value="45">4,5 × 4,5 cm</option><option value="40">4 × 4 cm</option></select>
+  <label for="finish">Acabado de referencia</label>
+  <select id="finish"><option value="cartagena" selected>Cartagena (simulación)</option><option value="light">Claro (simulación)</option><option value="warm">Cálido (simulación)</option></select>
+  <p class="hint">Mide tu pino con metro: elige la medida real, no la nominal. Fijos: tablero RH 15 mm, bisagra de cazoleta Ø35 de codo 18 (puerta embutida). El armazón se calcula a partir de la base de la pecera.</p>
+  <div class="note"><b>Importante:</b> es un diseño de taller con verificaciones simplificadas, no un cálculo estructural firmado. Usa pino seco y sano, y confirma con el fabricante de la pecera si exige manta o apoyo total.</div>
+</aside>
+
+<section class="panel">
+  <div class="reco" id="reco"></div>
+  <div class="metrics" id="metrics"></div>
+
+  <div id="viewWrap">
+    <div class="tabs" id="tabs"></div>
+    <div class="toggles">
+      <label class="toggle"><input type="checkbox" id="skel" checked> Mostrar armazón oculto (frontal)</label>
+      <label class="toggle"><input type="checkbox" id="explode"> Armazón 3D separado por niveles</label>
+    </div>
+    <div id="drawing" class="canvas"></div>
+    <p class="caption" id="caption"></p>
+  </div>
+  <div class="actions">
+    <button class="primary" onclick="window.print()">Imprimir / guardar PDF (todos los planos)</button>
+    <button onclick="downloadCSV()">Descargar despiece Madecentro (CSV)</button>
+    <button onclick="downloadConfig()">Guardar medidas y despiece (JSON)</button>
+  </div>
+
+  <section class="block"><h2>Despiece · armazón de pino (estructura)</h2><div class="tablewrap" id="tPine"></div><p class="sum" id="sPine"></p></section>
+  <section class="block"><h2>Despiece · tablero RH15 Cartagena (forro, puertas, tapa)</h2><div class="tablewrap" id="tBoard"></div><p class="sum" id="sBoard"></p></section>
+  <section class="block"><h2>Herrajes e insumos</h2><div class="tablewrap" id="tHw"></div></section>
+  <section class="block"><h2>Verificación de carga</h2><div class="tablewrap" id="tChk"></div><p class="sum" id="sChk"></p></section>
+  <section class="block"><h2>Secuencia de armado</h2><ol class="steps" id="steps"></ol></section>
+  <section class="block"><h2>Instalación y llenado</h2><ul class="tips" id="tips"></ul></section>
+  <div id="printAll"></div>
+</section>
+</main>
+
+<script src="assets/vendor/three-r128.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const C={t:15,f:20,pg:10,dg:2,cg:3,gd:30,E:8000};
+const FIN={cartagena:{face:'#b48a62',top:'#c29a72',edge:'#6f4f2a'},light:{face:'#cdb99f',top:'#dccbb3',edge:'#7f6a54'},warm:{face:'#b99a75',top:'#caa983',edge:'#6f5338'}};
+const PINE={top:'#f0d3a2',front:'#ddb274',left:'#c4955a',stroke:'#7a5527',ghost:'#f5e6cc'};
+const BLUE='#1d6a99',RED='#c0392b';
+let view='3d';
+const nf=(x,d=0)=>Number(x).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
+const mm=x=>{const v=Math.round(x*10)/10;return nf(v,v%1?1:0)};
+
+/* ---------- SVG helpers (unidades = mm) ---------- */
+const R=(x,y,w,h,fill,stroke='none',sw=0,ex='')=>`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${Math.max(0,h)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" ${ex}/>`;
+const RZ=(x,z,w,h,fill,stroke,sw,ex)=>R(x,-(z+h),w,h,fill,stroke,sw,ex);
+const LN=(x1,y1,x2,y2,stroke,sw,ex='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${sw}" ${ex}/>`;
+const ARW=(x1,y1,x2,y2,sw)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${RED}" stroke-width="${sw}" marker-end="url(#arr)"/>`;
+function T(x,y,s,fs,o={}){
+  const a=o.anchor||'middle',c=o.fill||'#233747',w=o.weight||500;
+  const rot=o.rot?` transform="rotate(-90 ${x} ${y})"`:'';
+  const halo=o.halo===false?'':` stroke="#fbfcfd" stroke-width="${fs*.3}" paint-order="stroke" stroke-linejoin="round"`;
+  return `<text x="${x}" y="${y}" font-size="${fs}" text-anchor="${a}" fill="${c}" font-weight="${w}"${halo}${rot}>${s}</text>`;
+}
+function tick(x,y,o,dir){
+  return dir==='h'
+    ?`<line x1="${x}" y1="${y-o*1.7}" x2="${x}" y2="${y+o*1.7}"/><line x1="${x-o}" y1="${y+o}" x2="${x+o}" y2="${y-o}"/>`
+    :`<line x1="${x-o*1.7}" y1="${y}" x2="${x+o*1.7}" y2="${y}"/><line x1="${x-o}" y1="${y+o}" x2="${x+o}" y2="${y-o}"/>`;
+}
+function dimH(x1,x2,y,lab,fs,below=false){
+  const o=fs*.28,sw=fs*.07;
+  return `<g stroke="${BLUE}" stroke-width="${sw}">${tick(x1,y,o,'h')}${tick(x2,y,o,'h')}<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"/></g>`
+    +T((x1+x2)/2,below?y+fs*1.05:y-fs*.4,lab,fs,{fill:BLUE,weight:650});
+}
+function dimV(y1,y2,x,lab,fs,right=false){
+  const o=fs*.28,sw=fs*.07,ym=(y1+y2)/2;
+  const g=`<g stroke="${BLUE}" stroke-width="${sw}">${tick(x,y1,o,'v')}${tick(x,y2,o,'v')}<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/></g>`;
+  if(Math.abs(y2-y1)<fs*2.2) return g+T(right?x+fs*.55:x-fs*.55,ym+fs*.35,lab,fs,{fill:BLUE,weight:650,anchor:right?'start':'end'});
+  return g+T(right?x+fs*1.05:x-fs*.4,ym,lab,fs,{fill:BLUE,weight:650,rot:true});
+}
+const SVG=(x,y,w,h,body,aria)=>`<svg viewBox="${x} ${y} ${w} ${h}" role="img" aria-label="${aria}" font-family="system-ui,Segoe UI,sans-serif">${body}</svg>`;
+
+/* ---------- Modelo ---------- */
+function model(){
+  const v=k=>parseFloat($(k).value)||0;
+  const L=v('tL'),P=v('tP'),A=v('tA'),e=v('tE'),H=v('sH'),g=v('gola'),sub=v('sub'),acc=v('acc');
+  const Hw=Math.min(v('tW'),A);
+  const {t,f,pg,dg,cg,gd}=C;
+  const sec=v('pine')||50,b=sec,h=sec,hT=sec,lD=sec; // armazón sencillo: una capa arriba, patas sencillas + 2 parales centrales
+  const r5=x=>Math.ceil(x/5)*5;
+  const FX=r5(L+5),FY=r5(P+10);            // armazón = base de la pecera + holgura mínima
+  const W=FX+2*t,D=FY+2*t;                 // exterior
+  const zTT=H-t,zTB=zTT-hT,zBB=f,zBT=f+h;   // alturas de bastidores
+  const legL=zTB-zBT,latH=zTT-pg;
+  const fasH=Math.max(70,hT),zF=zTT-fasH; // faja mínima 70 mm (Madecentro)
+  const plH=Math.max(70,zBT-pg),zPl=pg+plH,pilL=zF-zPl;
+  const doorB=zPl+dg,doorT=zF-g,doorH=doorT-doorB;
+  const cpW=70,cpX=(W-cpW)/2,cX=(FX-b)/2; // pilastra central 70 mm sobre el paral central
+  const dX=t+b+dg,doorW=cpX-dg-dX,pilW=b,shortL=FY-2*b;
+  let nC=Math.max(1,Math.ceil((FX-2*b)/180)-1);if(nC%2===0)nC++; // impar: el travesaño central cae sobre los parales centrales
+  const sp=(FX-2*b-nC*b)/(nC+1);
+  const cross=[];for(let k=1;k<=nC;k++)cross.push(b+k*sp+(k-1)*b);
+  const golaH=Math.max(70,g+20),golaL=cX-b;
+  const offX=(FX-L)/2,offY=(FY-P)/2;
+  const interior=zTB-(zBT+t);
+  const hingesPerDoor=doorH>650?3:2;
+
+  const glassKg=(L*P+2*L*A+2*P*A)/1e6*e*2.5;
+  const waterL=Math.max(0,(L-2*e)*(P-2*e)*(Hw-e)/1e6);
+  const subH=sub>0?Math.min(90,(sub/1.6)*1e6/((L-2*e)*(P-2*e))):0;
+  const tankKg=glassKg+waterL+sub+acc,designKg=tankKg*1.5;
+
+  const pine=[
+    {c:'P1',n:'Larguero bastidor superior',q:2,l:FX,note:'Frente y fondo. Sobre ellos caen los vidrios largos de la pecera; se apoyan en las patas y en los parales centrales.'},
+    {c:'P2',n:'Testero / travesaño bastidor superior',q:2+nC,l:shortL,note:`2 testeros + ${nC} travesaños (el del centro queda sobre los parales); luz libre ${mm(sp)} mm.`},
+    {c:'P3',n:'Pata / paral',q:6,l:legL,note:'4 patas de esquina + 2 parales centrales (frente y fondo, en la mitad del largo). Cortar las 6 juntas con tope, idénticas (±0,5 mm).'},
+    {c:'P4',n:'Larguero bastidor inferior',q:2,l:FX,note:'Cada uno lleva 3 niveladores.'},
+    {c:'P5',n:'Travesaño bastidor inferior',q:3,l:shortL,note:'2 en los extremos + 1 central (sobre los niveladores del centro).'},
+  ];
+  // canto por lado: [L1,L2,A1,A2] (L = lados del largo, A = lados del ancho)
+  const boards=[
+    {c:'R1',n:'Tapa',q:1,a:W,w:D,k:[1,1,1,1],note:'Se fija desde abajo con escuadras: ningún tornillo en la cara donde apoya la pecera.'},
+    {c:'R2',n:'Lateral',q:2,a:latH,w:D,k:[1,1,1,0],note:'Veta vertical. L1 = frente, L2 = atrás, A1 = abajo (arriba queda bajo la tapa).'},
+    {c:'R3',n:'Espaldar estructural',q:1,a:latH,w:FX,k:[0,0,0,0],note:'Entre laterales. Cola + tornillo cada 15 cm: impide que el mueble se ladee. Perforar 2 pasacables Ø60.'},
+    {c:'R4',n:'Piso interior',q:1,a:FX,w:FY,k:[1,0,0,0],sh:`Hacer 6 destajes con ruteadora: 4 en las esquinas de ${b+1} × ${b+1} mm y 2 al centro (frente y fondo) de ${b+2} × ${b+1} mm, para patas y parales. Ver plano “Piso R4”.`,note:'Se apoya en todo el bastidor inferior. L1 = canto frontal. Sella con silicona los bordes de los destajes.'},
+    {c:'R5',n:'Puerta',q:2,a:doorH,w:doorW,k:[1,1,1,1],note:`Veta vertical. ${hingesPerDoor} cazoletas Ø35 a 21,5 mm (centro) del canto.`},
+    {c:'R6',n:'Faja superior',q:1,a:FX,w:fasH,k:[1,0,0,0],note:'Tapa los largueros P1; L1 = canto inferior, techo de la gola.'},
+    {c:'R7',n:'Zócalo',q:1,a:FX,w:plH,k:[1,1,0,0],note:'Tapa el bastidor inferior y los niveladores. L1 = arriba, L2 = abajo (cerca del piso).'},
+    {c:'R8',n:'Pilastra (frente fijo)',q:2,a:pilL,w:pilW,k:[1,0,0,0],note:'Pegada al frente de cada pata delantera; L1 = canto hacia la puerta, L2 queda contra el lateral.'},
+    {c:'R10',n:'Pilastra central',q:1,a:pilL,w:cpW,k:[1,1,0,0],note:'Pegada al frente del paral central; separa las dos puertas y las dos golas.'},
+    {c:'R9',n:'Fondo de gola (izquierda y derecha)',q:2,a:golaL,w:golaH,k:[0,0,0,0],note:`Retranqueado ${C.gd} mm detrás de la puerta (espacio para los dedos). Se deja de 70 mm para cumplir el mínimo de corte; baja detrás de la puerta y no se ve.`},
+  ];
+  const SIDES=['L1','L2','A1','A2'];
+  const MINW=70; // ancho mínimo que acepta Madecentro
+  boards.forEach(p=>{
+    p.oa=p.a;p.ow=p.w;p.oq=p.q;p.ok=p.k.slice();p.shop=p.sh||'—';p.hand=0;
+    if(p.w<MINW&&!p.k[1]){p.ow=MINW;p.ok=p.k.slice();
+      p.shop=`Pedir a ${MINW} mm, canteada de fábrica en L1, y rebajar ${mm(MINW-p.w)} mm por L2 hasta ${mm(p.w)} mm. L2 va sin canto, oculto contra el lateral.`;}
+    else if(p.w<MINW){const cut=MINW-p.w;p.ow=MINW;p.ok=[p.k[0],0,1,1];p.hand=p.k[1]?p.q*p.a/1000:0;p.ok=[p.k[0],0,1,1];
+      p.shop=`Recortar ${mm(cut)} mm por el lado L2 hasta ${mm(p.w)} mm`+(p.k[1]?' y cantear L2 a mano':' (L2 queda oculto, sin canto)');}
+    const n=p.ok.reduce((a,c)=>a+c,0);p.edge=n===0?'sin canto':n===4?'4 lados':SIDES.filter((_,i)=>p.ok[i]).join(' + ');
+    p.em=p.oq*((p.ok[0]+p.ok[1])*p.oa+(p.ok[2]+p.ok[3])*p.ow)/1000;});
+  const handM=boards.reduce((s,p)=>s+p.hand,0);
+  const boardM2=boards.reduce((s,p)=>s+p.oq*p.oa*p.ow/1e6,0);
+  const edgeM=boards.reduce((s,p)=>s+p.em,0);
+  const pineLen=pine.reduce((s,p)=>s+p.q*p.l,0);
+  const pineKg=pineLen/1000*(b*h/1e6)*500;
+  const boardKg=boardM2*0.015*700;
+  const standKg=pineKg+boardKg;
+  const pieces=[];pine.forEach(p=>{for(let i=0;i<p.q;i++)pieces.push(p.l)});
+  const bins=[];pieces.sort((a,c)=>c-a).forEach(l=>{let bin=bins.find(x=>x.free>=l+4);if(!bin){bin={free:2950,parts:[]};bins.push(bin)}bin.free-=l+4;bin.parts.push(l)});
+
+  const F1=0.5*designKg*9.81,Ls=cX,Sx=b*hT*hT/6,I=b*hT**3/12,Fs=F1/2; // 2 tramos por larguero
+  const sigma=Fs*Ls/8/Sx,defl=5*Fs*Ls**3/(384*C.E*I);
+  const N=0.625*F1,sc=N/(b*b); // reacción del paral central (viga continua de 2 tramos)
+  const footKg=Math.max(100,Math.ceil(((tankKg+standKg)*1.5/6)/25)*25);
+  const checks=[
+    {n:`Flexión del larguero superior ${b} × ${hT} (tramo de ${mm(Ls)} mm)`,v:`${nf(sigma,1)} MPa`,lim:'≤ 7 MPa (pino seco, valor conservador)',ok:sigma<=7},
+    {n:'Flecha del larguero entre pata y paral',v:`${nf(defl,2)} mm`,lim:'≤ 1,0 mm (el vidrio no tolera torsión)',ok:defl<=1},
+    {n:'Aplastamiento del paral central sobre el bastidor inferior',v:`${nf(sc,2)} MPa`,lim:'≤ 2 MPa (perpendicular a la fibra)',ok:sc<=2},
+    {n:'Luz libre de la tapa entre travesaños',v:`${mm(sp)} mm`,lim:'≤ 200 mm',ok:sp<=200},
+    {n:'Los 4 vidrios de la pecera caen sobre madera',v:`margen ${mm(offX)} mm (largo) / ${mm(offY)} mm (fondo)`,lim:`margen + vidrio ≤ ${b} mm`,ok:offX+e<=b&&offY+e<=b},
+    {n:'Fondo de pata para la base de bisagra',v:`${lD} mm`,lim:'≥ 45 mm',ok:lD>=45},
+    {n:'Altura de puerta utilizable',v:`${mm(doorH)} mm`,lim:'≥ 250 mm',ok:doorH>=250},
+  ];
+  return {fasH,zF,cpW,cpX,cX,zPl,pilL,handM,sec,hT,lD,L,P,A,Hw,e,H,g,sub,acc,t,b,h,f,pg,gd,FX,FY,W,D,zTT,zTB,zBB,zBT,legL,latH,doorB,doorT,doorH,dX,doorW,pilW,shortL,nC,sp,cross,plH,golaH,golaL,offX,offY,interior,hingesPerDoor,glassKg,waterL,subH,tankKg,designKg,pine,boards,boardM2,edgeM,pineLen,standKg,bins,checks,footKg,sigma,defl};
+}
+
+/* ---------- Vistas ---------- */
+function vFront(m,o){
+  const F=FIN[o.finish],fs=(m.H+m.A)/42,sw=fs*.07;
+  const {W,H,A,L,e,Hw,t,b,h,pg,FX,zTT,zTB,zBB,zBT,legL,latH,doorB,doorT,doorH,dX,doorW,pilW,plH,g}=m;
+  const x0=(W-L)/2;let s='';
+  // pecera
+  s+=RZ(x0+e,H+e,L-2*e,Hw-e,'#d9eef9','none',0);
+  if(m.subH>0)s+=RZ(x0+e,H+e,L-2*e,m.subH,'#d8c39b','none',0);
+  s+=LN(x0+e,-(H+Hw),x0+L-e,-(H+Hw),'#3d8fc2',fs*.08,`stroke-dasharray="${fs*.4} ${fs*.25}"`);
+  s+=RZ(x0,H,L,A,'none','#4d8db5',fs*.12)+RZ(x0+e,H+e,L-2*e,A-e,'none','#9cc7e0',fs*.04);
+  s+=T(x0+L/2,-(H+Hw)-fs*.45,'nivel de agua',fs*.75,{fill:'#2d7bb0'});
+  // piso y niveladores
+  s+=LN(-fs*6,0,W+fs*6,0,'#8796a3',fs*.1);
+  [b/2,FX/2,FX-b/2].forEach(x=>s+=RZ(t+x-15,0,30,pg,'#6d7780','#4b545c',sw));
+  // mueble
+  s+=RZ(0,pg,t,latH,F.top,F.edge,sw)+RZ(W-t,pg,t,latH,F.top,F.edge,sw);
+  s+=RZ(t,pg,FX,plH,F.face,F.edge,sw);
+  s+=RZ(t,m.zPl,pilW,m.pilL,F.face,F.edge,sw)+RZ(W-t-pilW,m.zPl,pilW,m.pilL,F.face,F.edge,sw);
+  s+=RZ(t+pilW,doorT,FX-2*pilW,g,'#3a3029',F.edge,sw);
+  s+=RZ(m.cpX,m.zPl,m.cpW,m.pilL,F.face,F.edge,sw);
+  s+=RZ(t,m.zF,FX,m.fasH,F.face,F.edge,sw);
+  s+=RZ(0,zTT,W,t,F.top,F.edge,sw);
+  s+=RZ(dX,doorB,doorW,doorH,F.face,F.edge,sw)+RZ(W-dX-doorW,doorB,doorW,doorH,F.face,F.edge,sw);
+  s+=RZ(0,pg,W,H-pg,'url(#grain)','none',0);
+  // cazoletas (ocultas)
+  const hz=m.hingesPerDoor===3?[doorB+90,(doorB+doorT)/2,doorT-90]:[doorB+90,doorT-90];
+  hz.forEach(z=>[dX+21.5,W-dX-21.5].forEach(x=>s+=`<circle cx="${x}" cy="${-z}" r="17.5" fill="none" stroke="#5b6670" stroke-width="${sw}" stroke-dasharray="${fs*.25} ${fs*.18}"/>`));
+  if(o.skel){
+    const hd=`stroke-dasharray="${fs*.45} ${fs*.25}"`,c='#b5651d',w2=fs*.1;
+    s+=RZ(t,zTB,FX,h,'none',c,w2,hd)+RZ(t+m.cX,zBT,b,legL,'none',c,w2,hd)+RZ(t,zBB,FX,h,'none',c,w2,hd)+RZ(t,zBT,b,legL,'none',c,w2,hd)+RZ(W-t-b,zBT,b,legL,'none',c,w2,hd);
+    s+=T(W*.3,-(zTB+h/2)+fs*.3,'P1 larguero (oculto)',fs*.62,{fill:c,weight:650});
+    s+=T(W/2,-(zBB+h/2)+fs*.3,'P4 larguero inferior (oculto)',fs*.62,{fill:c,weight:650});
+    s+=T(t+b/2,-(zBT+legL*.62),'P3 pata',fs*.62,{fill:c,weight:650,rot:true});
+    s+=T(W-t-b/2,-(zBT+legL*.62),'P3 pata',fs*.62,{fill:c,weight:650,rot:true});
+  }
+  // cotas
+  s+=dimH(0,W,fs*1.7,`${mm(W)} exterior`,fs,true);
+  s+=dimH(dX,dX+doorW,-(doorB+doorH*.55),`puerta ${mm(doorW)}`,fs*.75);
+  s+=dimV(-doorB,-doorT,W-dX-doorW/2,`puerta ${mm(doorH)}`,fs*.75);
+  s+=dimV(0,-H,-fs*1.3,`mueble ${mm(H)}`,fs);
+  s+=dimV(0,-(H+A),-fs*3.5,`total ${mm(H+A)}`,fs);
+  const xr=W+fs*1.3;
+  s+=dimV(0,-m.zPl,xr,`${mm(m.zPl)}`,fs*.72,true)+dimV(-doorT,-m.zF,xr,`gola ${mm(g)}`,fs*.72,true)+dimV(-m.zF,-zTT,xr,`${m.fasH}`,fs*.72,true)+dimV(-zTT,-H,xr,`${t}`,fs*.72,true);
+  s+=dimV(-H,-(H+Hw),xr,`agua ${mm(Hw)}`,fs*.72,true)+dimV(-H,-(H+A),W+fs*4.4,`pecera ${mm(A)}`,fs*.8,true);
+  s+=dimH(x0,x0+L,-(H+A)-fs*1.1,`pecera ${mm(L)}`,fs);
+  return SVG(-fs*6,-(H+A)-fs*3,W+fs*13,H+A+fs*6.5,s,'Vista frontal del mueble con la pecera');
+}
+
+function vSide(m,o){
+  const F=FIN[o.finish],fs=(m.H+m.A)/42,sw=fs*.07;
+  const {hT,lD,D,H,A,P,e,Hw,t,b,h,f,pg,gd,FY,zTT,zTB,zBB,zBT,legL,latH,doorB,doorT,doorH,plH,golaH,shortL,offY,interior}=m;
+  const u=y=>y+t;let s='';
+  s+=RZ(0,pg,D,latH,'#f3ece2',F.edge,sw*.7);
+  [b/2,FY-b/2].forEach(y=>s+=RZ(u(y)-15,0,30,f,'#6d7780','#4b545c',sw));
+  // piezas más allá del corte
+  s+=RZ(u(0),zBT,lD,legL,PINE.ghost,PINE.stroke,sw)+RZ(u(FY-lD),zBT,lD,legL,PINE.ghost,PINE.stroke,sw);
+  s+=RZ(u(b),zTB,shortL,hT,PINE.ghost,PINE.stroke,sw)+RZ(u(b),zBB,shortL,h,PINE.ghost,PINE.stroke,sw);
+  // equipos (referencia)
+  const eqH=Math.min(420,interior-40);
+  if(eqH>120){s+=RZ(u(FY*.3),zBT+t,190,eqH,'none','#8796a3',sw,`stroke-dasharray="${fs*.4} ${fs*.25}"`);s+=T(u(FY*.3)+95,-(zBT+t+eqH/2),'filtro / equipos',fs*.6,{fill:'#6c7a86',rot:true})}
+  // pino cortado
+  const cut=(y,z)=>RZ(u(y),z,b,h,PINE.front,PINE.stroke,sw)+RZ(u(y),z,b,h,'url(#hatch)','none',0);
+  s+=cut(0,zTB)+cut(FY-b,zTB)+cut(0,zBB)+cut(FY-b,zBB);
+  // tableros cortados
+  const bd=(x,z,w,hh)=>RZ(x,z,w,hh,F.face,F.edge,sw);
+  s+=bd(u(-t),zTT,D,t)+bd(u(0),zBT,FY,t)+bd(u(FY),pg,t,latH)+bd(u(-t),doorB,t,doorH)+bd(u(-t),m.zF,t,m.fasH)+bd(u(-t),pg,t,plH)+bd(u(gd),zTB-golaH,t,golaH);
+  // pecera
+  s+=RZ(u(offY)+e,H+e,P-2*e,Hw-e,'#d9eef9','none',0)+RZ(u(offY),H,P,A,'none','#4d8db5',fs*.12);
+  s+=LN(u(offY)+e,-(H+Hw),u(offY+P)-e,-(H+Hw),'#3d8fc2',fs*.08,`stroke-dasharray="${fs*.4} ${fs*.25}"`);
+  // etiquetas
+  const lf=fs*.6;
+  s+=T(u(b/2),-(zTB+hT/2)+lf*.35,'P1',lf,{weight:700})+T(u(FY-b/2),-(zTB+hT/2)+lf*.35,'P1',lf,{weight:700});
+  s+=T(u(b/2),-(zBB+h/2)+lf*.35,'P4',lf,{weight:700})+T(u(FY-b/2),-(zBB+h/2)+lf*.35,'P4',lf,{weight:700});
+  s+=T(u(h/2),-(zBT+legL*.18),'P3',lf,{weight:700})+T(u(FY/2),-(zTB+hT/2)+lf*.35,'P2 (detrás)',lf);
+  s+=T(u(-t/2),-(doorB+doorH/2),'puerta R5',lf,{rot:true});
+  s+=T(u(FY+t/2),-(pg+latH*.42),'espaldar R3',lf,{rot:true});
+  s+=T(u(FY/2),-(zBT+t)-lf*.5,'piso R4',lf);
+  s+=T(0,fs*3.6,'← frente',fs*.7,{anchor:'start',fill:'#6c7a86',weight:650});
+  // cotas
+  s+=dimH(0,D,fs*1.7,`${mm(D)} exterior`,fs,true);
+  s+=dimH(u(0),u(FY),-(zBT+t+interior*.82),`armazón ${mm(FY)}`,fs*.7);
+  s+=dimV(-(zBT+t),-zTB,u(FY*.72),`libre ${mm(interior)}`,fs*.7);
+  s+=dimV(0,-H,-fs*1.3,`${mm(H)}`,fs);
+  s+=dimH(u(offY),u(offY+P),-(H+A)-fs*1.1,`pecera ${mm(P)}`,fs);
+  const xr=D+fs*1.3;
+  s+=dimV(0,-zBB,xr,`nivelador ${f}`,fs*.7,true)+dimV(-zBB,-zBT,xr,`${h}`,fs*.7,true)+dimV(-zBT,-zTB,xr,`pata ${mm(legL)}`,fs*.7,true)+dimV(-zTB,-zTT,xr,`${hT}`,fs*.7,true)+dimV(-zTT,-H,xr,`${t}`,fs*.7,true);
+  return SVG(-fs*5,-(H+A)-fs*3,D+fs*12,H+A+fs*7.5,s,'Corte lateral del mueble');
+}
+
+function vIso(m,o){
+  const {FX,FY,b,h,lD,zTB,zBB,zBT,shortL,cross,legL,L,P,offX,offY}=m;
+  const ex=o.explode?170:0,fs=(FX+FY)/40,sw=fs*.06;
+  const B=[];const add=(c,x0,y0,z0,dx,dy,dz,kind='pine')=>B.push({c,x0,y0,z0,x1:x0+dx,y1:y0+dy,z1:z0+dz,kind});
+  const zt=zTB+ex,zb=zBB-ex;
+  add('P1',0,0,zt,FX,b,h);add('P1',0,FY-b,zt,FX,b,h);add('P2',0,b,zt,b,shortL,h);add('P2',FX-b,b,zt,b,shortL,h);cross.forEach(x=>add('P2',x,b,zt,b,shortL,h));
+  [[0,0],[FX-b,0],[0,FY-b],[FX-b,FY-b],[m.cX,0],[m.cX,FY-b]].forEach(([x,y])=>add('P3',x,y,zBT,b,b,legL));
+  add('P4',0,0,zb,FX,b,h);add('P4',0,FY-b,zb,FX,b,h);
+  add('P5',0,b,zb,b,shortL,h);add('P5',FX-b,b,zb,b,shortL,h);add('P5',(FX-b)/2,b,zb,b,shortL,h);
+  [b/2,FX/2,FX-b/2].forEach(x=>[b/2,FY-b/2].forEach(y=>add('N',x-14,y-14,zb-C.f,28,28,C.f,'foot')));
+  const c=Math.cos(Math.PI/6),p=(x,y,z)=>[(x-y)*c,-(x+y)*.5-z];
+  B.forEach(q=>{const pts=[];for(const x of[q.x0,q.x1])for(const y of[q.y0,q.y1])for(const z of[q.z0,q.z1])pts.push(p(x,y,z));
+    q.mnx=Math.min(...pts.map(a=>a[0]));q.mxx=Math.max(...pts.map(a=>a[0]));q.mny=Math.min(...pts.map(a=>a[1]));q.mxy=Math.max(...pts.map(a=>a[1]));});
+  const front=(A,Bb)=>{if(A.x1<=Bb.x0)return true;if(Bb.x1<=A.x0)return false;if(A.y1<=Bb.y0)return true;if(Bb.y1<=A.y0)return false;if(A.z0>=Bb.z1)return true;if(Bb.z0>=A.z1)return false;return null};
+  const n=B.length,before=B.map(()=>[]);
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const A=B[i],Bb=B[j];
+    if(A.mxx<=Bb.mnx||Bb.mxx<=A.mnx||A.mxy<=Bb.mny||Bb.mxy<=A.mny)continue;
+    const r=front(A,Bb);if(r===true)before[i].push(j);else if(r===false)before[j].push(i);}
+  const done=new Array(n).fill(false),order=[];
+  while(order.length<n){let k=-1;for(let i=0;i<n;i++)if(!done[i]&&before[i].every(j=>done[j])){k=i;break}if(k<0)k=done.indexOf(false);done[k]=true;order.push(k)}
+  const poly=(pts,fill)=>`<polygon points="${pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ')}" fill="${fill}" stroke="${PINE.stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  let s='';
+  order.forEach(k=>{const q=B[k],col=q.kind==='foot'?['#a3abb2','#848d95','#6b737a']:[PINE.top,PINE.front,PINE.left];
+    s+=poly([p(q.x0,q.y0,q.z1),p(q.x1,q.y0,q.z1),p(q.x1,q.y1,q.z1),p(q.x0,q.y1,q.z1)],col[0]);
+    s+=poly([p(q.x0,q.y0,q.z0),p(q.x1,q.y0,q.z0),p(q.x1,q.y0,q.z1),p(q.x0,q.y0,q.z1)],col[1]);
+    s+=poly([p(q.x0,q.y0,q.z0),p(q.x0,q.y1,q.z0),p(q.x0,q.y1,q.z1),p(q.x0,q.y0,q.z1)],col[2]);});
+  // huella de la pecera sobre el bastidor superior
+  const zz=zt+h,fp=[p(offX,offY,zz),p(offX+L,offY,zz),p(offX+L,offY+P,zz),p(offX,offY+P,zz)];
+  s+=`<polygon points="${fp.map(q=>q.join(',')).join(' ')}" fill="#4d8db5" fill-opacity=".10" stroke="#2d7bb0" stroke-width="${fs*.1}" stroke-dasharray="${fs*.5} ${fs*.3}"/>`;
+  // flechas de carga
+  [[offX+L*.25,offY],[offX+L*.75,offY],[offX,offY+P*.5]].forEach(([x,y])=>{const a=p(x,y,zz+fs*4.2),bq=p(x,y,zz+fs*.6);s+=ARW(a[0],a[1],bq[0],bq[1],fs*.13)});
+  const ld=p(offX+L*.5,offY,zz+fs*4.8);s+=T(ld[0],ld[1],'peso de la pecera → sobre los largueros',fs*.9,{fill:RED,weight:650});
+  // etiquetas
+  const seen={};const names={P1:'P1 larguero sup.',P2:'P2 testero/travesaño',P3:'P3 pata / paral',P4:'P4 larguero inf.',P5:'P5 travesaño inf.',N:'nivelador'};
+  B.forEach(q=>{if(seen[q.c])return;seen[q.c]=1;
+    let pt=(q.c==='P2'||q.c==='P5')?p(q.x0,(q.y0+q.y1)/2,(q.z0+q.z1)/2):p((q.x0+q.x1)/2,q.y0,(q.z0+q.z1)/2);
+    if(q.c==='P1')pt=p(FX*.62,0,(q.z0+q.z1)/2);if(q.c==='P4')pt=p(FX*.62,0,(q.z0+q.z1)/2);
+    const off=(q.c==='P2'||q.c==='P5')?[-fs*3.2,-fs*1.6]:q.c==='N'?[-fs*1.5,fs*2]:q.c==='P3'?[-fs*3.4,0]:[fs*1.5,fs*2.2];
+    const lx=pt[0]+off[0],ly=pt[1]+off[1];
+    s+=LN(pt[0],pt[1],lx,ly,'#233747',fs*.05)+`<circle cx="${pt[0]}" cy="${pt[1]}" r="${fs*.18}" fill="#233747"/>`;
+    s+=T(lx,ly+(off[1]>0?fs*.8:-fs*.25),names[q.c],fs*.95,{weight:650,anchor:off[0]<0?'end':'start'});});
+  let mnx=Infinity,mxx=-Infinity,mny=Infinity,mxy=-Infinity;B.forEach(q=>{mnx=Math.min(mnx,q.mnx);mxx=Math.max(mxx,q.mxx);mny=Math.min(mny,q.mny);mxy=Math.max(mxy,q.mxy)});
+  mny=Math.min(mny,ld[1]-fs);
+  return SVG(mnx-fs*9,mny-fs*1.5,mxx-mnx+fs*15,mxy-mny+fs*5,s,'Armazón de pino en isométrico');
+}
+
+function vPlanTop(m){
+  const {FX,FY,b,lD,shortL,cross,L,P,e,offX,offY,sp}=m;const fs=FX/32,sw=fs*.06;
+  const Y=y=>FY-y,pr=(x,y,w,d,fill,st,s2,ex='')=>R(x,Y(y+d),w,d,fill,st,s2,ex);
+  let s='';
+  s+=pr(0,0,FX,b,PINE.top,PINE.stroke,sw)+pr(0,FY-b,FX,b,PINE.top,PINE.stroke,sw);
+  s+=pr(0,b,b,shortL,PINE.front,PINE.stroke,sw)+pr(FX-b,b,b,shortL,PINE.front,PINE.stroke,sw);
+  cross.forEach(x=>s+=pr(x,b,b,shortL,PINE.front,PINE.stroke,sw));
+  const hd=`stroke-dasharray="${fs*.35} ${fs*.2}"`;
+  [[0,0],[FX-b,0],[0,FY-b],[FX-b,FY-b],[m.cX,0],[m.cX,FY-b]].forEach(([x,y])=>s+=pr(x,y,b,b,'none','#a0522d',sw*1.5,hd));
+  s+=pr(offX,offY,L,P,'#4d8db5','#2d7bb0',fs*.09,`fill-opacity=".10" ${hd}`)+pr(offX+e,offY+e,L-2*e,P-2*e,'none','#7fb2d3',fs*.05,hd);
+  s+=T(FX/2,Y(b/2)+fs*.35,'P1',fs*.8,{weight:700})+T(FX/2,Y(FY-b/2)+fs*.35,'P1',fs*.8,{weight:700});
+  [0,FX-b,...cross].forEach(x=>s+=T(x+b/2,Y(FY/2),'P2',fs*.6,{weight:700,rot:true}));
+  s+=T(FX/2,Y(0)+fs*3.5,`Línea azul = base de la pecera ${mm(L)} × ${mm(P)}: los 4 vidrios quedan sobre la madera`,fs*.6,{fill:'#2d7bb0',weight:650});
+  s+=T(FX/2,Y(0)+fs*4.8,'— FRENTE —',fs*.7,{fill:'#6c7a86',weight:650});
+  s+=dimH(0,FX,-fs*1.4,`${mm(FX)}`,fs);
+  s+=dimV(Y(0),Y(FY),-fs*1.3,`${mm(FY)}`,fs);
+  const xs=[0,b];cross.forEach(x=>xs.push(x,x+b));xs.push(FX-b,FX);
+  for(let i=0;i<xs.length-1;i++)s+=dimH(xs[i],xs[i+1],Y(0)+fs*1.6,mm(xs[i+1]-xs[i]),fs*.6,true);
+  s+=dimV(Y(0),Y(b),FX+fs*1.1,`${b}`,fs*.6,true)+dimV(Y(b),Y(FY-b),FX+fs*1.1,`${mm(shortL)}`,fs*.6,true)+dimV(Y(FY-b),Y(FY),FX+fs*1.1,`${b}`,fs*.6,true);
+  return SVG(-fs*4,-fs*3,FX+fs*8,FY+fs*9,s,'Planta del bastidor superior');
+}
+
+function vPlanBot(m){
+  const {FX,FY,b,lD,shortL}=m;const fs=FX/32,sw=fs*.06;
+  const Y=y=>FY-y,pr=(x,y,w,d,fill,st,s2,ex='')=>R(x,Y(y+d),w,d,fill,st,s2,ex);
+  let s='';
+  s+=pr(0,0,FX,b,PINE.top,PINE.stroke,sw)+pr(0,FY-b,FX,b,PINE.top,PINE.stroke,sw);
+  [0,FX-b,(FX-b)/2].forEach(x=>s+=pr(x,b,b,shortL,PINE.front,PINE.stroke,sw));
+  [[0,0],[FX-b,0],[0,FY-b],[FX-b,FY-b],[m.cX,0],[m.cX,FY-b]].forEach(([x,y])=>{s+=pr(x,y,b,b,PINE.left,PINE.stroke,sw*1.4)+pr(x,y,b,b,'url(#hatch)','none',0)});
+  const fx=[b/2,FX/2,FX-b/2],fyy=[b/2,FY-b/2];
+  fx.forEach(x=>fyy.forEach(y=>s+=`<circle cx="${x}" cy="${Y(y)}" r="16" fill="#6d7780" fill-opacity=".35" stroke="#4b545c" stroke-width="${sw*1.3}" stroke-dasharray="${fs*.3} ${fs*.18}"/><circle cx="${x}" cy="${Y(y)}" r="4" fill="#4b545c"/>`));
+  s+=T(FX/2,Y(b/2)+fs*.35,'P4',fs*.8,{weight:700})+T(FX/2,Y(FY-b/2)+fs*.35,'P4',fs*.8,{weight:700});
+  [0,FX-b,(FX-b)/2].forEach(x=>s+=T(x+b/2,Y(FY/2),'P5',fs*.6,{weight:700,rot:true}));
+  s+=T(FX*.27,Y(FY/2)-fs*.2,'P3 = patas y parales apoyados encima',fs*.58,{fill:'#7a5527',weight:650});
+  s+=T(FX*.27,Y(FY/2)+fs*.8,'(rayado)',fs*.55,{fill:'#7a5527'});
+  s+=T(FX*.73,Y(FY/2)-fs*.2,'● nivelador M10 bajo el larguero',fs*.58,{fill:'#4b545c',weight:650});
+  s+=T(FX*.73,Y(FY/2)+fs*.8,`(6 unidades)`,fs*.55,{fill:'#4b545c'});
+  s+=T(FX/2,Y(0)+fs*3.6,'— FRENTE —',fs*.7,{fill:'#6c7a86',weight:650});
+  s+=dimH(0,FX,-fs*1.4,`${mm(FX)}`,fs);
+  s+=dimV(Y(0),Y(FY),-fs*1.3,`${mm(FY)}`,fs);
+  s+=dimH(b/2,FX/2,Y(0)+fs*1.6,`${mm(FX/2-b/2)} entre ejes`,fs*.6,true)+dimH(FX/2,FX-b/2,Y(0)+fs*1.6,`${mm(FX/2-b/2)}`,fs*.6,true);
+  s+=dimV(Y(b/2),Y(FY-b/2),FX+fs*1.1,`${mm(FY-b)} entre ejes`,fs*.6,true);
+  return SVG(-fs*4,-fs*3,FX+fs*8,FY+fs*7.5,s,'Planta del bastidor inferior con niveladores');
+}
+
+function dCorner(m,o){
+  const F=FIN[o.finish],{b,h,hT,lD,t,offX,e}=m,fs=11,sw=.8,zl=220,tp=zl+hT;let s='';
+  s+=RZ(-t,0,t,tp,F.top,F.edge,sw);
+  s+=RZ(0,0,b,zl,PINE.front,PINE.stroke,sw)+RZ(0,zl,300,h,PINE.front,PINE.stroke,sw);
+  s+=RZ(-t,tp,315,t,F.top,F.edge,sw);
+  s+=RZ(offX+e,tp+t,300-offX-e,62,'#e2f1fa','none',0)+RZ(offX,tp+t,e,75,'#bcdcef','#4d8db5',sw);
+  s+=`<path d="M295 ${-zl-hT-5} l6 ${(hT+10)/3} l-8 ${(hT+10)/3} l6 ${(hT+10)/3}" fill="#fbfcfd" stroke="#8796a3" stroke-width="${sw}"/>`;
+  s+=`<path d="M-20 3 l${(b+25)/3} -6 l${(b+25)/3} 8 l${(b+25)/3} -6" fill="none" stroke="#8796a3" stroke-width="${sw}"/>`;
+  s+=`<path d="M${b+1.5} ${-(zl-55)} L${b+1.5} ${-zl+1.5} L${b+55} ${-zl+1.5}" fill="none" stroke="#5b6670" stroke-width="3"/>`;
+  [[b+1.5,-(zl-18)],[b+1.5,-(zl-42)],[b+18,-zl+1.5],[b+42,-zl+1.5]].forEach(([x,y])=>s+=`<circle cx="${x}" cy="${y}" r="2" fill="#2f363c"/>`);
+  s+=LN(b-3,-(zl-40),b-28,-(zl+45),'#4b545c',1.8,'stroke-dasharray="4 2.5"');
+  [offX+e/2,offX+e/2].slice(0,1).forEach(x=>s+=ARW(x+20,-(tp+t+120),x+20,-(tp+t+80),2.2));
+  s+=ARW(b/2,-(zl-15),b/2,-(zl-120),2.6)+ARW(b/2,-(zl-125),b/2,-(zl-195),2.6);
+  s+=T(offX+e+30,-(tp+t+122),'peso de la pecera',fs,{anchor:'start',fill:RED,weight:650});
+  s+=T(110,-(tp+t+40),'Vidrio: cae sobre el larguero',fs,{anchor:'start'});
+  s+=T(170,-(tp+4),'Tapa R1 (RH15)',fs,{});
+  s+=T(170,-(zl+h/2)+4,`P1 · larguero ${b}×${hT}`,fs,{weight:650});
+  s+=T(b+62,-(zl-14),'Escuadra metálica 60 mm',fs,{anchor:'start'});
+  s+=T(b+62,-(zl-40),'Tornillo 5×90 inclinado + cola D3',fs,{anchor:'start'});
+  s+=T(b+14,-(zl-110),`P3 · pata ${b}×${b}`,fs,{anchor:'start',weight:650});
+  s+=T(b+14,-(zl-150),'Compresión directa:',fs,{anchor:'start',fill:RED,weight:650});
+  s+=T(b+14,-(zl-150)+fs*1.25,'madera contra madera.',fs,{anchor:'start',fill:RED});
+  s+=T(b+14,-(zl-150)+fs*2.5,'Escuadras y tornillos solo',fs,{anchor:'start',fill:RED});
+  s+=T(b+14,-(zl-150)+fs*3.75,'mantienen la posición.',fs,{anchor:'start',fill:RED});
+  s+=T(-t/2,-tp/2,'Lateral R2',fs*.85,{rot:true});
+  return SVG(-40,-(tp+t+140),360,tp+t+160,s,'Detalle de la unión pata–larguero');
+}
+
+function dGola(m,o){
+  const F=FIN[o.finish],{t,b,h,hT,gd,g,zTB,zTT,H,doorT,golaH,offY,e}=m,fs=9.5,sw=.8,yr=150,zb=doorT-100;let s='';
+  s+=RZ(b,zTB,yr-b,hT,PINE.ghost,PINE.stroke,sw);
+  s+=RZ(-t,zb,t,doorT-zb,F.face,F.edge,sw)+RZ(-t,m.zF,t,m.fasH,F.face,F.edge,sw)+RZ(-t,zTT,yr+t,t,F.face,F.edge,sw);
+  [zTB].forEach(z=>s+=RZ(0,z,b,h,PINE.front,PINE.stroke,sw)+RZ(0,z,b,h,'url(#hatch)','none',0));
+  s+=RZ(gd,zTB-golaH,t,golaH,F.face,F.edge,sw);
+  s+=RZ(offY+e,H,yr-offY-e,32,'#e2f1fa','none',0)+RZ(offY,H,e,40,'#bcdcef','#4d8db5',sw);
+  s+=`<path d="M${-t-48} ${-(doorT+g/2)} L${gd/2-6} ${-(doorT+g/2)} Q${gd/2+2} ${-(doorT+g/2)} ${gd/2+2} ${-(doorT-6)} L${gd/2+2} ${-(doorT-18)}" fill="none" stroke="#d9a07f" stroke-opacity=".8" stroke-width="9" stroke-linecap="round"/>`;
+  s+=dimV(-doorT,-m.zF,-t-14,`gola ${mm(g)}`,fs)+dimV(-m.zF,-zTT,-t-14,`${m.fasH}`,fs)+dimV(-zTT,-H,-t-14,`${t}`,fs);
+  s+=dimH(0,gd,-(doorT-55),`${gd}`,fs);
+  s+=T(-t/2,-(m.zF+m.fasH/2),'Faja R6',fs*.85,{rot:true})+T(-t/2,-(zb+50),'Puerta R5',fs*.85,{rot:true});
+  s+=T(b/2,-(zTB+hT/2)+3,'P1',fs,{weight:700})+T((b+yr)/2,-(zTB+hT/2)+3,'P2 (detrás)',fs*.9,{});
+  s+=T(gd+t+5,-(zTB-golaH/2)+3,'Fondo de gola R9',fs,{anchor:'start'});
+  s+=T(gd+t+5,-(zTB-golaH/2)+3+fs*1.2,'(escuadras a P1 y patas)',fs*.85,{anchor:'start',fill:'#5d6f80'});
+  s+=T(60,-(zTT+t/2)+3,'Tapa R1',fs,{anchor:'start'});
+  s+=T(offY+e+6,-(H+20),'pecera',fs,{anchor:'start',fill:'#2d7bb0'});
+  s+=T(-t-50,-(doorT+g/2)-8,'dedos',fs*.9,{anchor:'start',fill:'#a8684a'});
+  return SVG(-t-70,-(H+55),yr+t+85,H+55-zb+20,s,'Detalle de la gola en corte');
+}
+
+function dHinge(m,o){
+  const F=FIN[o.finish],{t,b,pilW,dX}=m,h=m.lD,fs=8.5,sw=.7,xr=175;
+  const P=(x,y,w,d,fill,st,s2,ex='')=>R(x,-(y+d),w,d,fill,st,s2,ex);let s='';
+  s+=P(0,-t,t,h+60+t,F.top,F.edge,sw);
+  s+=P(t,0,b,h,PINE.front,PINE.stroke,sw)+P(t,0,b,h,'url(#hatch)','none',0);
+  s+=P(t,-t,pilW,t,F.face,F.edge,sw)+P(dX,-t,xr-dX,t,F.face,F.edge,sw);
+  s+=P(dX+4,-12.5,35,12.5,'#fbfcfd','#5b6670',sw,'stroke-dasharray="2 1.5"');
+  s+=P(t+b,4,9,40,'#a3abb2','#5b6670',sw);
+  s+=`<path d="M${dX+21.5} 6 L${dX+21.5} -8 Q${dX+22} -24 ${t+b+5} -34" fill="none" stroke="#5b6670" stroke-width="4.5" stroke-linecap="round"/>`;
+  s+=T(t+b/2,-(h/2)+2,'P3',fs*1.1,{weight:700});
+  s+=T(t+b+14,-(42),'base de bisagra',fs,{anchor:'start'})+T(t+b+14,-(42)+fs*1.2,'atornillada a la pata',fs,{anchor:'start'});
+  s+=T(dX+48,-(-t/2)+3,'Puerta R5',fs,{anchor:'start'});
+  s+=T(dX+21.5,t+16,'cazoleta Ø35',fs*.9,{fill:'#5b6670'});
+  s+=T(t/2,-(h+30),'Lateral R2',fs*.9,{rot:true});
+  s+=T(t+pilW/2,t+33,'Pilastra R8',fs*.9,{});
+  s+=LN(t+pilW/2,t+26,t+pilW/2,t-2,'#233747',.5);
+  s+=dimH(0,t,t+12,`${t}`,fs*.9,true)+dimH(t,t+pilW,t+12,`${mm(pilW)}`,fs*.9,true);
+  s+=dimH(t+b,dX,-(h+14),`holgura ${C.dg}`,fs*.9)+dimH(t,t+b,-(h+30),`pata ${b}`,fs*.9);
+  s+=dimV(0,-h,-10,`${h}`,fs*.9);
+  s+=T(xr-5,t+40,'— FRENTE —',fs,{anchor:'end',fill:'#6c7a86',weight:650});
+  return SVG(-32,-(h+62),xr+40,h+62+t+50,s,'Detalle en planta de la bisagra');
+}
+
+function dPiso(m,o){
+  const F=FIN[o.finish],{FX,FY,b}=m,n=b+1,c0=m.cX-1,c1=m.cX+b+1,fs=FX/19,sw=fs*.05,Y=y=>FY-y;
+  const pts=[[n,0],[c0,0],[c0,n],[c1,n],[c1,0],[FX-n,0],[FX-n,n],[FX,n],[FX,FY-n],[FX-n,FY-n],[FX-n,FY],[c1,FY],[c1,FY-n],[c0,FY-n],[c0,FY],[n,FY],[n,FY-n],[0,FY-n],[0,n],[n,n]];
+  let s='';
+  [[0,0],[FX-b,0],[0,FY-b],[FX-b,FY-b],[m.cX,0],[m.cX,FY-b]].forEach(([x,y])=>s+=R(x,Y(y+b),b,b,PINE.front,PINE.stroke,sw)+R(x,Y(y+b),b,b,'url(#hatch)','none',0));
+  s+=`<polygon points="${pts.map(([x,y])=>x+','+Y(y)).join(' ')}" fill="${F.face}" fill-opacity=".85" stroke="${F.edge}" stroke-width="${sw*1.6}"/>`;
+  s+=LN(n,Y(0),c0,Y(0),'#174d70',sw*3)+LN(c1,Y(0),FX-n,Y(0),'#174d70',sw*3);
+  s+=T(FX/2,Y(FY/2),'Piso R4',fs*1.1,{weight:700})+T(FX/2,Y(FY/2)+fs*1.3,'rayado = patas y parales de pino',fs*.75,{fill:'#7a5527'});
+  s+=T(FX/2,Y(0)+fs*3.7,'— FRENTE (canto L1, en azul) —',fs*.8,{fill:'#6c7a86',weight:650});
+  s+=dimH(0,FX,-fs*1.3,`${mm(FX)}`,fs);
+  s+=dimV(Y(0),Y(FY),-fs*1.2,`${mm(FY)}`,fs);
+  s+=dimH(0,n,Y(0)+fs*1.6,`${n}`,fs*.75,true)+dimH(n,c0,Y(0)+fs*1.6,`${mm(c0-n)}`,fs*.75,true)+dimH(c0,c1,Y(0)+fs*1.6,`${mm(c1-c0)}`,fs*.75,true)+dimH(c1,FX-n,Y(0)+fs*1.6,`${mm(FX-n-c1)}`,fs*.75,true)+dimH(FX-n,FX,Y(0)+fs*1.6,`${n}`,fs*.75,true);
+  s+=dimV(Y(0),Y(n),FX+fs*1.1,`${n}`,fs*.75,true)+dimV(Y(n),Y(FY-n),FX+fs*1.1,`${mm(FY-2*n)}`,fs*.75,true)+dimV(Y(FY-n),Y(FY),FX+fs*1.1,`${n}`,fs*.75,true);
+  s+=T(c0-fs*.3,Y(n)-fs*.4,`desde la izq. ${mm(c0)}`,fs*.7,{anchor:'end',fill:BLUE,weight:650});
+  return SVG(-fs*3.5,-fs*2.8,FX+fs*7,FY+fs*7.6,s,'Plano del piso con destajes');
+}
+function vDet(m,o){
+  return `<div class="grid3">
+    <div class="canvas">${dCorner(m,o)}<p class="caption"><b>Unión pata–larguero.</b> El larguero se apoya ENCIMA de la pata: el peso baja por contacto. Corta las patas exactas y a escuadra; un extremo torcido hace que la carga se vaya a los tornillos.</p></div>
+    <div class="canvas">${dGola(m,o)}<p class="caption"><b>Gola.</b> Los dedos entran por la ranura de ${mm(m.g)} mm y agarran el canto superior de la puerta, que queda libre porque el fondo de gola está ${C.gd} mm atrás.</p></div>
+    <div class="canvas">${dPiso(m,o)}<p class="caption"><b>Piso R4 (visto desde arriba).</b> Pieza entera de ${mm(m.FX)} × ${mm(m.FY)} mm. Los destajes llevan 1 mm de holgura por lado para que entre sin forzar; así el piso se apoya en los dos largueros, los extremos y el travesaño central de abajo.</p></div>
+    <div class="canvas">${dHinge(m,o)}<p class="caption"><b>Bisagra (planta).</b> La base va atornillada a la cara interior de la pata (pino), no al tablero. Con bisagra de codo 18 la puerta queda embutida entre las pilastras, a ras con ellas y con ${C.dg} mm de holgura; la pilastra tapa toda la pata.</p></div>
+  </div>`;
+}
+
+const VIEWS={
+  '3d':{t:'Vista 3D',fn:v3d,cap:()=>'Arrastra para girar, usa la rueda para acercar o alejar y haz clic en una puerta para abrirla o cerrarla. Activa “forro transparente” para ver cómo queda el armazón de pino dentro del mueble.'},
+  front:{t:'Frontal',fn:vFront,cap:m=>`Alzado frontal. Exterior ${mm(m.W)} × ${mm(m.D)} × ${mm(m.H)} mm. En naranja punteado, el armazón de pino que queda escondido detrás del forro; los círculos punteados son las cazoletas de las bisagras.`},
+  side:{t:'Corte lateral',fn:vSide,cap:m=>`Corte por la puerta izquierda, mirando hacia el costado (frente a la izquierda). Las piezas rayadas son los largueros de pino cortados: uno de ${m.b} × ${m.hT} bajo el vidrio del frente y otro bajo el de atrás; espacio libre interior ${mm(m.interior)} mm de alto.`},
+  iso:{t:'Armazón 3D',fn:vIso,cap:m=>`Armazón de pino de ${m.b} × ${m.b} mm. El bastidor superior se apoya sobre 4 patas y 2 parales centrales (uno bajo el larguero del frente y otro bajo el de atrás), y estos sobre el bastidor inferior, que descansa en 6 niveladores. La línea azul es la base de la pecera: sus 4 vidrios quedan sobre la madera. Activa “separado por niveles” para ver cómo encaja.`},
+  top:{t:'Bastidor superior',fn:vPlanTop,cap:m=>`Planta del bastidor superior (visto desde arriba). ${2+m.nC} piezas P2: 2 en los extremos y ${m.nC} intermedias, con ${mm(m.sp)} mm libres entre ellas para que la tapa no se hunda. Los rectángulos marrones punteados son las patas debajo.`},
+  bot:{t:'Bastidor inferior',fn:vPlanBot,cap:m=>`Planta del bastidor inferior. Las patas (rayado) se apoyan encima, en las esquinas. Debajo de cada larguero van 3 niveladores M10: uno bajo cada pata y uno al centro.`},
+  det:{t:'Detalles',fn:vDet,cap:()=>'Detalles constructivos a escala ampliada.'},
+};
+
+
+/* ---------- Vista 3D (three.js) ---------- */
+const S3={theta:-0.65,phi:1.12,r:3100,goal:null,doors:[0,0],anim:[0,0],renderer:null,raf:0,scene:null,cam:null,doorGroups:[],doorMeshes:[],opts:{ghost:false,tank:true,spin:false}};
+function v3d(){
+  return `<div class="three-ui">
+    <button class="primary" data-a="doors">🚪 Abrir / cerrar puertas</button>
+    <span class="hint" style="margin:0 4px">Vista:</span>
+    <button data-cam="iso">3/4</button><button data-cam="front">Frente</button><button data-cam="side">Lateral</button><button data-cam="back">Atrás</button><button data-cam="top">Arriba</button>
+  </div>
+  <div class="three-ui">
+    <label class="toggle"><input type="checkbox" data-o="ghost" ${S3.opts.ghost?'checked':''}> Forro transparente (ver el pino)</label>
+    <label class="toggle"><input type="checkbox" data-o="tank" ${S3.opts.tank?'checked':''}> Mostrar pecera</label>
+    <label class="toggle"><input type="checkbox" data-o="spin" ${S3.opts.spin?'checked':''}> Girar solo</label>
+  </div>
+  <div id="three" class="three"></div>`;
+}
+const CAMS={iso:[-0.65,1.12],front:[0,1.42],side:[-Math.PI/2,1.42],back:[Math.PI,1.25],top:[0,0.03]};
+function init3D(m,o){
+  const el=$('three');if(!el)return;
+  if(typeof THREE==='undefined'){el.innerHTML='<p class="hint" style="padding:24px">La vista 3D necesita conexión a internet la primera vez para cargar la librería three.js.</p>';return}
+  if(!S3.renderer){
+    const r=S3.renderer=new THREE.WebGLRenderer({antialias:true});
+    r.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+    S3.cam=new THREE.PerspectiveCamera(35,1.5,10,30000);
+    S3.ray=new THREE.Raycaster();
+    const cv=r.domElement;let down=null;
+    const hit=ev=>{const rc=cv.getBoundingClientRect();const v=new THREE.Vector2(((ev.clientX-rc.left)/rc.width)*2-1,-((ev.clientY-rc.top)/rc.height)*2+1);S3.ray.setFromCamera(v,S3.cam);const h=S3.ray.intersectObjects(S3.doorMeshes,false)[0];return h?h.object.userData.door:-1};
+    cv.addEventListener('pointerdown',ev=>{down={x:ev.clientX,y:ev.clientY,moved:0};cv.setPointerCapture(ev.pointerId);S3.goal=null});
+    cv.addEventListener('pointermove',ev=>{
+      if(down){const dx=ev.clientX-down.x,dy=ev.clientY-down.y;down.moved+=Math.abs(dx)+Math.abs(dy);down.x=ev.clientX;down.y=ev.clientY;
+        S3.theta-=dx*0.008;S3.phi=Math.min(1.52,Math.max(0.03,S3.phi-dy*0.008));cv.style.cursor='grabbing'}
+      else cv.style.cursor=hit(ev)>=0?'pointer':'grab';
+    });
+    cv.addEventListener('pointerup',ev=>{if(down&&down.moved<6){const d=hit(ev);if(d>=0)S3.doors[d]=S3.doors[d]?0:1}down=null;cv.style.cursor='grab'});
+    cv.addEventListener('wheel',ev=>{ev.preventDefault();S3.r=Math.min(7000,Math.max(800,S3.r*(1+ev.deltaY*0.001)))},{passive:false});
+    window.addEventListener('resize',resize3D);
+  }
+  el.appendChild(S3.renderer.domElement);
+  S3.m=m;S3.o=o;build3D();resize3D();
+  $('drawing').querySelectorAll('[data-cam]').forEach(bt=>bt.onclick=()=>{const c=CAMS[bt.dataset.cam];let th=c[0];while(th-S3.theta>Math.PI)th-=2*Math.PI;while(S3.theta-th>Math.PI)th+=2*Math.PI;S3.goal={theta:th,phi:c[1]};S3.opts.spin=false;const sp=$('drawing').querySelector('[data-o="spin"]');if(sp)sp.checked=false});
+  $('drawing').querySelector('[data-a="doors"]').onclick=()=>{const v=S3.doors[0]||S3.doors[1]?0:1;S3.doors=[v,v]};
+  $('drawing').querySelectorAll('[data-o]').forEach(cb=>cb.onchange=()=>{S3.opts[cb.dataset.o]=cb.checked;if(cb.dataset.o!=='spin')build3D()});
+  if(!S3.raf)loop3D();
+}
+function resize3D(){const el=$('three');if(!el||!S3.renderer)return;const w=el.clientWidth||800,h=Math.round(Math.min(640,Math.max(360,w*0.66)));S3.renderer.setSize(w,h);S3.cam.aspect=w/h;S3.cam.updateProjectionMatrix()}
+function build3D(){
+  if(S3.scene)S3.scene.traverse(ob=>{if(ob.geometry)ob.geometry.dispose();if(ob.material)ob.material.dispose()});
+  const m=S3.m,o=S3.o,{lD,t,b,h,f,pg,gd,FX,FY,W,zTT,zTB,zBB,zBT,legL,doorB,doorH,dX,doorW,pilW,golaH,shortL,cross,L,P,A,Hw,e,H,offX,offY,subH,hingesPerDoor,doorT}=m;
+  const sc=S3.scene=new THREE.Scene();sc.background=new THREE.Color('#eef3f6');
+  sc.add(new THREE.HemisphereLight(0xffffff,0xaab6c0,0.8));
+  const d1=new THREE.DirectionalLight(0xffffff,0.7);d1.position.set(-1500,2600,2400);sc.add(d1);
+  const d2=new THREE.DirectionalLight(0xffffff,0.3);d2.position.set(2200,900,-1800);sc.add(d2);
+  const fl=new THREE.Mesh(new THREE.CircleGeometry(1700,72),new THREE.MeshStandardMaterial({color:'#dde5ea',roughness:1}));fl.rotation.x=-Math.PI/2;fl.position.y=-1;sc.add(fl);
+  const F=FIN[o.finish],gh=S3.opts.ghost;
+  const mat=(c,ex={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.7,metalness:0},ex));
+  const gx=gh?{transparent:true,opacity:.16,depthWrite:false}:{};
+  const mFace=mat(F.face,gx),mTop=mat(F.top,gx),mPine=mat(PINE.front),mPineEnd=mat(PINE.left),mMetal=mat('#9aa3ab',{metalness:.5,roughness:.35}),mFoot=mat('#4b545c');
+  const eBoard=new THREE.LineBasicMaterial({color:F.edge,transparent:true,opacity:gh?.3:.55}),ePine=new THREE.LineBasicMaterial({color:PINE.stroke,transparent:true,opacity:.6});
+  const X=x=>x-W/2,Zd=y=>FY/2-y;
+  const box=(x0,x1,y0,y1,z0,z1,mt,em,parent=sc,org=[0,0,0])=>{
+    const g=new THREE.BoxGeometry(x1-x0,z1-z0,y1-y0),me=new THREE.Mesh(g,mt);
+    me.position.set(X((x0+x1)/2)-org[0],(z0+z1)/2-org[1],Zd((y0+y1)/2)-org[2]);parent.add(me);
+    if(em)me.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),em));
+    return me;
+  };
+  const pb=(x0,dx,y0,dy,z0,dz,mt=mPine)=>box(t+x0,t+x0+dx,y0,y0+dy,z0,z0+dz,mt,ePine);
+  [zTB].forEach(z=>{pb(0,FX,0,b,z,h);pb(0,FX,FY-b,b,z,h);[0,FX-b].forEach(x=>pb(x,b,b,shortL,z,h,mPineEnd))});
+  cross.forEach(x=>pb(x,b,b,shortL,zTB,h,mPineEnd));
+  [[0,0],[FX-b,0],[0,FY-b],[FX-b,FY-b],[m.cX,0],[m.cX,FY-b]].forEach(([x,y])=>pb(x,b,y,b,zBT,legL));
+  pb(0,FX,0,b,zBB,h);pb(0,FX,FY-b,b,zBB,h);
+  [0,FX-b,(FX-b)/2].forEach(x=>pb(x,b,b,shortL,zBB,h,mPineEnd));
+  [b/2,FX/2,FX-b/2].forEach(x=>[b/2,FY-b/2].forEach(y=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(14,16,f,20),mFoot);c.position.set(X(t+x),f/2,Zd(y));sc.add(c)}));
+  const hz=hingesPerDoor===3?[doorB+90,(doorB+doorT)/2,doorT-90]:[doorB+90,doorT-90];
+  hz.forEach(z=>{box(t+b,t+b+9,4,44,z-20,z+20,mMetal,null);box(W-t-b-9,W-t-b,4,44,z-20,z+20,mMetal,null)});
+  box(0,W,-t,FY+t,zTT,H,mTop,eBoard);
+  box(0,t,-t,FY+t,pg,zTT,mTop,eBoard);box(W-t,W,-t,FY+t,pg,zTT,mTop,eBoard);
+  box(t,W-t,FY,FY+t,pg,zTT,mFace,eBoard);
+  { // piso con destajes para patas y parales
+    const n=b+1,c0=m.cX-1,c1=m.cX+b+1,z0=zBT,z1=zBT+t;
+    box(t,t+FX,n,FY-n,z0,z1,mFace,eBoard);
+    [[0,n],[FY-n,FY]].forEach(([y0,y1])=>{box(t+n,t+c0,y0,y1,z0,z1,mFace,eBoard);box(t+c1,t+FX-n,y0,y1,z0,z1,mFace,eBoard)});
+  }
+  box(t,W-t,-t,0,m.zF,zTT,mFace,eBoard);
+  box(t,W-t,-t,0,pg,zBT,mFace,eBoard);
+  box(t,t+pilW,-t,0,m.zPl,m.zF,mFace,eBoard);box(W-t-pilW,W-t,-t,0,m.zPl,m.zF,mFace,eBoard);box(m.cpX,m.cpX+m.cpW,-t,0,m.zPl,m.zF,mFace,eBoard);
+  box(t+b,t+m.cX,gd,gd+t,zTB-golaH,zTB,mFace,eBoard);box(t+m.cX+b,W-t-b,gd,gd+t,zTB-golaH,zTB,mFace,eBoard);
+  const mDoor=mat(F.face,gh?{transparent:true,opacity:.35,depthWrite:false}:{});
+  S3.doorGroups=[];S3.doorMeshes=[];
+  [[dX,dX+doorW,dX],[W-dX-doorW,W-dX,W-dX]].forEach(([x0,x1,px],i)=>{
+    const g=new THREE.Group();const org=[X(px),doorB,Zd(-t)];g.position.set(org[0],org[1],org[2]);sc.add(g);
+    const d=box(x0,x1,-t,0,doorB,doorB+doorH,mDoor,eBoard,g,org);d.userData.door=i;S3.doorMeshes.push(d);
+    const cx=i===0?x0+21.5:x1-21.5;
+    hz.forEach(z=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(17.5,17.5,3,24),mMetal);c.rotation.x=Math.PI/2;c.position.set(X(cx)-org[0],z-org[1],Zd(1.5)-org[2]);g.add(c)});
+    S3.doorGroups.push(g);
+  });
+  if(S3.opts.tank){
+    const gl=new THREE.MeshStandardMaterial({color:'#bfe3f5',transparent:true,opacity:.22,roughness:.05,metalness:.1,depthWrite:false});
+    const eg=new THREE.LineBasicMaterial({color:'#4d8db5',transparent:true,opacity:.8});
+    const tx0=t+offX,ty0=offY,tz=H;
+    box(tx0,tx0+L,ty0,ty0+P,tz,tz+e,gl,eg);
+    box(tx0,tx0+L,ty0,ty0+e,tz,tz+A,gl,eg);box(tx0,tx0+L,ty0+P-e,ty0+P,tz,tz+A,gl,eg);
+    box(tx0,tx0+e,ty0+e,ty0+P-e,tz,tz+A,gl,eg);box(tx0+L-e,tx0+L,ty0+e,ty0+P-e,tz,tz+A,gl,eg);
+    if(subH>0)box(tx0+e,tx0+L-e,ty0+e,ty0+P-e,tz+e,tz+e+subH,mat('#d8c39b'),null);
+    const wm=new THREE.MeshStandardMaterial({color:'#5fb0dc',transparent:true,opacity:.35,roughness:.1,depthWrite:false});
+    box(tx0+e+1,tx0+L-e-1,ty0+e+1,ty0+P-e-1,tz+e+subH,tz+Hw,wm,null);
+  }
+}
+function loop3D(){
+  if(view!=='3d'||!S3.scene){S3.raf=0;return}
+  S3.raf=requestAnimationFrame(loop3D);
+  for(let i=0;i<2;i++){S3.anim[i]+=(S3.doors[i]-S3.anim[i])*0.09;if(S3.doorGroups[i])S3.doorGroups[i].rotation.y=(i===0?-1:1)*S3.anim[i]*1.85}
+  if(S3.goal){S3.theta+=(S3.goal.theta-S3.theta)*0.1;S3.phi+=(S3.goal.phi-S3.phi)*0.1;if(Math.abs(S3.goal.theta-S3.theta)+Math.abs(S3.goal.phi-S3.phi)<0.002)S3.goal=null}
+  else if(S3.opts.spin)S3.theta+=0.004;
+  const m=S3.m,ty=S3.opts.tank?(m.H+m.A)*0.48:m.H*0.5,r=S3.r;
+  S3.cam.position.set(r*Math.sin(S3.phi)*Math.sin(S3.theta),ty+r*Math.cos(S3.phi),r*Math.sin(S3.phi)*Math.cos(S3.theta));
+  S3.cam.up.set(0,1,0);if(S3.phi<0.1)S3.cam.up.set(-Math.sin(S3.theta),0,-Math.cos(S3.theta));
+  S3.cam.lookAt(0,ty,0);
+  S3.renderer.render(S3.scene,S3.cam);
+}
+
+/* ---------- Tablas ---------- */
+function renderTables(m){
+  $('tPine').innerHTML=`<table><thead><tr><th>Código</th><th>Pieza</th><th class="num">Cant.</th><th class="num">Largo (mm)</th><th>Sección</th><th>Notas</th></tr></thead><tbody>${m.pine.map(p=>`<tr><td class="code">${p.c}</td><td>${p.n}</td><td class="num">${p.q}</td><td class="num">${mm(p.l)}</td><td>${m.b} × ${m.b}</td><td>${p.note}</td></tr>`).join('')}</tbody></table>`;
+  $('sPine').innerHTML=`Total ${nf(m.pineLen/1000,2)} m lineales. Optimizado en <b>${m.bins.length} varas de 3 m</b> (${m.bins.map((bn,i)=>`vara ${i+1}: ${bn.parts.map(mm).join(' + ')}`).join(' · ')}). Compra <b>${m.bins.length+1}</b> para descartar tramos con nudos o torceduras. Pino seco (≤ 15 % de humedad), cepillado, sección real ${m.b} × ${m.b} mm.`;
+  $('tBoard').innerHTML=`<table><thead><tr><th>Código</th><th>Pieza</th><th class="num">Cant.</th><th class="num">Pedir: largo – veta (mm)</th><th class="num">Pedir: ancho (mm)</th><th>L1</th><th>L2</th><th>A1</th><th>A2</th><th>Medida final</th><th>Trabajo en casa</th><th>Notas</th></tr></thead><tbody>${m.boards.map(p=>`<tr><td class="code">${p.c}</td><td>${p.n}</td><td class="num">${p.oq!==p.q?`${p.oq} (salen ${p.q})`:p.q}</td><td class="num">${mm(p.oa)}</td><td class="num">${p.ow!==p.w?`<b>${mm(p.ow)}</b>`:mm(p.ow)}</td>${p.ok.map(x=>`<td>${x?'✓':'–'}</td>`).join('')}<td class="num">${mm(p.a)} × ${mm(p.w)}</td><td>${p.shop}</td><td>${p.note}</td></tr>`).join('')}</tbody></table>`;
+  $('sBoard').innerHTML=`Área neta ${nf(m.boardM2,2)} m². En este proyecto va dentro del <b>pedido conjunto RH15 Cartagena</b> de Madecentro (cocina, clóset, baño y pecera) y cabe en las mismas 8 láminas. Las columnas de largo, ancho y cantos son <b>lo que se pide a Madecentro</b> (medidas finales con canto incluido). Madecentro no corta piezas de menos de 70 mm de ancho: las más angostas se piden de 70 mm y se recortan en casa (ver “Trabajo en casa”); canto a mano ≈ <b>${nf(m.handM,1)} m</b>. L1/L2 = los dos lados del largo, A1/A2 = los dos lados del ancho. Canto ≈ <b>${Math.ceil(m.edgeM*1.1)} m</b>: <b>rígido 2 mm solo en las puertas</b> (R5) y <b>flexible 0,45 mm</b> en el resto, como en la cocina. Los cantos sin enchapar se sellan con silicona neutra.`;
+  const nh=m.hingesPerDoor*2;
+  const hw=[
+    ['Bisagra de cazoleta Ø35, codo 18 (puerta embutida/interior), cierre lento',nh,'Base atornillada a la pata (pino) con 4×16.'],
+    [`Nivelador regulable con rosca M10 + tuerca de inserción M10`,6,`Capacidad ≥ ${m.footKg} kg cada uno.`],
+    ['Tornillo estructural 5 × 90 mm',40,'Uniones del armazón; pretaladrar Ø3 mm.'],
+    ['Escuadra metálica reforzada 60 × 60 mm',24,'2 arriba y 2 abajo en cada pata y paral.'],
+    ['Escuadra pequeña 25–30 mm',14,'Tapa (8–10) y fondo de gola (4).'],
+    ['Tornillo para aglomerado 4 × 40 mm',100,'Forro a pino y espaldar (cada 15 cm).'],
+    ['Tornillo 4 × 16 mm',60,'Bisagras y escuadras pequeñas.'],
+    ['Cola PVA D3 (resistente a la humedad)','½ kg','En todas las uniones madera–madera y forro–pino.'],
+    ['Canto Cartagena: rígido 19 × 2 mm en puertas, flexible 19 × 0,45 mm en el resto',`${Math.ceil(m.edgeM*1.1)} m`,'Va en el pedido conjunto de Madecentro.'],
+    ['Silicona neutra o sellador de cantos','1 tubo','Cantos cortados sin enchapar y unión tapa–laterales.'],
+    ['Pasacables Ø60 mm',2,'En el espaldar, para mangueras y cables.'],
+    [`Manta EVA/espuma 5 mm de ${mm(m.L)} × ${mm(m.P)}`,1,'Solo si el fabricante de la pecera la exige (típico en peceras sin marco).'],
+    ['Escuadra de anclaje a pared + chazo y tornillo',2,'Contra volcamiento (zona sísmica).'],
+  ];
+  $('tHw').innerHTML=`<table><thead><tr><th>Elemento</th><th class="num">Cant.</th><th>Uso</th></tr></thead><tbody>${hw.map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+  $('tChk').innerHTML=`<table><thead><tr><th>Verificación</th><th>Resultado</th><th>Criterio</th><th>Estado</th></tr></thead><tbody>${m.checks.map(c=>`<tr><td>${c.n}</td><td>${c.v}</td><td>${c.lim}</td><td class="${c.ok?'ok':'bad'}">${c.ok?'✓ cumple':'✗ revisar'}</td></tr>`).join('')}</tbody></table>`;
+  $('sChk').innerHTML=`Peso estimado: vidrio ${nf(m.glassKg,0)} kg + agua ${nf(m.waterL,0)} kg + sustrato/rocas ${nf(m.sub,0)} kg + equipos ${nf(m.acc,0)} kg = <b>${nf(m.tankKg,0)} kg</b>. Se diseña para <b>${nf(m.designKg,0)} kg</b> (factor 1,5). Cálculo simplificado: cada tramo del larguero (entre pata y paral central) como viga simplemente apoyada, E = 8.000 MPa; sirve para comparar, no sustituye la revisión de un profesional.`;
+  const steps=[
+    `<b>Preparar el pino.</b> Escoge piezas rectas y secas. Corta las 6 piezas P3 (4 patas + 2 parales) juntas con un tope a <b>${mm(m.legL)} mm</b>; deben quedar idénticas y con los extremos a escuadra. Es el paso más importante: la pecera necesita un apoyo plano.`,
+    `<b>Bastidor superior.</b> 2 P1 (${mm(m.FX)}) con ${2+m.nC} P2 (${mm(m.shortL)}) entre ellos: uno en cada extremo y ${m.nC} intermedios; el del centro queda justo encima de los parales. Cola D3 + 2 tornillos 5×90 por unión. Verifica que las diagonales midan lo mismo (±1 mm).`,
+    `<b>Bastidor inferior.</b> 2 P4 y 3 P5 (uno al centro). Instala 6 tuercas de inserción M10 en la cara inferior de los P4: en los extremos (centro a ${mm(m.b/2)} mm del borde) y al centro.`,
+    `<b>Montaje.</b> Pon las 4 patas en las esquinas y los 2 parales en la mitad del largo (frente y fondo, sobre el travesaño central de abajo), al ras con el frente/fondo, y el bastidor superior <i>encima</i> de las patas: el peso debe bajar por contacto, no colgar de tornillos. Cola + 2 tornillos inclinados + 2 escuadras en cada unión. Comprueba con el nivel que la cara superior quede plana en las dos diagonales.`,
+    `<b>Espaldar R3.</b> Cola en todo el contacto + tornillos 4×40 cada 15 cm a P1, P4 y patas traseras. Con esto el armazón queda rígido; compruébalo empujando de lado.`,
+    `<b>Laterales R2.</b> Atornilla desde adentro, a través de las patas y de los testeros: avellana con broca de 10 mm a 25 mm de profundidad y usa tornillo 4×40 (así entra ~12 mm en el tablero sin atravesarlo).`,
+    `<b>Piso R4.</b> Marca y rutea los 6 destajes (plano “Piso R4” en Detalles), presenta el piso sobre el bastidor inferior antes de montar las patas para comprobar que entra, y luego atorníllalo sobre los P4 y P5.`,
+    `<b>Tapa R1.</b> Cola sobre todo el bastidor superior y 8–10 escuadras pequeñas desde abajo. La cara de arriba queda sin cabezas de tornillo.`,
+    `<b>Frentes fijos:</b> faja R6 sobre el larguero delantero, pilastra central R10 sobre el paral delantero, zócalo R7 sobre el P4 delantero (ambos atornillados desde adentro con avellanado), pilastras R8 pegadas al frente de las patas delanteras (cola + prensas o puntillas sin cabeza), los dos fondos de gola R9 (a cada lado del paral central) con escuadras a ${C.gd} mm detrás del plano de la puerta.`,
+    `<b>Puertas R5.</b> Perfora las cazoletas Ø35 (centro a 21,5 mm del canto, ${m.hingesPerDoor === 3 ? 'arriba, al centro y abajo' : 'a 90 mm de los extremos'}). Atornilla las bases a la cara interior de las patas de esquina (a ~22 mm del frente de la pata) y regula ${C.dg} mm de holgura a las pilastras.`,
+    `<b>Sellado.</b> Silicona neutra en la unión tapa–laterales y en todo canto cortado sin enchapar. El RH resiste la humedad, pero no el agua encharcada.`,
+  ];
+  $('steps').innerHTML=steps.map(x=>`<li>${x}</li>`).join('');
+  const tips=[
+    `Ubica el mueble vacío contra el muro y nivélalo con los 6 niveladores. Usa un nivel de 60 cm a lo largo, a lo ancho y en diagonal; la diferencia debe quedar <b>por debajo de 1 mm</b> en todo el largo.`,
+    `Ancla el mueble al muro con 2 escuadras. Lleno pesa cerca de <b>${nf(m.tankKg+m.standKg,0)} kg</b> y su centro de gravedad queda alto; en zona sísmica no lo dejes suelto. Por el peso no se va a deslizar, pero sí podría volcarse.`,
+    `Si la pecera es sin marco (vidrio pegado con silicona), pon la manta de 5 mm si el fabricante lo indica. Si tiene marco plástico inferior, apóyala directo sobre la tapa, salvo que el fabricante diga otra cosa.`,
+    `Pon la pecera vacía, revisa que no se mueva sobre ninguna esquina y llena primero hasta la mitad. Espera unas horas, revisa el nivel y luego termina. Vuelve a revisar el nivel a las 24 h.`,
+    `Peso sobre el piso: ≈ ${nf(m.tankKg+m.standKg,0)} kg en ${nf(m.W*m.D/1e6,2)} m². En un piso alto, ubícalo junto a un muro o una viga, no en el centro de la losa.`,
+  ];
+  $('tips').innerHTML=tips.map(x=>`<li>${x}</li>`).join('');
+}
+
+/* ---------- Render ---------- */
+function opts(){return {finish:$('finish').value,skel:$('skel').checked,explode:$('explode').checked}}
+function render(){
+  const m=model(),o=opts();
+  $('reco').innerHTML=`<b>Medidas recomendadas para tu pecera de ${mm(m.L/10)} × ${mm(m.P/10)} × ${mm(m.A/10)} cm:</b> mueble exterior <b>${mm(m.W/10)} × ${mm(m.D/10)} × ${mm(m.H/10)} cm</b> (ancho × fondo × alto). El armazón de pino mide <b>${mm(m.FX/10)} × ${mm(m.FY/10)} cm</b>, casi lo mismo que la base de la pecera. Así cada vidrio queda justo encima de una viga de pino de ${m.b} mm y el peso baja directo por las patas al piso, sin pasar por el tablero. Un mueble más grande, como 85 × 40, dejaría los vidrios apoyados sobre el tablero y no sobre la madera.`;
+  $('metrics').innerHTML=[
+    [`${mm(m.W)} × ${mm(m.D)} × ${mm(m.H)}`,'Exterior del mueble (mm)'],
+    [`${mm(m.FX)} × ${mm(m.FY)}`,'Armazón de pino (mm)'],
+    [`${nf(m.tankKg,0)} kg`,'Pecera llena (estimado)'],
+    [`${nf(m.designKg,0)} kg`,'Carga de diseño (×1,5)'],
+    [`${mm(m.interior)} mm`,'Altura libre interior'],
+    [`${nf(m.standKg,0)} kg`,'Peso del mueble'],
+  ].map(([a,b])=>`<div class="metric"><b>${a}</b>${b}</div>`).join('');
+  $('tabs').innerHTML=Object.entries(VIEWS).map(([k,v])=>`<button data-view="${k}" class="${k===view?'active':''}">${v.t}</button>`).join('');
+  $('drawing').innerHTML=VIEWS[view].fn(m,o);
+  $('caption').textContent=VIEWS[view].cap(m);
+  renderTables(m);
+  document.querySelector('.toggles').style.display=view==='3d'?'none':'';
+  if(view==='3d')init3D(m,o);
+  $('printAll').innerHTML=Object.entries(VIEWS).filter(([k])=>k!=='3d').map(([k,v])=>k==='det'?`<h3>${v.t}</h3>${v.fn(m,o)}`:`<div class="canvas"><h3>${v.t}</h3>${v.fn(m,{...o,explode:false})}<p class="caption">${v.cap(m)}</p></div>`).join('');
+}
+$('tabs').addEventListener('click',ev=>{const bt=ev.target.closest('[data-view]');if(!bt)return;view=bt.dataset.view;render()});
+['tL','tP','tA','tW','tE','sH','gola','sub','acc','pine','finish','skel','explode'].forEach(id=>{$(id).addEventListener('input',render);$(id).addEventListener('change',render)});
+function downloadConfig(){
+  const m=model();
+  const data={proyecto:'Mueble pecera PY-800',estado:'Diseño de taller, verificaciones simplificadas',
+    pecera_mm:{largo:m.L,fondo:m.P,alto:m.A,agua:m.Hw,vidrio:m.e},
+    mueble_mm:{ancho:m.W,fondo:m.D,alto:m.H,armazon:[m.FX,m.FY],gola:m.g},
+    pesos_kg:{pecera_llena:Math.round(m.tankKg),diseno:Math.round(m.designKg),mueble:Math.round(m.standKg)},
+    pino_seccion_mm:[m.b,m.b],
+    despiece_pino:m.pine.map(p=>({codigo:p.c,pieza:p.n,cantidad:p.q,largo_mm:p.l})),
+    despiece_RH15:m.boards.map(p=>({codigo:p.c,pieza:p.n,cantidad:p.q,largo_pedido_mm:p.oa,ancho_pedido_mm:p.ow,canto_L1:!!p.ok[0],canto_L2:!!p.ok[1],canto_A1:!!p.ok[2],canto_A2:!!p.ok[3],medida_final_mm:[p.a,p.w],trabajo_en_casa:p.shop}))};
+  const bl=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),u=URL.createObjectURL(bl),a=document.createElement('a');
+  a.href=u;a.download='mueble-pecera-despiece.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function downloadCSV(){
+  const m=model(),q=x=>`"${String(x).replace(/"/g,'""')}"`,n=x=>String(Math.round(x*10)/10).replace('.',',');
+  const rows=[['Código','Pieza','Cantidad','Largo pedido mm (veta)','Ancho pedido mm','Canto L1','Canto L2','Canto A1','Canto A2','Material','Medida final mm','Trabajo en casa','Notas']];
+  m.boards.forEach(p=>rows.push([p.c,p.n,p.oq,n(p.oa),n(p.ow),...p.ok.map(x=>x?'Sí':'No'),'RH 15 mm Cartagena',`${n(p.a)} x ${n(p.w)}`,p.shop,p.note]));
+  rows.push([]);rows.push(['Código','Pieza pino','Cantidad','Largo mm','Sección mm']);
+  m.pine.forEach(p=>rows.push([p.c,p.n,p.q,n(p.l),`${m.b} x ${m.b}`]));
+  const csv='\ufeff'+rows.map(r=>r.map(q).join(';')).join('\r\n');
+  const bl=new Blob([csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(bl),a=document.createElement('a');
+  a.href=u;a.download='despiece-madecentro.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+render();
+</script>
+</body>
+</html>

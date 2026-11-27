@@ -1,4 +1,4 @@
-"""Comprueba canto único, medidas y coherencia entre los tres muebles y sus pedidos.
+"""Comprueba canto único, medidas y coherencia entre los cuatro muebles y sus pedidos.
 
 Solo lectura. Uso: python herramientas/auditar_cantos.py
 """
@@ -7,7 +7,7 @@ import json,re,openpyxl
 import build_compras_proyecto as b
 
 R=Path(__file__).resolve().parent.parent
-for slug,first,cols in [('cocina',5,(5,6,7,8,12)),('closet',7,(5,6,4,9,13)),('bano',7,(6,7,5,10,14))]:
+for slug,first,cols in [('cocina',5,(5,6,7,8,12)),('closet',7,(5,6,4,9,13)),('bano',7,(6,7,5,10,14)),('pecera',7,(5,6,7,8,12))]:
     t=(R/f'assets/models/{slug}-data.js').read_text(encoding='utf8')
     d=json.loads(t[t.index('{'):t.rindex('}')+1])
     w=openpyxl.load_workbook(R/f'despiece-{slug}.xlsx',data_only=True)

@@ -13,7 +13,7 @@ for name,file in [('Arial','arial.ttf'),('ArialBold','arialbd.ttf')]:pdfmetrics.
 pdfmetrics.registerFontFamily('Arial',normal='Arial',bold='ArialBold',italic='Arial',boldItalic='ArialBold')
 W,H=landscape(A4);margin=34;usable=W-2*margin
 ink=colors.HexColor('#253b35');gray=colors.HexColor('#59675d');pale=colors.HexColor('#e9f0e9');amber=colors.HexColor('#fff0cd')
-path=root/'pedido-corte-ventana-pino.pdf';c=canvas.Canvas(str(path),pagesize=(W,H));c.setTitle('Pedido de corte - ventana de pino - 9 tablas y 4 bastidores')
+path=root/'pedido-corte-ventana-pino.pdf';c=canvas.Canvas(str(path),pagesize=(W,H));c.setTitle('Pedido de la ventana de pino - 4 bastidores y 22 tiras')
 style=ParagraphStyle('body',fontName='Arial',fontSize=9.3,leading=12.5,textColor=ink)
 small=ParagraphStyle('small',parent=style,fontSize=8.5,leading=11)
 head=ParagraphStyle('head',parent=small,fontName='ArialBold',textColor=colors.white)
@@ -25,7 +25,7 @@ def title(page,title,sub):
  p(sub,margin,H-58)
  c.setStrokeColor(colors.HexColor('#ccd7cc'));c.line(margin,29,W-margin,29)
  c.setFillColor(gray);c.setFont('Arial',8);c.drawString(margin,17,'25/11/2026 · Ventana con madera local · Todas las medidas en milímetros')
- c.drawRightString(W-margin,17,str(page)+' / 5')
+ c.drawRightString(W-margin,17,str(page)+' / 6')
 
 def table(rows,widths,x,y):
  styled=[[Paragraph(str(v),head if i==0 else small) for v in row] for i,row in enumerate(rows)]
@@ -42,42 +42,49 @@ def bar(x,y,width,segments,total=3000,height=32):
    c.setFillColor(ink);c.setFont('ArialBold',8.5);c.drawCentredString(at+sw/2,y+height/2-3,label)
   at+=sw
 
-title(1,'Pedido de corte · ventana de pino','9 tablas de 3000–3020 × 220 × 20, cepilladas a 15 mm. 4 bastidores con sección final 100 × 40 mm.')
+title(1,'Pedido a la carpintería · ventana de pino','Piezas enteras de 3 m, cepilladas a su sección final. Todos los largos se cortan en casa. Incluye el listón del mueble de la pecera.')
 y=H-91
-rows=[['Pieza','Cant.','Entrega del taller','Medida final en armado']]
+big=ParagraphStyle('big',parent=style,fontSize=11.5,leading=15)
+bighead=ParagraphStyle('bighead',parent=big,fontName='ArialBold',textColor=colors.white)
+rows=[['Pieza','Cantidad','Sección','Largo','Indicaciones']]+[[f'<b>{o[1]}</b>',f'<b>{o[2]}</b>',f'<b>{o[3]}</b>',o[4],o[5]] for o in d['order']]
+styled=[[Paragraph(str(v),bighead if i==0 else big) for v in row] for i,row in enumerate(rows)]
+tb=Table(styled,colWidths=[190,70,90,90,usable-440],hAlign='LEFT')
+tb.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),ink),('VALIGN',(0,0),(-1,-1),'MIDDLE'),('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('LINEBELOW',(0,0),(-1,-1),.35,colors.HexColor('#d8e0d8')),('BACKGROUND',(1,1),(3,-1),amber)]))
+tw,th=tb.wrap(usable,999);tb.drawOn(c,margin,y-th);y-=th
+y=p('<b>Material de origen</b> · '+d['order_note'],margin,y-14)
+y=p('<b>Pedir además</b> · Abrir las tablas y luego cepillar, para que las tiras queden derechas. Entregar todos los retales.',margin,y-8)
+y-=22;c.setFont('ArialBold',13);c.setFillColor(ink);c.drawString(margin,y,'Lo que sale de este pedido para la ventana (corte en casa)')
+rows=[['Pieza','Cant.','Sale de','Medida final']]
 for row in d['parts']:
  if row[0]=='R01':continue
- delivery=('Entero, útil ≥3010 × 100 × 40' if row[0] in ('V01','V02') else f'{row[4]} × {row[5]} × {row[6]}')
- rows.append([row[1],row[2],delivery,f'{row[7]} × {row[8]} × {row[9]}'])
-y=table(rows,[235,45,245,usable-525],margin,y)
-y=p('<b>Para entregar al taller</b> · Anchos y espesores terminados. Los largos llevan margen para ajustar en casa. Identificar piezas y entregar todos los retales: uno de al menos 200 × 100 × 15 para separadores y pruebas, y los sobrantes de bastidor para topes y calces de 20.',margin,y-13)
-y=p('<b>Rieles</b> · Escoger dos bastidores enteros y sanos, preferiblemente de 3020 y con al menos 3010 útiles. Si solo hay 3000, usar la alternativa de la página 3.',margin,y-10)
-p('<b>Mecanizado</b> · Canal, taladros y topes se realizan en el armado con una prueba del mecanismo real. Las tablillas de repuesto reciben el mismo cepillado y acabado.',margin,y-10)
+ rows.append([row[1],row[2],row[3],f'{row[7]} × {row[8]} × {row[9]}'])
+cs=ParagraphStyle('cs',parent=small,fontSize=8.3,leading=10)
+st=[[Paragraph(str(v),head if i==0 else cs) for v in row] for i,row in enumerate(rows)]
+tb=Table(st,colWidths=[235,45,245,usable-525],hAlign='LEFT')
+tb.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),ink),('VALIGN',(0,0),(-1,-1),'MIDDLE'),('TOPPADDING',(0,0),(-1,-1),3),('BOTTOMPADDING',(0,0),(-1,-1),3),('LEFTPADDING',(0,0),(-1,-1),8),('LINEBELOW',(0,0),(-1,-1),.35,colors.HexColor('#d8e0d8')),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#f3f6f1')])]))
+tw,th=tb.wrap(usable,999);assert y-8-th>36,(y,th);tb.drawOn(c,margin,y-8-th)
 c.showPage()
 
-title(2,'Cómo cortar las 9 tablas','Cepillar primero a 15 mm con caras paralelas. Sanear los cantos conservando al menos 210 mm útiles. Disco previsto de 4 mm.')
+title(2,'Corte de las tiras en casa','Cada tira llega entera de 3000. Cortar con tope fijo para que las piezas iguales salgan idénticas.')
 y=H-100
-c.setFont('ArialBold',13);c.setFillColor(ink);c.drawString(margin,y,'Tablas 1 a 7 · cuatro tablillas por tabla')
-bar(margin,y-48,usable,[(1180,'Paño 1180',pale),(1180,'Paño 1180',pale),(640,'Retal ancho',amber)])
-y=p('En cada paño de 1180, sacar <b>dos tiras de 100 × 15</b>. Resultado de estas siete tablas: <b>28 tablillas de 1180 × 100 × 15</b>. Queda un retal ancho de unos 620–650 de largo por tabla, según largo real, disco y saneado.',margin,y-60)
-y-=28;c.setFont('ArialBold',13);c.drawString(margin,y,'Tablas 8 y 9 · dos tablillas y las carteras largas por tabla')
-bar(margin,y-48,usable,[(1180,'Paño 1180',pale),(1550,'Paño largo 1550',colors.HexColor('#d5e4da')),(270,'Retal',amber)])
-y=p('Del paño de 1180 salen <b>dos tablillas de 100 × 15</b>. Del paño de 1550 salen <b>una tira de 100 y dos de 50</b>, todas de 15 mm de espesor. Con disco de 4 mm, 100 + 4 + 50 + 4 + 50 = <b>208 mm</b>, dentro de los 210 útiles.',margin,y-61)
-# Esquema de reparto al ancho del paño largo.
-y-=17
-x=margin;bh=38;scale=usable/220
-for ww,label in [(100,'Solapa superior · 100'),(4,' '),(50,'Cartera · 50'),(4,' '),(50,'Cartera · 50'),(12,'Margen')]:
- c.setFillColor(pale if ww in (100,50) else amber);c.rect(x,y-bh,ww*scale,bh,fill=1,stroke=0)
- if ww>20:c.setFillColor(ink);c.setFont('ArialBold',9);c.drawCentredString(x+ww*scale/2,y-bh/2-3,label)
- x+=ww*scale
-y=p('Resultado conjunto de las tablas 8 y 9: <b>4 tablillas, 2 solapas de 1550 × 100 × 15 y 4 carteras de 1550 × 50 × 15</b>. Terminar las carteras y solapas a 1540 al presentar el marco.',margin,y-bh-12)
-p('<b>Total</b> · 32 tablillas: 30 para montar y 2 de repuesto. Sacar de los retales un remate de 150 × 50 × 15, para terminar nominalmente a 130 × 50 × 15. Los esquemas muestran las piezas; el disco y el saneado se reservan fuera de esas longitudes.',margin,y-11)
+for hd,segs,text in [
+ ('Tiras de 100 × 15 · n.º 1 a 15 y n.º 18',[(1180,'Tablilla 1180',pale),(1180,'Tablilla 1180',pale),(640,'Sobrante',amber)],
+  'Dos tablillas por tira. Las tiras 1 a 15 dan las <b>30 tablillas</b> que se montan; la 18 da <b>2 de repuesto</b>. Ajuste final a 1170.'),
+ ('Tiras de 100 × 15 · n.º 16 y 17',[(1550,'Solapa 1550',colors.HexColor('#d5e4da')),(1180,'Tablilla 1180',pale),(270,'Sobr.',amber)],
+  'Una solapa y una tablilla por tira: <b>2 solapas</b> y <b>2 tablillas de repuesto</b>. Las solapas se terminan a 1540 al presentar el marco.'),
+ ('Tiras de 50 × 15 · n.º 1 a 4',[(1550,'Cartera 1550',colors.HexColor('#d5e4da')),(150,'Rem.',pale),(1300,'Sobrante',amber)],
+  'Una cartera por tira: <b>4 carteras</b>, dos por cara del antepecho, terminadas a 1540. El <b>remate de 150</b> sale del sobrante de una de ellas.'),
+]:
+ c.setFont('ArialBold',13);c.setFillColor(ink);c.drawString(margin,y,hd)
+ bar(margin,y-48,usable,segs)
+ y=p(text,margin,y-60)-30
+p('<b>Total</b> · 34 tablillas (30 montadas y 4 de repuesto), 2 solapas, 4 carteras y el remate. Cortar primero una tablilla de prueba y presentarla en el marco armado antes de hacer la serie. Los sobrantes sirven para separadores, pruebas del mecanismo y calces.',margin,y)
 c.showPage()
 
 title(3,'Bastidores y armado del marco','Los costados son de altura completa. Los dos horizontales se colocan entre ellos y el montante central entre los horizontales.')
 y=H-92
-rows=[['Bastidor','Corte del taller','Final de montaje','Identificación']]
-rows.extend([[1,'Entregar entero, útil ≥3010',3000,'Riel inferior'],[2,'Entregar entero, útil ≥3010',3000,'Riel superior'],[3,'2 tramos de 1280','2 × 1256','Costados completos'],[4,'1 tramo de 1200',1176,'Montante central']])
+rows=[['Bastidor','Entrega y corte','Final de montaje','Identificación']]
+rows.extend([[1,'Entero, útil ≥3010 · cortar en casa',3000,'Riel inferior'],[2,'Entero, útil ≥3010 · cortar en casa',3000,'Riel superior'],[3,'Entero · cortar en casa 2 × 1280','2 × 1256','Costados completos'],[4,'Entero · cortar en casa 1200',1176,'Montante central']])
 y=table(rows,[65,260,180,usable-505],margin,y)
 # Alzado frontal a escala, acotado y con piezas claramente identificadas.
 x=margin+25;y0=85;sw=360/3080;fw=3080*sw;fh=1256*sw;t=40*sw
@@ -126,10 +133,28 @@ styled=[[Paragraph(str(v),head if i==0 else guide) for v in row] for i,row in en
 t=Table(styled,colWidths=[34,112,(usable-146)*.53,(usable-146)*.47],hAlign='LEFT')
 t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),ink),('VALIGN',(0,0),(-1,-1),'MIDDLE'),('TOPPADDING',(0,0),(-1,-1),4),('BOTTOMPADDING',(0,0),(-1,-1),4),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('LINEBELOW',(0,0),(-1,-1),.35,colors.HexColor('#d8e0d8')),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#f3f6f1')])]))
 tw,th=t.wrap(usable,999);assert th<H-115,th;t.drawOn(c,margin,H-78-th)
+c.showPage()
+PE=d['pecera']
+title(6,PE['titulo'],PE['nota'])
+y=H-96
+rows=[['Código','Pieza','Cant.','Largo final','Sección','Nota']]+[[x[0],x[1],x[2],x[3],'50 × 50',x[4]] for x in PE['piezas']]
+y=table(rows,[50,190,40,65,60,usable-405],margin,y)
+y-=24;c.setFont('ArialBold',13);c.setFillColor(ink);c.drawString(margin,y,'Corte de los listones de 3000 (disco de 4 mm)')
+y-=10
+for n,parts,rest in PE['barras']:
+ y-=44
+ c.setFillColor(ink);c.setFont('ArialBold',9.5);c.drawString(margin,y+12,f'Listón {n}')
+ if parts:
+  bar(margin+62,y,usable-62,[(L,f'{k} {L}',pale if k in('P1','P4') else colors.HexColor('#d5e4da') if k=='P3' else colors.HexColor('#eef3ee')) for k,L in parts]+[(3000-sum(L for _,L in parts)-4*len(parts),'',amber)],height=26)
+  c.setFillColor(gray);c.setFont('Arial',8.5);c.drawRightString(W-margin,y-10,'sobrante '+rest)
+ else:
+  c.setFillColor(gray);c.setFont('Arial',9.5);c.drawString(margin+62,y+9,rest)
+y-=26
+p('<b>Antes de cortar</b> · Las 6 patas y parales (P3) se cortan juntas con un tope fijo: si una queda más corta, la pecera no apoya plano. Todos los extremos a escuadra. '+PE['seccion_alt'],margin,y,sty=small)
 c.save()
 print('OK PDF',path)
 # Renderizar todas las páginas para inspección.
 import fitz
 pdf=fitz.open(path)
-assert len(pdf)==5
+assert len(pdf)==6
 for i,page in enumerate(pdf):page.get_pixmap(matrix=fitz.Matrix(1.3,1.3)).save(tmp/f'pdf-{i+1}.png')

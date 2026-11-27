@@ -1,10 +1,10 @@
-"""Genera el presupuesto y el pedido de corte conjuntos de los tres muebles.
+"""Genera el presupuesto y el pedido de corte conjuntos de los cuatro muebles: cocina, clóset, baño y pecera.
 
 Uso, desde la raíz del repositorio:
 
     python herramientas/build_compras_proyecto.py
 
-Lee despiece-cocina.xlsx, despiece-closet.xlsx y despiece-bano.xlsx (valores guardados por Excel)
+Lee despiece-cocina.xlsx, despiece-closet.xlsx, despiece-bano.xlsx y despiece-pecera.xlsx (valores guardados por Excel)
 y los manifiestos assets/models/*-data.js. Escribe compras-proyecto.xlsx y compras-proyecto.html.
 Los Excel de cada mueble siguen siendo la fuente: si cambia un despiece, guárdalo en Excel y vuelve
 a ejecutar este script. Requisitos: Python 3.9+ y openpyxl.
@@ -30,6 +30,8 @@ MUEBLES = [
          cantos={"2": ("C7", "D7"), "0.45": ("C8", "D8")}),
     dict(nombre="Baño", xlsx="despiece-bano.xlsx", js="bano-data.js", fila=7, fin=(6, 7), corte=(14, 15),
          cantos={"2": ("B7", "C7"), "0.45": ("B8", "C8")}),
+    dict(nombre="Pecera", xlsx="despiece-pecera.xlsx", js="pecera-data.js", fila=7, fin=(5, 6), corte=(12, 13),
+         cantos={"2": ("C7", "D7"), "0.45": ("C8", "D8")}),
 ]
 
 
@@ -171,14 +173,14 @@ GENERICOS = ("Por elegir", "Por dimensionar", "Por cotizar", "Pino · por cotiza
 def compras(n_rh, n_fondo, canto):
     filas = []   # grupo, ítem, mueble, cantidad, unidad, precio, nota
     add = lambda *f: filas.append(list(f))
-    add("Tableros y cantos", "Tablero melamina Cartagena RH15 · 2440 × 2150", "Cocina, clóset y baño", n_rh, "lámina", PRECIO["RH15"],
-        f"Encaje conjunto de las piezas RH15 de los tres muebles en {n_rh} láminas (hoja Láminas). El total por separado se muestra en Resumen.")
+    add("Tableros y cantos", "Tablero melamina Cartagena RH15 · 2440 × 2150", "Cocina, clóset, baño y pecera", n_rh, "lámina", PRECIO["RH15"],
+        f"Encaje conjunto de las piezas RH15 de los cuatro muebles en {n_rh} láminas (hoja Láminas). El total por separado se muestra en Resumen.")
     add("Tableros y cantos", "Fondo melamina blanco RH6 · 2440 × 2150", "Cocina y baño", n_fondo, "lámina", PRECIO["RH6"],
         "Los 9 fondos de la cocina y el fondo del gabinete del baño caben en una lámina.")
     r, f = canto["2"], canto["0.45"]
-    add("Tableros y cantos", "Canto rígido Cartagena 19 × 2 mm · rollo 100 m", "Cocina, clóset y baño", r["rollos"], "rollo", PRECIO["rigido"],
+    add("Tableros y cantos", "Canto rígido Cartagena 19 × 2 mm · rollo 100 m", "Cocina, clóset, baño y pecera", r["rollos"], "rollo", PRECIO["rigido"],
         f"Necesario {r['necesario']} m: {fmt(round(r['neto'], 1))} m netos + 5 cm por borde ({r['bordes']} bordes) + 10 %.")
-    add("Tableros y cantos", "Canto rígido Cartagena 19 × 2 mm · metros sueltos", "Cocina, clóset y baño", r["sueltos"], "m", "cotizar",
+    add("Tableros y cantos", "Canto rígido Cartagena 19 × 2 mm · metros sueltos", "Cocina, clóset, baño y pecera", r["sueltos"], "m", "cotizar",
         "Complemento del rollo de 100 m; se compra suelto en la sucursal.")
     add("Tableros y cantos", "Canto flexible Cartagena 19 × 0,45 mm · rollo 200 m", "Cocina, clóset y baño", f["rollos"], "rollo", PRECIO["flexible"],
         f"Necesario {f['necesario']} m: {fmt(round(f['neto'], 1))} m netos + 5 cm por borde ({f['bordes']} bordes) + 10 %. "
@@ -220,10 +222,16 @@ def compras(n_rh, n_fondo, canto):
         grupo = ("Otros proveedores" if ref in ("Espejo", "Retal de granito") else
                  "Mesón, equipos y grifería" if ref in ("Lavamanos de sobreponer", "Grifería", "Desagüe y sifón") else "Herrajes")
         add(grupo, f"{ref} · {uso}", "Baño", cant, unidad, precio, det)
+    # Pecera
+    pe = libro("despiece-pecera.xlsx")["Compras"]
+    for r_ in range(7, pe.max_row + 1):
+        g, item, cant, unidad, precio, nota = (pe.cell(r_, c).value for c in range(1, 7))
+        if g:
+            add(g, item, "Pecera", cant, unidad, precio, nota)
     # Bisagras compartidas: misma referencia en cocina y baño.
     add("Herrajes", "Bisagra parche HBM897-01 · par", "Cocina y baño", (bisagras_cocina or 0) + (bisagras_bano or 0), "par", PRECIO["bisagra_par"],
         f"Cocina {bisagras_cocina} pares (24 bisagras) + baño {bisagras_bano} pares (6 bisagras). Validar peso y cabida en el gabinete del espejo.")
-    add("Servicios", "Corte y canteado · pedido único", "Cocina, clóset y baño", 1, "servicio", "cotizar",
+    add("Servicios", "Corte y canteado · pedido único", "Cocina, clóset, baño y pecera", 1, "servicio", "cotizar",
         "Un solo pedido a la sucursal (hoja Pedido de corte). No cortar las piezas marcadas en Bloqueos hasta resolverlas.")
     orden = ["Tableros y cantos", "Herrajes", "Mesón, equipos y grifería", "Otros proveedores", "Accesorios", "Servicios"]
     filas.sort(key=lambda f: orden.index(f[0]))
@@ -272,14 +280,14 @@ def main():
     wb = openpyxl.Workbook()
     # Resumen
     ws = wb.active; ws.title = "Resumen"
-    titulo(ws, "Compras del proyecto · cocina, clóset y baño",
+    titulo(ws, "Compras del proyecto · cocina, clóset, baño y pecera",
            f"Documentación revisada {FECHA}. Precios conservados de las referencias aportadas; no son cotizaciones vigentes nuevas.")
     encabezado(ws, 6, ["Concepto", "Por separado", "Conjunto", "Nota"], [42, 16, 16, 90])
     cocina_sep = libro("despiece-cocina.xlsx")["Compras"]["C2"].value
     closet_sep = libro("despiece-closet.xlsx")["Compras"]["C7"].value
-    sep_rh = cocina_sep + closet_sep + 1
+    sep_rh = cocina_sep + closet_sep + 1 + 1
     resumen = [
-        ["Láminas RH15", sep_rh, len(lam_rh), f"Cocina {cocina_sep} + clóset {closet_sep} + baño 1 por separado; encaje conjunto en la hoja Láminas."],
+        ["Láminas RH15", sep_rh, len(lam_rh), f"Cocina {cocina_sep} + clóset {closet_sep} + baño 1 + pecera 1 por separado; encaje conjunto en la hoja Láminas."],
         ["Láminas de fondo RH6", 2, len(lam_fondo), "El fondo del baño cabe en la lámina de fondo de la cocina."],
         ["Rollos de canto rígido 100 m", 2, canto["2"]["rollos"], f"Más {canto['2']['sueltos']} m sueltos en la sucursal."],
         ["Rollos de canto flexible 200 m", 2, canto["0.45"]["rollos"], f"Sobran unos {canto['0.45']['sobrante']} m para cantear piezas pequeñas en el armado."],
@@ -298,7 +306,7 @@ def main():
 
     # Pedido de corte
     ws = wb.create_sheet("Pedido de corte")
-    titulo(ws, "Pedido de corte y canteado · pedido único de los tres muebles",
+    titulo(ws, "Pedido de corte y canteado · pedido único de los cuatro muebles",
            "Medidas finales en mm, con canto incluido; largo en sentido de veta. R = rígido 2 mm · F = flexible 0,45 mm · — = sin canto. Un solo tipo de canto por pieza, únicamente en los bordes indicados.")
     ws["A4"] = ("Medidas finales con canto: criterio confirmado. El proveedor ajusta el tablero al espesor real sin alterar estas cotas. "
                 "Corte sin canto es teórico, con espesores de referencia. Mínimos orientativos de canteadora: lado menor 100 mm y mayor 250 mm, por confirmar en sucursal.")
